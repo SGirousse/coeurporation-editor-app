@@ -1,1 +1,14 @@
-// place files you want to import through the `$lib` alias in this folder.
+type CardType = {
+    title: string;
+    illustration: string;
+}
+
+export type ResourceCardType = {
+    title: string;
+    illustration: string;
+    grade: string;
+    lore: string;
+    effect: string;
+    burnoutPoints: number;
+    cost: string;
+}

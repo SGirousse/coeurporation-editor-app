@@ -1,19 +1,12 @@
 <script lang="ts">
 	import CardList from '$lib/CardList.svelte';
+	import type { ResourceCardType } from '$lib/index.ts';
 	import { Fileupload, Label, Helper, Button } from 'flowbite-svelte';
   
-	interface Card {
-	  title: string;
-	  badge: string;
-	  imageSrc: string;
-	  shortDescription: string;
-	  longText: string;
-	  batteryValue: number;
-	  moneyValue: string;
-	}
+
   
 	let files: FileList | null = null;
-	let resourceCards: Card[] = [];
+	let resourceCards: ResourceCardType[] = [];
   
 	$: if (files) {
 		resourceCards = [];
@@ -23,14 +16,14 @@
 		reader.onload = () => {
 		  const cardsData = JSON.parse(reader.result as string);
 		  for (const cardData of cardsData) {
-			const resourceCard: Card = {
+			const resourceCard: ResourceCardType = {
 			  title: cardData.title || 'Default Title',
-			  badge: cardData.badge || 'A',
-			  imageSrc: cardData.imageSrc || '',
-			  shortDescription: cardData.shortDescription || 'Default short description.',
-			  longText: cardData.longText || 'Default long text.',
-			  batteryValue: cardData.batteryValue || 0,
-			  moneyValue: cardData.moneyValue || '0k'
+			  grade: cardData.grade || 'A',
+			  illustration: cardData.illustration || '',
+			  lore: cardData.lore || 'Default short effect.',
+			  effect: cardData.effect || 'Default long text.',
+			  burnoutPoints: cardData.burnoutPoints || 0,
+			  cost: cardData.cost || '0k'
 			};
 			console.log(cardData)
 			resourceCards = [...resourceCards, resourceCard];
@@ -54,8 +47,8 @@
   
 	async function saveCardsToFile() {
 	  const cardsWithBase64Images = await Promise.all(resourceCards.map(async resourceCard => {
-		if (resourceCard.imageSrc && !resourceCard.imageSrc.startsWith('data:')) {
-		  resourceCard.imageSrc = await convertImageToBase64(resourceCard.imageSrc);
+		if (resourceCard.illustration && !resourceCard.illustration.startsWith('data:')) {
+		  resourceCard.illustration = await convertImageToBase64(resourceCard.illustration);
 		}
 		return resourceCard;
 	  }));
