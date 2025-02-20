@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+/* @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); */
+
+body {
+    font-family: 'Roboto';
+    background: linear-gradient(135deg, #1B03A3 25%, #9400D3 50%, #FF6EC7 75%);
+    color: white;
+}
