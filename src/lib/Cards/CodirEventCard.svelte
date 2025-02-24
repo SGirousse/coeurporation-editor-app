@@ -5,13 +5,13 @@
 
     import type { CodirEventCardType } from "$lib/index.ts";
 
-    export let resourceCard: CodirEventCardType;
+    export let codirEventCard: CodirEventCardType;
 
     const dispatch = createEventDispatcher();
     let isEditing = writable(false);
 
     function saveCard() {
-        dispatch("updateCard", resourceCard);
+        dispatch("updateCard", codirEventCard);
         isEditing.set(false);
     }
 
@@ -21,7 +21,7 @@
             const reader = new FileReader();
             reader.onload = () => {
                 if (reader.result) {
-                    resourceCard.illustration = reader.result as string;
+                    codirEventCard.illustration = reader.result as string;
                 }
             };
             reader.readAsDataURL(file);
@@ -48,12 +48,12 @@
         <div class="flex flex-col space-y-2">
             <input
                 type="text"
-                bind:value={resourceCard.title}
+                bind:value={codirEventCard.title}
                 class="border-none p-0 text-lg font-bold focus:outline-none"
             />
             <div class="relative h-[40%]">
                 <img
-                    src={resourceCard.illustration}
+                    src={codirEventCard.illustration}
                     alt="Card Illustration"
                     class="h-full w-full rounded-lg object-cover"
                 />
@@ -65,38 +65,38 @@
                 />
             </div>
             <textarea
-                bind:value={resourceCard.lore}
+                bind:value={codirEventCard.lore}
                 class="border-none p-0 text-xs leading-tight italic focus:outline-none"
             ></textarea>
             <textarea
-                bind:value={resourceCard.effect}
+                bind:value={codirEventCard.effect}
                 class="h-[30%] border-none p-0 text-sm leading-tight focus:outline-none"
             ></textarea>
         </div>
     {:else}
         <div class="h-[10%] truncate text-lg font-bold">
-            {resourceCard.title}
+            {codirEventCard.title}
         </div>
         <div class="relative h-[40%]">
             <img
-                src={resourceCard.illustration}
+                src={codirEventCard.illustration}
                 alt="Card Illustration"
                 class="h-full w-full rounded-lg object-cover"
             />
         </div>
         <div class="truncate-2-lines h-[10%] text-xs italic">
-            {resourceCard.lore}
+            {codirEventCard.lore}
         </div>
         <div
             class="h-[30%] overflow-hidden text-sm leading-tight text-ellipsis"
         >
-            {resourceCard.effect}
+            {codirEventCard.effect}
         </div>
     {/if}
 </div>
 
 <style>
-    .resourceCard {
+    .codirEventCard {
         width: 63.5mm;
         height: 88.9mm;
     }

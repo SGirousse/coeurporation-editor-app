@@ -1,7 +1,7 @@
 <script lang="ts">
 	import CardList from "$lib/CardList.svelte";
 	import type { ResourceCardType } from "$lib/index.ts";
-	import { Fileupload, Label, Helper, Button } from "flowbite-svelte";
+	import { Fileupload, Button } from "flowbite-svelte";
 
 	let files: FileList | undefined = undefined;
 	let resourceCards: ResourceCardType[] = [];
@@ -73,9 +73,7 @@
 
 <div class="flex items-center justify-between mb-4">
 	<div>
-		<Label for="with_helper" class="pb-2">Upload file</Label>
 		<Fileupload id="with_helper" class="mb-2" bind:files />
-		<Helper>JSON</Helper>
 	</div>
 	<Button onclick={saveCardsToFile}>Save</Button>
 </div>
