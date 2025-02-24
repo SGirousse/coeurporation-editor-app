@@ -1,0 +1,128 @@
+<script lang="ts">
+    import { writable } from "svelte/store";
+    import { EditOutline, FloppyDiskAltOutline } from "flowbite-svelte-icons";
+    import { createEventDispatcher } from "svelte";
+
+    import type { ProjectCardType } from "$lib/index.ts";
+
+    export let projectCard: ProjectCardType;
+    const dispatch = createEventDispatcher();
+    let isEditing = writable(false);
+
+    function saveCard() {
+        dispatch("updateCard", projectCard);
+        isEditing.set(false);
+    }
+
+    function handleImageChange(event: any) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (reader.result) {
+                    projectCard.illustration = reader.result as string;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+
+<div
+    class="group relative flex h-[88.9mm] w-[63.5mm] flex-col rounded-lg border p-4 shadow-lg rsccard"
+>
+    <button
+        on:click={() => isEditing.update((n) => !n)}
+        class="absolute top-2 right-2 rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
+    >
+        {#if $isEditing}
+            <FloppyDiskAltOutline class="text-blue-600" on:click={saveCard} />
+        {/if}
+        {#if !$isEditing}
+            <EditOutline class="text-blue-600" />
+        {/if}
+    </button>
+
+    {#if $isEditing}
+        <div class="flex flex-col space-y-2">
+            <input
+                type="text"
+                bind:value={projectCard.title}
+                class="border-none p-0 text-lg font-bold focus:outline-none"
+            />
+            <div class="relative h-[40%]">
+                <img
+                    src={projectCard.illustration}
+                    alt="Card Illustration"
+                    class="h-full w-full rounded-lg object-cover"
+                />
+                <input
+                    type="file"
+                    accept="image/*"
+                    on:change={handleImageChange}
+                    class="absolute inset-0 opacity-0 cursor-pointer"
+                />
+            </div>
+            <textarea
+                bind:value={projectCard.lore}
+                class="border-none p-0 text-xs leading-tight italic focus:outline-none"
+            ></textarea>
+            <textarea
+                bind:value={projectCard.effect}
+                class="h-[30%] border-none p-0 text-sm leading-tight focus:outline-none"
+            ></textarea>
+        </div>
+    {:else}
+        <div class="h-[10%] truncate text-lg font-bold">
+            {projectCard.title}
+        </div>
+        <div class="relative h-[40%]">
+            <img
+                src={projectCard.illustration}
+                alt="Card Illustration"
+                class="h-full w-full rounded-lg object-cover"
+            />
+        </div>
+        <div class="truncate-2-lines h-[10%] text-xs italic">
+            {projectCard.lore}
+        </div>
+        <div
+            class="h-[30%] overflow-hidden text-sm leading-tight text-ellipsis"
+        >
+            {projectCard.effect}
+        </div>
+    {/if}
+</div>
+
+<style>
+    .projectCard {
+        width: 63.5mm;
+        height: 88.9mm;
+    }
+    .rsccard {
+        background-color: white;
+        color: black;
+    }
+
+    .truncate {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .truncate-2-lines {
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Number of lines to show */
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .text-ellipsis {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Number of lines to show */
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>

@@ -1,8 +1,10 @@
-import type { CardType, ResourceCardType, CodirEventCardType } from "$lib/index.ts";
+import type { CardType, ResourceCardType, CodirEventCardType, ActionCardType, ProjectCardType } from "$lib/index.ts";
 
 const CARD_JSON_DATA = "data"
 const CARD_JSON_DATA_CARD_RESOURCES = "resources"
 const CARD_JSON_DATA_CARD_CODIREVENTS = "codirEvents"
+const CARD_JSON_DATA_CARD_ACTIONS = "actions"
+const CARD_JSON_DATA_CARD_PROJECTS = "projects"
 const CARD_JSON_META = "meta"
 const CARD_JSON_META_VERSION = "version"
 
@@ -21,7 +23,7 @@ async function convertImageToBase64(imageUrl: string): Promise<string> {
     });
 }
 
-async function cardIllustrationToBase64Images(cardsWithIllustration: CardType[]): Promise<CardType[]> {
+async function cardIllustrationToBase64Images(cardsWithIllustration: CardType[] = []): Promise<CardType[]> {
     const cardsWithBase64Images = await Promise.all(
         cardsWithIllustration.map(async (cardWithIllustration) => {
             if (
@@ -39,19 +41,22 @@ async function cardIllustrationToBase64Images(cardsWithIllustration: CardType[])
     return cardsWithBase64Images
 }
 
-export async function writeFileContent(resourceCards: ResourceCardType[], codirEventCards: CodirEventCardType[]) {
+export async function writeFileContent(resourceCards: ResourceCardType[], codirEventCards: CodirEventCardType[], actionCards: ActionCardType[], projectCards: ProjectCardType[]) {
 
     let meta = {
         [CARD_JSON_META_VERSION]: CURRENT_VERSION
     }
 
-
     const resourceCardsWithBase64Images = await cardIllustrationToBase64Images(resourceCards);
     const codirEventCardsWithBase64Images = await cardIllustrationToBase64Images(codirEventCards);
+    const actionCardsWithBase64Images = await cardIllustrationToBase64Images(actionCards);
+    const projectCardsWithBase64Images = await cardIllustrationToBase64Images(projectCards);
 
     let data = {
         [CARD_JSON_DATA_CARD_RESOURCES]: resourceCardsWithBase64Images,
         [CARD_JSON_DATA_CARD_CODIREVENTS]: codirEventCardsWithBase64Images,
+        [CARD_JSON_DATA_CARD_ACTIONS]: actionCardsWithBase64Images,
+        [CARD_JSON_DATA_CARD_PROJECTS]: projectCardsWithBase64Images,
     }
 
     let jsonified = {
@@ -70,9 +75,11 @@ export async function writeFileContent(resourceCards: ResourceCardType[], codirE
     URL.revokeObjectURL(url);
 }
 
-export async function readFileContent(files: FileList): Promise<{ resourceCards: ResourceCardType[], codirEventCards: CodirEventCardType[] }> {
+export async function readFileContent(files: FileList): Promise<{ resourceCards: ResourceCardType[], codirEventCards: CodirEventCardType[], actionCards: ActionCardType[], projectCards: ProjectCardType[] }> {
     let resourceCards: ResourceCardType[] = [];
     let codirEventCards: CodirEventCardType[] = [];
+    let actionCards: ActionCardType[] = [];
+    let projectCards: ProjectCardType[] = [];
 
     for (const file of files) {
         const reader = new FileReader();
@@ -95,27 +102,55 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
         if (CARD_JSON_DATA_CARD_RESOURCES in cards) {
             for (const card of cards[CARD_JSON_DATA_CARD_RESOURCES]) {
                 resourceCards.push({
-                    title: card.title || "Default Title",
-                    grade: card.grade || "A",
-                    illustration: card.illustration || "",
-                    lore: card.lore || "Default short effect.",
-                    effect: card.effect || "Default long text.",
-                    burnoutPoints: card.burnoutPoints || 0,
-                    cost: card.cost || "0k",
+                    title: card.title,
+                    grade: card.grade,
+                    illustration: card.illustration,
+                    lore: card.lore,
+                    effect: card.effect,
+                    burnoutPoints: card.burnoutPoints,
+                    cost: card.cost,
                 });
             }
         }
         if (CARD_JSON_DATA_CARD_CODIREVENTS in cards) {
             for (const card of cards[CARD_JSON_DATA_CARD_CODIREVENTS]) {
                 codirEventCards.push({
-                    title: card.title || "Default Title",
-                    illustration: card.illustration || "",
-                    lore: card.lore || "Default short effect.",
-                    effect: card.effect || "Default long text.",
+                    title: card.title,
+                    illustration: card.illustration,
+                    lore: card.lore,
+                    effect: card.effect,
+                });
+            }
+        }
+        if (CARD_JSON_DATA_CARD_ACTIONS in cards) {
+            for (const card of cards[CARD_JSON_DATA_CARD_ACTIONS]) {
+                actionCards.push({
+                    title: card.title,
+                    illustration: card.illustration,
+                    lore: card.lore,
+                    effect: card.effect,
+                });
+            }
+        }
+        if (CARD_JSON_DATA_CARD_PROJECTS in cards) {
+            for (const card of cards[CARD_JSON_DATA_CARD_PROJECTS]) {
+                projectCards.push({
+                    title: card.title,
+                    illustration: card.illustration,
+                    lore: card.lore,
+                    effect: card.effect,
+                    client: card.client,
+                    optimalRevenue: card.optimalRevenue,
+                    baseRevenue: card.baseRevenue,
+                    comboClientThreshold: card.comboClientThreshold,
+                    comboClientEffect: card.comboClientEffect,
+                    optimalStaffing: card.optimalStaffing,
+                    penaltyThreshold: card.penaltyThreshold,
+                    penaltyEffect: card.penaltyEffect,
                 });
             }
         }
     }
 
-    return { resourceCards, codirEventCards };
+    return { resourceCards, codirEventCards, actionCards, projectCards };
 }

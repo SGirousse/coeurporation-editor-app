@@ -1,6 +1,11 @@
 <script lang="ts">
 	import CardList from "$lib/CardList.svelte";
-	import type { ResourceCardType, CodirEventCardType } from "$lib/index.ts";
+	import type {
+		ResourceCardType,
+		CodirEventCardType,
+		ActionCardType,
+		ProjectCardType,
+	} from "$lib/index.ts";
 	import {
 		readFileContent,
 		writeFileContent,
@@ -10,22 +15,33 @@
 	let files: FileList | undefined = undefined;
 	let resourceCards: ResourceCardType[] = [];
 	let codirEventCards: CodirEventCardType[] = [];
+	let actionCards: ActionCardType[] = [];
+	let projectCards: ProjectCardType[] = [];
 
 	$: if (files) {
 		readFileContent(files).then(
 			({
 				resourceCards: newResourceCards,
 				codirEventCards: newCodirEventCards,
+				actionCards: newActionCards,
+				projectCards: newProjectCards,
 			}) => {
 				resourceCards = newResourceCards;
 				codirEventCards = newCodirEventCards;
+				actionCards = newActionCards;
+				projectCards = newProjectCards;
 			},
 		);
 		files = undefined;
 	}
 
 	async function saveCardsToFile() {
-		writeFileContent(resourceCards, codirEventCards);
+		writeFileContent(
+			resourceCards,
+			codirEventCards,
+			actionCards,
+			projectCards,
+		);
 	}
 </script>
 
@@ -37,5 +53,10 @@
 </div>
 
 <div class="flex min-h-screen items-center justify-center">
-	<CardList bind:resourceCards bind:codirEventCards />
+	<CardList
+		bind:resourceCards
+		bind:codirEventCards
+		bind:actionCards
+		bind:projectCards
+	/>
 </div>
