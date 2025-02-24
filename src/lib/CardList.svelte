@@ -3,13 +3,13 @@
   import CodirEventCard from "./Cards/CodirEventCard.svelte";
   import ActionCard from "./Cards/ActionCard.svelte";
   import ProjectCard from "./Cards/ProjectCard.svelte";
-  import type {
-    CardType,
-    ResourceCardType,
-    CodirEventCardType,
-    ActionCardType,
-    ProjectCardType,
-  } from "$lib/index.ts";
+  import {
+    type CardType,
+    type ResourceCardType,
+    type CodirEventCardType,
+    type ActionCardType,
+    type ProjectCardType,
+  } from "$lib/index.js";
   import { Accordion, AccordionItem, Button } from "flowbite-svelte";
 
   let {
@@ -19,10 +19,28 @@
     projectCards = $bindable([]),
   } = $props();
 
-  function updateCard(index: number, updatedCard: CardType) {
-    resourceCards[index] = updatedCard;
-    resourceCards = [...resourceCards];
+  function deleteResourceCard(cardToDelete: ResourceCardType) {
+    resourceCards = resourceCards.filter((card) => card !== cardToDelete);
   }
+
+  function deleteCodirEventCard(cardToDelete: CodirEventCardType) {
+    codirEventCards = codirEventCards.filter((card) => card !== cardToDelete);
+  }
+
+  function deleteActionCard(cardToDelete: ActionCardType) {
+    actionCards = actionCards.filter((card) => card !== cardToDelete);
+  }
+
+  function deleteProjectCard(cardToDelete: ProjectCardType) {
+    projectCards = projectCards.filter((card) => card !== cardToDelete);
+  }
+
+  let onDeleteAccessor = {
+    deleteResourceCard,
+    deleteCodirEventCard,
+    deleteActionCard,
+    deleteProjectCard,
+  };
 
   function addNewResourceCard() {
     const newCard: ResourceCardType = {
@@ -82,10 +100,7 @@
     <div class="flex flex-wrap">
       {#each resourceCards as resourceCard, index}
         <div class="p-2">
-          <ResourceCard
-            {resourceCard}
-            updateCard={(event: any) => updateCard(index, event.detail)}
-          />
+          <ResourceCard {resourceCard} {onDeleteAccessor} />
         </div>
       {/each}
       <div class="p-2">
@@ -99,10 +114,7 @@
     <div class="flex flex-wrap">
       {#each codirEventCards as codirEventCard, index}
         <div class="p-2">
-          <CodirEventCard
-            {codirEventCard}
-            updateCard={(event: any) => updateCard(index, event.detail)}
-          />
+          <CodirEventCard {codirEventCard} {onDeleteAccessor} />
         </div>
       {/each}
       <div class="p-2">
@@ -117,10 +129,7 @@
     <div class="flex flex-wrap">
       {#each actionCards as actionCard, index}
         <div class="p-2">
-          <ActionCard
-            {actionCard}
-            updateCard={(event: any) => updateCard(index, event.detail)}
-          />
+          <ActionCard {actionCard} {onDeleteAccessor} />
         </div>
       {/each}
       <div class="p-2">
@@ -134,10 +143,7 @@
     <div class="flex flex-wrap">
       {#each projectCards as projectCard, index}
         <div class="p-2">
-          <ProjectCard
-            {projectCard}
-            updateCard={(event: any) => updateCard(index, event.detail)}
-          />
+          <ProjectCard {projectCard} {onDeleteAccessor} />
         </div>
       {/each}
       <div class="p-2">

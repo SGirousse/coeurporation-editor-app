@@ -1,18 +1,23 @@
 <script lang="ts">
 	import { writable } from "svelte/store";
-	import { EditOutline, FloppyDiskAltOutline } from "flowbite-svelte-icons";
-	import { createEventDispatcher } from "svelte";
+	import {
+		EditOutline,
+		FloppyDiskAltOutline,
+		TrashBinOutline,
+	} from "flowbite-svelte-icons";
 
 	import type { ResourceCardType } from "$lib/index.ts";
 
 	export let resourceCard: ResourceCardType;
-
-	const dispatch = createEventDispatcher();
+	export let onDeleteAccessor;
 	let isEditing = writable(false);
 
 	function saveCard() {
-		dispatch("updateCard", resourceCard);
 		isEditing.set(false);
+	}
+
+	function deleteCard() {
+		onDeleteAccessor.deleteResourceCard(resourceCard);
 	}
 
 	function handleImageChange(event: any) {
@@ -45,17 +50,28 @@
 <div
 	class="group relative flex h-[88.9mm] w-[63.5mm] flex-col rounded-lg border p-4 shadow-lg rsccard"
 >
-	<button
-		on:click={() => isEditing.update((n) => !n)}
-		class="absolute top-2 right-2 rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
-	>
-		{#if $isEditing}
-			<FloppyDiskAltOutline class="text-blue-600" on:click={saveCard} />
-		{/if}
-		{#if !$isEditing}
-			<EditOutline class="text-blue-600" />
-		{/if}
-	</button>
+	<div class="absolute top-2 right-2 flex space-x-2">
+		<button
+			on:click={() => isEditing.update((n) => !n)}
+			class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
+		>
+			{#if $isEditing}
+				<FloppyDiskAltOutline
+					class="text-blue-600"
+					on:click={saveCard}
+				/>
+			{/if}
+			{#if !$isEditing}
+				<EditOutline class="text-blue-600" />
+			{/if}
+		</button>
+		<button
+			on:click={deleteCard}
+			class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
+		>
+			<TrashBinOutline class="text-red-600" />
+		</button>
+	</div>
 
 	{#if $isEditing}
 		<div class="flex flex-col space-y-2">
