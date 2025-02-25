@@ -4,6 +4,8 @@
         EditOutline,
         FloppyDiskAltOutline,
         TrashBinOutline,
+        DollarOutline,
+        BatteryOutline,
     } from "flowbite-svelte-icons";
 
     import type { CardType } from "$lib/index.ts";
@@ -115,32 +117,14 @@
             <div class="flex h-[10%] items-center justify-between">
                 {#if card.burnoutPoints}
                     <div class="flex items-center">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5 text-gray-500"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm14 0H4v8h12V6zM6 8h2v4H6V8zm4 0h2v4h-2V8z"
-                            ></path>
-                        </svg>
+                        <BatteryOutline />
                         <span class="ml-1">{card.burnoutPoints}</span>
                     </div>
                 {/if}
                 {#if card.cost}
                     <div class="flex items-center">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5 text-gray-500"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"
-                            ></path>
-                        </svg>
-                        <span class="ml-1">{card.cost}</span>
+                        <DollarOutline />
+                        <span class="ml-1">{card.cost}k</span>
                     </div>
                 {/if}
             </div>
