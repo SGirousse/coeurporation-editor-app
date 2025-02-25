@@ -1,14 +1,12 @@
 <script lang="ts">
-  import ResourceCard from "$lib/Cards/ResourceCard.svelte";
-  import CodirEventCard from "./Cards/CodirEventCard.svelte";
-  import ActionCard from "./Cards/ActionCard.svelte";
+  import Card from "./Cards/Card.svelte";
   import ProjectCard from "./Cards/ProjectCard.svelte";
   import {
     type CardType,
-    type ResourceCardType,
-    type CodirEventCardType,
-    type ActionCardType,
-    type ProjectCardType,
+    ResourceCardType,
+    CodirEventCardType,
+    ActionCardType,
+    ProjectCardType,
   } from "$lib/index.js";
   import { Accordion, AccordionItem, Button } from "flowbite-svelte";
 
@@ -19,16 +17,33 @@
     projectCards = $bindable([]),
   } = $props();
 
-  function deleteResourceCard(cardToDelete: ResourceCardType) {
-    resourceCards = resourceCards.filter((card) => card !== cardToDelete);
-  }
+  function deleteCard(cardToDelete: CardType) {
+    switch (cardToDelete.cardType) {
+      case "ResourceCardType":
+        resourceCards = resourceCards.filter((card) => card !== cardToDelete);
 
-  function deleteCodirEventCard(cardToDelete: CodirEventCardType) {
-    codirEventCards = codirEventCards.filter((card) => card !== cardToDelete);
-  }
+        break;
 
-  function deleteActionCard(cardToDelete: ActionCardType) {
-    actionCards = actionCards.filter((card) => card !== cardToDelete);
+      case "CodirEventCardType":
+        codirEventCards = codirEventCards.filter(
+          (card) => card !== cardToDelete,
+        );
+
+        break;
+
+      case "ActionCardType":
+        actionCards = actionCards.filter((card) => card !== cardToDelete);
+
+        break;
+
+      case "ProjectCardType":
+        projectCards = projectCards.filter((card) => card !== cardToDelete);
+
+        break;
+
+      default:
+        throw new Error("Unsupported card type");
+    }
   }
 
   function deleteProjectCard(cardToDelete: ProjectCardType) {
@@ -36,60 +51,48 @@
   }
 
   let onDeleteAccessor = {
-    deleteResourceCard,
-    deleteCodirEventCard,
-    deleteActionCard,
+    deleteCard,
     deleteProjectCard,
   };
 
   function addNewResourceCard() {
-    const newCard: ResourceCardType = {
-      title: "Title",
-      grade: "A",
-      illustration: "",
-      lore: "Lore",
-      effect: "Effect",
-      burnoutPoints: 3,
-      cost: 30,
-    };
+    const newCard = new ResourceCardType(
+      "Title",
+      "",
+      "Lore",
+      "Effect",
+      "A",
+      3,
+      30,
+    );
     resourceCards = [...resourceCards, newCard];
   }
 
   function addNewCodiEventCard() {
-    const newCard: CodirEventCardType = {
-      title: "Title",
-      illustration: "",
-      lore: "Lore",
-      effect: "Effect",
-    };
+    const newCard = new CodirEventCardType("Title", "", "Lore", "Effect");
     codirEventCards = [...codirEventCards, newCard];
   }
 
   function addNewActionCard() {
-    const newCard: ActionCardType = {
-      title: "Title",
-      illustration: "",
-      lore: "Lore",
-      effect: "Effect",
-    };
+    const newCard = new ActionCardType("Title", "", "Lore", "Effect");
     actionCards = [...actionCards, newCard];
   }
 
   function addNewProjectCard() {
-    const newCard: ProjectCardType = {
-      title: "Title",
-      illustration: "",
-      lore: "Lore",
-      effect: "Effect",
-      client: "Client",
-      optimalRevenue: 15,
-      baseRevenue: 10,
-      comboClientThreshold: 3,
-      comboClientEffect: "Combo Effect",
-      optimalStaffing: ["A", "B", "C"],
-      penaltyThreshold: 1,
-      penaltyEffect: "Penalty Effect",
-    };
+    const newCard = new ProjectCardType(
+      "Title",
+      "",
+      "Lore",
+      "Effect",
+      "Client",
+      15,
+      10,
+      3,
+      "Combo Effect",
+      ["A", "B", "C"],
+      1,
+      "Penalty Effect",
+    );
     projectCards = [...projectCards, newCard];
   }
 </script>
@@ -100,7 +103,7 @@
     <div class="flex flex-wrap">
       {#each resourceCards as resourceCard, index}
         <div class="p-2">
-          <ResourceCard {resourceCard} {onDeleteAccessor} />
+          <Card card={resourceCard} {onDeleteAccessor} />
         </div>
       {/each}
       <div class="p-2">
@@ -114,7 +117,7 @@
     <div class="flex flex-wrap">
       {#each codirEventCards as codirEventCard, index}
         <div class="p-2">
-          <CodirEventCard {codirEventCard} {onDeleteAccessor} />
+          <Card card={codirEventCard} {onDeleteAccessor} />
         </div>
       {/each}
       <div class="p-2">
@@ -129,7 +132,7 @@
     <div class="flex flex-wrap">
       {#each actionCards as actionCard, index}
         <div class="p-2">
-          <ActionCard {actionCard} {onDeleteAccessor} />
+          <Card card={actionCard} {onDeleteAccessor} />
         </div>
       {/each}
       <div class="p-2">

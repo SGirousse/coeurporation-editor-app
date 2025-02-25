@@ -1,4 +1,4 @@
-import type { CardType, ResourceCardType, CodirEventCardType, ActionCardType, ProjectCardType } from "$lib/index.ts";
+import { type CardType, ResourceCardType, CodirEventCardType, ActionCardType, ProjectCardType } from "$lib/index.js";
 
 const CARD_JSON_DATA = "data"
 const CARD_JSON_DATA_CARD_RESOURCES = "resources"
@@ -101,53 +101,54 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
 
         if (CARD_JSON_DATA_CARD_RESOURCES in cards) {
             for (const card of cards[CARD_JSON_DATA_CARD_RESOURCES]) {
-                resourceCards.push({
+                resourceCards.push(new ResourceCardType({
                     title: card.title,
-                    grade: card.grade,
                     illustration: card.illustration,
                     lore: card.lore,
                     effect: card.effect,
+                    grade: card.grade,
                     burnoutPoints: card.burnoutPoints,
                     cost: card.cost,
-                });
+                }
+                ));
             }
         }
         if (CARD_JSON_DATA_CARD_CODIREVENTS in cards) {
             for (const card of cards[CARD_JSON_DATA_CARD_CODIREVENTS]) {
-                codirEventCards.push({
-                    title: card.title,
-                    illustration: card.illustration,
-                    lore: card.lore,
-                    effect: card.effect,
-                });
+                codirEventCards.push(new CodirEventCardType(
+                    card.title,
+                    card.illustration,
+                    card.lore,
+                    card.effect,
+                ));
             }
         }
         if (CARD_JSON_DATA_CARD_ACTIONS in cards) {
             for (const card of cards[CARD_JSON_DATA_CARD_ACTIONS]) {
-                actionCards.push({
-                    title: card.title,
-                    illustration: card.illustration,
-                    lore: card.lore,
-                    effect: card.effect,
-                });
+                actionCards.push(new ActionCardType(
+                    card.title,
+                    card.illustration,
+                    card.lore,
+                    card.effect,
+                ));
             }
         }
         if (CARD_JSON_DATA_CARD_PROJECTS in cards) {
             for (const card of cards[CARD_JSON_DATA_CARD_PROJECTS]) {
-                projectCards.push({
-                    title: card.title,
-                    illustration: card.illustration,
-                    lore: card.lore,
-                    effect: card.effect,
-                    client: card.client,
-                    optimalRevenue: card.optimalRevenue,
-                    baseRevenue: card.baseRevenue,
-                    comboClientThreshold: card.comboClientThreshold,
-                    comboClientEffect: card.comboClientEffect,
-                    optimalStaffing: card.optimalStaffing,
-                    penaltyThreshold: card.penaltyThreshold,
-                    penaltyEffect: card.penaltyEffect,
-                });
+                projectCards.push(new ProjectCardType(
+                    card.title,
+                    card.illustration,
+                    card.lore,
+                    card.effect,
+                    card.client,
+                    card.optimalRevenue,
+                    card.baseRevenue,
+                    card.comboClientThreshold,
+                    card.comboClientEffect,
+                    card.optimalStaffing,
+                    card.penaltyThreshold,
+                    card.penaltyEffect,
+                ));
             }
         }
     }
