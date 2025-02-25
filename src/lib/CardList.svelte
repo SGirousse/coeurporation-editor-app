@@ -9,7 +9,6 @@
     ProjectCardType,
   } from "$lib/index.js";
   import { Accordion, AccordionItem, Button } from "flowbite-svelte";
-
   let {
     resourceCards = $bindable([]),
     codirEventCards = $bindable([]),
@@ -56,43 +55,22 @@
   };
 
   function addNewResourceCard() {
-    const newCard = new ResourceCardType(
-      "Title",
-      "",
-      "Lore",
-      "Effect",
-      "A",
-      3,
-      30,
-    );
+    const newCard = new ResourceCardType();
     resourceCards = [...resourceCards, newCard];
   }
 
   function addNewCodiEventCard() {
-    const newCard = new CodirEventCardType("Title", "", "Lore", "Effect");
+    const newCard = new CodirEventCardType();
     codirEventCards = [...codirEventCards, newCard];
   }
 
   function addNewActionCard() {
-    const newCard = new ActionCardType("Title", "", "Lore", "Effect");
+    const newCard = new ActionCardType();
     actionCards = [...actionCards, newCard];
   }
 
   function addNewProjectCard() {
-    const newCard = new ProjectCardType(
-      "Title",
-      "",
-      "Lore",
-      "Effect",
-      "Client",
-      15,
-      10,
-      3,
-      "Combo Effect",
-      ["A", "B", "C"],
-      1,
-      "Penalty Effect",
-    );
+    const newCard = new ProjectCardType();
     projectCards = [...projectCards, newCard];
   }
 </script>

@@ -8,13 +8,13 @@ export interface CardType {
 
 export class ResourceCardType implements CardType {
     cardType: string;
-    public title: string = "";
+    public title: string = "Title";
     public illustration: string = "";
-    public lore: string = "";
-    public effect: string = "";
-    public grade: string = "";
-    public burnoutPoints: number = 0;
-    public cost: number = 0;
+    public lore: string = "Lore";
+    public effect: string = "Effect";
+    public grade: string = "A";
+    public burnoutPoints: number = 3;
+    public cost: number = 25;
 
     constructor(init?: Partial<ResourceCardType>) {
         Object.assign(this, init);
@@ -24,67 +24,47 @@ export class ResourceCardType implements CardType {
 
 export class CodirEventCardType implements CardType {
     cardType: string;
-    title: string;
-    illustration: string;
-    lore: string;
-    effect: string;
+    public title: string = "Title";
+    public illustration: string = "";
+    public lore: string = "Lore";
+    public effect: string = "Effect";
 
-    constructor(title: string, illustration: string, lore: string, effect: string) {
+    constructor(init?: Partial<CodirEventCardType>) {
+        Object.assign(this, init);
         this.cardType = 'CodirEventCardType';
-        this.title = title;
-        this.illustration = illustration;
-        this.lore = lore;
-        this.effect = effect;
     }
 }
 
 export class ActionCardType implements CardType {
     cardType: string;
-    title: string;
-    illustration: string;
-    lore: string;
-    effect: string;
+    public title: string = "Title";
+    public illustration: string = "";
+    public lore: string = "Lore";
+    public effect: string = "Effect";
 
-    constructor(title: string, illustration: string, lore: string, effect: string) {
+    constructor(init?: Partial<ActionCardType>) {
+        Object.assign(this, init);
         this.cardType = 'ActionCardType';
-        this.title = title;
-        this.illustration = illustration;
-        this.lore = lore;
-        this.effect = effect;
     }
 }
 
 export class ProjectCardType implements CardType {
     cardType: string;
-    title: string;
-    illustration: string;
-    lore: string;
-    effect: string;
-    client: string;
-    optimalRevenue: number;
-    baseRevenue: number;
-    comboClientThreshold: number;
-    comboClientEffect: string;
-    optimalStaffing: string[];
-    penaltyThreshold: number;
-    penaltyEffect: string;
+    public title: string = "Title";
+    public illustration: string = "";
+    public lore: string = "Lore";
+    public effect: string = "Effect";
+    public client: string = "Client";
+    public optimalRevenue: number = 20;
+    public baseRevenue: number = 10;
+    public comboClientThreshold: number = 3;
+    public comboClientEffect: string = "";
+    public optimalStaffing: string[] = ["A", "B", "C"];
+    public penaltyThreshold: number = 3;
+    public penaltyEffect: string = "";
 
-    constructor(
-        title: string, illustration: string, lore: string, effect: string, client: string, optimalRevenue: number, baseRevenue: number,
-        comboClientThreshold: number, comboClientEffect: string, optimalStaffing: string[], penaltyThreshold: number, penaltyEffect: string
-    ) {
+    constructor(init?: Partial<ProjectCardType>) {
+        Object.assign(this, init);
         this.cardType = 'ProjectCardType';
-        this.title = title;
-        this.illustration = illustration;
-        this.lore = lore;
-        this.effect = effect;
-        this.client = client;
-        this.optimalRevenue = optimalRevenue;
-        this.baseRevenue = baseRevenue;
-        this.comboClientThreshold = comboClientThreshold;
-        this.comboClientEffect = comboClientEffect;
-        this.optimalStaffing = optimalStaffing;
-        this.penaltyThreshold = penaltyThreshold;
-        this.penaltyEffect = penaltyEffect;
     }
 }
