@@ -109,46 +109,45 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                     grade: card.grade,
                     burnoutPoints: card.burnoutPoints,
                     cost: card.cost,
-                }
-                ));
+                }));
             }
         }
         if (CARD_JSON_DATA_CARD_CODIREVENTS in cards) {
             for (const card of cards[CARD_JSON_DATA_CARD_CODIREVENTS]) {
-                codirEventCards.push(new CodirEventCardType(
-                    card.title,
-                    card.illustration,
-                    card.lore,
-                    card.effect,
-                ));
+                codirEventCards.push(new CodirEventCardType({
+                    title: card.title,
+                    illustration: card.illustration,
+                    lore: card.lore,
+                    effect: card.effect,
+                }));
             }
         }
         if (CARD_JSON_DATA_CARD_ACTIONS in cards) {
             for (const card of cards[CARD_JSON_DATA_CARD_ACTIONS]) {
-                actionCards.push(new ActionCardType(
-                    card.title,
-                    card.illustration,
-                    card.lore,
-                    card.effect,
-                ));
+                actionCards.push(new ActionCardType({
+                    title: card.title,
+                    illustration: card.illustration,
+                    lore: card.lore,
+                    effect: card.effect,
+                }));
             }
         }
         if (CARD_JSON_DATA_CARD_PROJECTS in cards) {
             for (const card of cards[CARD_JSON_DATA_CARD_PROJECTS]) {
-                projectCards.push(new ProjectCardType(
-                    card.title,
-                    card.illustration,
-                    card.lore,
-                    card.effect,
-                    card.client,
-                    card.optimalRevenue,
-                    card.baseRevenue,
-                    card.comboClientThreshold,
-                    card.comboClientEffect,
-                    card.optimalStaffing,
-                    card.penaltyThreshold,
-                    card.penaltyEffect,
-                ));
+                projectCards.push(new ProjectCardType({
+                    title: card.title,
+                    illustration: card.illustration,
+                    lore: card.lore,
+                    effect: card.effect,
+                    client: card.client,
+                    optimalRevenue: card.optimalRevenue,
+                    baseRevenue: card.baseRevenue,
+                    comboClientThreshold: card.comboClientThreshold,
+                    comboClientEffect: card.comboClientEffect,
+                    optimalStaffing: card.optimalStaffing,
+                    penaltyThreshold: card.penaltyThreshold,
+                    penaltyEffect: card.penaltyEffect,
+                }));
             }
         }
     }

@@ -1,15 +1,7 @@
 <script lang="ts">
     import { writable } from "svelte/store";
-    import {
-        EditOutline,
-        FloppyDiskAltOutline,
-        TrashBinOutline,
-        DollarOutline,
-        BatteryOutline,
-    } from "flowbite-svelte-icons";
-
+    import { PrinterOutline, TrashBinOutline } from "flowbite-svelte-icons";
     import type { CardType } from "$lib/index.ts";
-
     export let card: CardType;
     export let onDeleteAccessor;
     let isEditing = writable(false);
@@ -49,6 +41,12 @@
     class="group relative flex h-[88.9mm] w-[63.5mm] flex-col rounded-lg border p-1 shadow-lg rsccard"
 >
     <div class="absolute top-2 right-2 flex space-x-2 z-10">
+        <button
+            on:click={print}
+            class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
+        >
+            <PrinterOutline class="text-amber-300" />
+        </button>
         <button
             on:click={deleteCard}
             class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
@@ -126,17 +124,11 @@
 </div>
 
 <style>
-    .card {
-        width: 63.5mm;
-        height: 88.9mm;
-    }
     .rsccard {
-        /* background-color: rgb(243, 213, 213); */
         background-color: white;
         color: black;
     }
     .cardcontent {
-        /* background-color: lightgray; */
         border-radius: 5px;
         color: black;
     }

@@ -35,7 +35,7 @@
             const reader = new FileReader();
             reader.onload = () => {
                 if (reader.result) {
-                    projectCard.logo = reader.result as string;
+                    projectCard.illustration = reader.result as string;
                 }
             };
             reader.readAsDataURL(file);
@@ -115,8 +115,8 @@
         </div>
         <div class="relative w-[25mm]">
             <img
-                src={projectCard.logo}
-                alt="Project Logo"
+                src={projectCard.illustration}
+                alt="Project Illustration"
                 class="h-full w-full object-cover"
             />
             <input
