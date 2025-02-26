@@ -13,6 +13,7 @@
     export let card: CardType;
     export let onDeleteAccessor;
     let isEditing = writable(false);
+    let editingField = writable<string | null>(null);
 
     function saveCard() {
         isEditing.set(false);
@@ -34,27 +35,20 @@
             reader.readAsDataURL(file);
         }
     }
+
+    function startEditing(field: string) {
+        editingField.set(field);
+    }
+
+    function stopEditing() {
+        editingField.set(null);
+    }
 </script>
 
 <div
     class="group relative flex h-[88.9mm] w-[63.5mm] flex-col rounded-lg border p-1 shadow-lg rsccard"
 >
-    <div class="absolute top-2 right-2 flex space-x-2">
-        <button
-            on:click={() => isEditing.update((n) => !n)}
-            class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
-            aria-label="Edit card"
-        >
-            {#if $isEditing}
-                <FloppyDiskAltOutline
-                    class="text-blue-600"
-                    on:click={saveCard}
-                />
-            {/if}
-            {#if !$isEditing}
-                <EditOutline class="text-blue-600" />
-            {/if}
-        </button>
+    <div class="absolute top-2 right-2 flex space-x-2 z-10">
         <button
             on:click={deleteCard}
             class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
@@ -64,71 +58,70 @@
     </div>
 
     <div class="flex-grow cardcontent p-1">
-        {#if $isEditing}
-            <div class="flex flex-col space-y-2">
+        <div class="flex flex-col space-y-2">
+            {#if $editingField === "title"}
                 <input
                     type="text"
                     bind:value={card.title}
                     class="border-none p-0 text-lg font-bold focus:outline-none"
+                    on:blur={stopEditing}
+                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 />
-                <div class="relative h-[40%]">
-                    <img
-                        src={card.illustration}
-                        alt="Card Illustration"
-                        class="h-full w-full rounded-lg object-cover"
-                    />
-                    <input
-                        type="file"
-                        accept="image/*"
-                        on:change={handleImageChange}
-                        class="absolute inset-0 opacity-0 cursor-pointer"
-                    />
+            {:else}
+                <div
+                    class="h-[10%] truncate text-lg font-bold"
+                    on:click={() => startEditing("title")}
+                >
+                    {card.title}
                 </div>
+            {/if}
+
+            <div class="relative h-[40%]">
+                <img
+                    src={card.illustration}
+                    alt="Card Illustration"
+                    class="h-full w-full rounded-lg object-cover"
+                />
+                <input
+                    type="file"
+                    accept="image/*"
+                    on:change={handleImageChange}
+                    class="absolute inset-0 opacity-0 cursor-pointer"
+                />
+            </div>
+
+            {#if $editingField === "lore"}
                 <textarea
                     bind:value={card.lore}
                     class="border-none p-0 text-xs leading-tight italic focus:outline-none"
+                    on:blur={stopEditing}
+                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 ></textarea>
+            {:else}
+                <div
+                    class="truncate-2-lines h-[10%] text-xs italic"
+                    on:click={() => startEditing("lore")}
+                >
+                    {card.lore}
+                </div>
+            {/if}
+
+            {#if $editingField === "effect"}
                 <textarea
                     bind:value={card.effect}
                     class="h-[30%] border-none p-0 text-sm leading-tight focus:outline-none"
+                    on:blur={stopEditing}
+                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 ></textarea>
-            </div>
-        {:else}
-            <div class="h-[10%] truncate text-lg font-bold">
-                {card.title}
-            </div>
-            <div class="relative h-[40%]">
-                <button
-                    class="h-full w-full rounded-lg object-cover p-0 border-none"
-                    aria-label="card illustration"
-                    style="background: url({card.illustration}) no-repeat center/cover;"
+            {:else}
+                <div
+                    class="h-[30%] overflow-hidden text-sm leading-tight text-ellipsis effect_area"
+                    on:click={() => startEditing("effect")}
                 >
-                </button>
-            </div>
-            <div class="truncate-2-lines h-[10%] text-xs italic">
-                {card.lore}
-            </div>
-            <div
-                class="h-[30%] overflow-hidden text-sm leading-tight text-ellipsis effect_area"
-            >
-                {card.effect}
-            </div>
-
-            <div class="flex h-[10%] items-center justify-between">
-                {#if card.burnoutPoints}
-                    <div class="flex items-center">
-                        <BatteryOutline />
-                        <span class="ml-1">{card.burnoutPoints}</span>
-                    </div>
-                {/if}
-                {#if card.cost}
-                    <div class="flex items-center">
-                        <DollarOutline />
-                        <span class="ml-1">{card.cost}k</span>
-                    </div>
-                {/if}
-            </div>
-        {/if}
+                    {card.effect}
+                </div>
+            {/if}
+        </div>
     </div>
 </div>
 
