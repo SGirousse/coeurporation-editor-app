@@ -70,7 +70,7 @@
     </div>
 
     <div class="flex-grow cardcontent p-1">
-        <div class="flex flex-col space-y-1">
+        <div class="flex flex-col">
             {#if $editingField === "title"}
                 <input
                     type="text"
@@ -88,7 +88,7 @@
                 </div>
             {/if}
 
-            <div class="relative h-[30mm]">
+            <div class="relative h-[34mm] mb-1">
                 <img
                     src={card.illustration}
                     alt="Card Illustration"
@@ -122,13 +122,13 @@
                     <textarea
                         rows="2"
                         bind:value={card.lore}
-                        class="edited border-none p-0 text-xs leading-tight italic focus:outline-none"
+                        class="edited border-none p-0 text-[9px] leading-tight italic focus:outline-none text-justify"
                         on:blur={stopEditing}
                         on:keydown={(e) => e.key === "Enter" && stopEditing()}
                     ></textarea>
                 {:else}
                     <div
-                        class="truncate-2-lines text-xs italic"
+                        class="truncate-2-lines text-[9px] italic text-justify"
                         on:click={() => startEditing("lore")}
                     >
                         {card.lore}
@@ -140,13 +140,13 @@
                 {#if $editingField === "effect"}
                     <textarea
                         bind:value={card.effect}
-                        class="edited border-none p-0 text-sm leading-tight focus:outline-none"
+                        class="edited border-none p-0 text-sm leading-tight focus:outline-none text-justify"
                         on:blur={stopEditing}
                         on:keydown={(e) => e.key === "Enter" && stopEditing()}
                     ></textarea>
                 {:else}
                     <div
-                        class="h-full overflow-hidden text-sm leading-tight text-ellipsis effect_area align-text-top"
+                        class="h-full overflow-hidden text-sm leading-tight effect_area align-text-top text-justify"
                         on:click={() => startEditing("effect")}
                     >
                         {card.effect}
@@ -155,7 +155,7 @@
             </div>
 
             <div class="flex h-[9mm] items-center justify-between">
-                {#if card.burnoutPoints}
+                {#if "burnoutPoints" in card }
                     <div class="flex items-center w-[15mm]">
                         <BatteryOutline />
                         {#if $editingField === "burnoutPoints"}
@@ -163,6 +163,7 @@
                                 type="number"
                                 bind:value={card.burnoutPoints}
                                 class="edited border-none p-0 leading-tight focus:outline-none"
+                                placeholder="e.g. 3"
                                 on:blur={stopEditing}
                                 on:keydown={(e) =>
                                     e.key === "Enter" && stopEditing()}
@@ -171,12 +172,12 @@
                             <button
                                 class="truncate-2-lines pl-1"
                                 on:click={() => startEditing("burnoutPoints")}
-                                >{card.burnoutPoints}</button
+                                >{#if card.burnoutPoints}{card.burnoutPoints}{:else}0{/if}</button
                             >
                         {/if}
                     </div>
                 {/if}
-                {#if card.cost}
+                {#if "cost" in card}
                     <div class="flex items-center w-[15mm]">
                         <DollarOutline />
                         {#if $editingField === "cost"}
@@ -184,15 +185,17 @@
                                 type="number"
                                 bind:value={card.cost}
                                 class="edited border-none p-0 leading-tight focus:outline-none"
+                                placeholder="e.g. 20"
                                 on:blur={stopEditing}
                                 on:keydown={(e) =>
                                     e.key === "Enter" && stopEditing()}
                             />
                         {:else}
+                        
                             <button
                                 class="truncate-2-lines pl-1"
                                 on:click={() => startEditing("cost")}
-                                >{card.cost}</button
+                                >{#if card.cost}{card.cost}{:else}0{/if}</button
                             >
                         {/if}
                         k
@@ -239,18 +242,11 @@
         white-space: nowrap;
         text-overflow: ellipsis;
     }
+
     .truncate-2-lines {
         display: -webkit-box;
         -webkit-line-clamp: 2; /* Number of lines to show */
         line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .text-ellipsis {
-        display: -webkit-box;
-        -webkit-line-clamp: 3; /* Number of lines to show */
-        line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
