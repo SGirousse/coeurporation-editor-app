@@ -4,41 +4,48 @@
 
     import type { ProjectCardType } from "$lib/index.ts";
 
-    export let projectCard: ProjectCardType;
-    export let onDeleteAccessor;
-    let isEditing = writable(false);
+    import logo_cebocorp from "$lib/assets/companies/logo/001_cebocorp.png";
+    import logo_fullcarburant from "$lib/assets/companies/logo/002_fullcarburant.png";
+    import logo_etatfroncais from "$lib/assets/companies/logo/003_etatfroncais.png";
+    import logo_superkopter from "$lib/assets/companies/logo/004_superkopter.png";
+    import logo_laklass from "$lib/assets/companies/logo/005_laklass.png";
+    import logo_novosanst from "$lib/assets/companies/logo/006_novosanst.png";
+    import logo_telko from "$lib/assets/companies/logo/007_telko.png";
+    import logo_flycar from "$lib/assets/companies/logo/008_flycar.png";
+    import logo_turbomotor from "$lib/assets/companies/logo/009_turbomotor.png";
+    import logo_moulabank from "$lib/assets/companies/logo/010_moulabank.png";
 
-    function saveCard() {
-        isEditing.set(false);
-    }
+    export let projectCard: ProjectCardType;
+    export let onDeleteAccessor: any;
+
+    const clients = [
+        { id: "001", name: "Cébo Corp", file: logo_cebocorp },
+        { id: "002", name: "FullCarburant", file: logo_fullcarburant },
+        { id: "003", name: "Etat Fronçais", file: logo_etatfroncais },
+        { id: "004", name: "SuperKopter", file: logo_superkopter },
+        { id: "005", name: "La Klass", file: logo_laklass },
+        { id: "006", name: "Novo Sans T", file: logo_novosanst },
+        { id: "007", name: "TELKO", file: logo_telko },
+        { id: "008", name: "FlyCar", file: logo_flycar },
+        { id: "009", name: "Turbo Motor", file: logo_turbomotor },
+        { id: "010", name: "Moula Bank", file: logo_moulabank },
+    ];
 
     function deleteCard() {
         onDeleteAccessor.deleteProjectCard(projectCard);
     }
 
-    function handleImageChange(event: any) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (reader.result) {
-                    projectCard.illustration = reader.result as string;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+    function handleSelectChange(event: any) {
+        const selectedClientId = event.target.value;
+        const selectedClient = clients.find(
+            (client) => client.id === selectedClientId,
+        );
 
-    function handleLogoChange(event: any) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (reader.result) {
-                    projectCard.illustration = reader.result as string;
-                }
-            };
-            reader.readAsDataURL(file);
+        if (selectedClient) {
+            projectCard.client = selectedClient.id;
+            projectCard.illustration = selectedClient.file;
+        } else {
+            projectCard.client = "";
         }
     }
 
@@ -69,37 +76,40 @@
         class="flex h-[20mm]
     "
     >
-        <div class="flex flex-col w-[55mm] m-0">
+        <div class="flex flex-col w-[44mm] m-0">
             <div
                 class="flex h-[8mm]
         "
             >
-                {#if $editingField === "title"}
-                    <input
-                        type="text"
-                        bind:value={projectCard.title}
-                        class="border-none p-0 text-lg font-bold focus:outline-none"
-                        on:blur={stopEditing}
-                        on:keydown={(e) => e.key === "Enter" && stopEditing()}
-                    />
-                {:else}
-                    <button
-                        class="truncate text-lg font-bold"
-                        on:click={() => startEditing("title")}
-                    >
-                        {projectCard.title}
-                    </button>
-                {/if}
+                <div class="relative h-[9mm]">
+                    {#if $editingField === "title"}
+                        <input
+                            type="text"
+                            bind:value={projectCard.title}
+                            class="edited border-none p-0 text-lg font-bold focus:outline-none"
+                            on:blur={stopEditing}
+                            on:keydown={(e) =>
+                                e.key === "Enter" && stopEditing()}
+                        />
+                    {:else}
+                        <button
+                            class="truncate text-lg font-bold"
+                            on:click={() => startEditing("title")}
+                        >
+                            {projectCard.title}
+                        </button>
+                    {/if}
+                </div>
             </div>
 
             <div
-                class="flex h-full
+                class="relative h-[9mm]
         "
             >
                 {#if $editingField === "lore"}
                     <textarea
                         bind:value={projectCard.lore}
-                        class="border-none p-0 text-xs leading-tight italic focus:outline-none resize-none w-full h-full"
+                        class="edited border-none p-0 text-xs leading-tight italic focus:outline-none resize-none w-full h-full"
                         on:blur={stopEditing}
                         on:keydown={(e) => e.key === "Enter" && stopEditing()}
                     ></textarea>
@@ -113,17 +123,11 @@
                 {/if}
             </div>
         </div>
-        <div class="relative w-[25mm]">
+        <div class="relative">
             <img
                 src={projectCard.illustration}
                 alt="Project Illustration"
-                class="h-full w-full object-cover"
-            />
-            <input
-                type="file"
-                accept="image/*"
-                on:change={handleLogoChange}
-                class="absolute inset-0 opacity-0 cursor-pointer h-full w-full"
+                class="h-[17mm] w-[17mm]"
             />
         </div>
     </div>
@@ -133,152 +137,160 @@
             {#if $editingField === "effect"}
                 <textarea
                     bind:value={projectCard.effect}
-                    class="border-none p-0 text-sm leading-tight focus:outline-none"
+                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
                     on:blur={stopEditing}
                     on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 ></textarea>
             {:else}
                 <div
-                    class="overflow-hidden text-sm leading-tight text-ellipsis"
+                    class="overflow-hidden text-[12px] leading-tight text-ellipsis"
                     on:click={() => startEditing("effect")}
                 >
                     {projectCard.effect}
                 </div>
             {/if}
         </div>
-        {#if $editingField === "client"}
-            <input
-                type="text"
-                bind:value={projectCard.client}
-                class="border-none p-0 text-sm leading-tight focus:outline-none"
-                on:blur={stopEditing}
-                on:keydown={(e) => e.key === "Enter" && stopEditing()}
-            />
-        {:else}
-            <div
-                class="text-sm leading-tight"
-                on:click={() => startEditing("client")}
+        <div class="h-[7mm] text-[12px] leading-tight">
+            Client: <select
+                name="clients"
+                class="compact-select"
+                on:change={handleSelectChange}
             >
-                Client: {projectCard.client}
-            </div>
-        {/if}
+                {#each clients as client, index}
+                    <option
+                        value={client.id}
+                        selected={projectCard.client === client.id}
+                        >{client.name}</option
+                    >
+                {/each}
+            </select>
+        </div>
 
-        {#if $editingField === "optimalRevenue"}
-            <input
-                type="number"
-                bind:value={projectCard.optimalRevenue}
-                class="border-none p-0 text-sm leading-tight focus:outline-none"
-                on:blur={stopEditing}
-                on:keydown={(e) => e.key === "Enter" && stopEditing()}
-            />
-        {:else}
-            <div
-                class="text-sm leading-tight"
-                on:click={() => startEditing("optimalRevenue")}
-            >
-                Optimal Revenue: {projectCard.optimalRevenue}k
-            </div>
-        {/if}
+        <div class="relative h-[7mm]">
+            {#if $editingField === "optimalRevenue"}
+                <input
+                    type="number"
+                    bind:value={projectCard.optimalRevenue}
+                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
+                    on:blur={stopEditing}
+                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                />
+            {:else}
+                <div
+                    class="text-[12px] leading-tight"
+                    on:click={() => startEditing("optimalRevenue")}
+                >
+                    Optimal Revenue: {projectCard.optimalRevenue}k
+                </div>
+            {/if}
+        </div>
 
-        {#if $editingField === "baseRevenue"}
-            <input
-                type="number"
-                bind:value={projectCard.baseRevenue}
-                class="border-none p-0 text-sm leading-tight focus:outline-none"
-                on:blur={stopEditing}
-                on:keydown={(e) => e.key === "Enter" && stopEditing()}
-            />
-        {:else}
-            <div
-                class="text-sm leading-tight"
-                on:click={() => startEditing("baseRevenue")}
-            >
-                Base Revenue: {projectCard.baseRevenue}k
-            </div>
-        {/if}
-
-        {#if $editingField === "comboClientThreshold"}
-            <input
-                type="number"
-                bind:value={projectCard.comboClientThreshold}
-                class="border-none p-0 text-sm leading-tight focus:outline-none"
-                on:blur={stopEditing}
-                on:keydown={(e) => e.key === "Enter" && stopEditing()}
-            />
-        {:else}
-            <div
-                class="text-sm leading-tight"
-                on:click={() => startEditing("comboClientThreshold")}
-            >
-                Combo Client Threshold: {projectCard.comboClientThreshold}
-            </div>
-        {/if}
-
-        {#if $editingField === "comboClientEffect"}
-            <textarea
-                bind:value={projectCard.comboClientEffect}
-                class="border-none p-0 text-sm leading-tight focus:outline-none"
-                on:blur={stopEditing}
-                on:keydown={(e) => e.key === "Enter" && stopEditing()}
-            ></textarea>
-        {:else}
-            <div
-                class="text-sm leading-tight"
-                on:click={() => startEditing("comboClientEffect")}
-            >
-                Combo Client Effect: {projectCard.comboClientEffect}
-            </div>
-        {/if}
-
-        {#if $editingField === "optimalStaffing"}
-            <input
-                type="text"
-                bind:value={projectCard.optimalStaffing}
-                class="border-none p-0 text-sm leading-tight focus:outline-none"
-                on:blur={stopEditing}
-                on:keydown={(e) => e.key === "Enter" && stopEditing()}
-            />
-        {:else}
-            <div
-                class="text-sm leading-tight"
-                on:click={() => startEditing("optimalStaffing")}
-            >
-                Optimal Staffing: {projectCard.optimalStaffing.join(", ")}
-            </div>
-        {/if}
-
-        {#if $editingField === "penaltyThreshold"}
-            <input
-                type="number"
-                bind:value={projectCard.penaltyThreshold}
-                class="border-none p-0 text-sm leading-tight focus:outline-none"
-                on:blur={stopEditing}
-                on:keydown={(e) => e.key === "Enter" && stopEditing()}
-            />
-        {:else}
-            <div
-                class="text-sm leading-tight"
-                on:click={() => startEditing("penaltyThreshold")}
-            >
-                Penalty Threshold: {projectCard.penaltyThreshold}
-            </div>
-        {/if}
-
-        {#if $editingField === "penaltyEffect"}
-            <textarea
-                bind:value={projectCard.penaltyEffect}
-                class="border-none p-0 text-sm leading-tight focus:outline-none"
-                on:blur={stopEditing}
-                on:keydown={(e) => e.key === "Enter" && stopEditing()}
-            ></textarea>
-        {:else}
-            <div
-                class="text-sm leading-tight"
-                on:click={() => startEditing("penaltyEffect")}
-            >
-                Penalty Effect: {projectCard.penaltyEffect}
-            </div>
-        {/if}
+        <div class="relative h-[7mm]">
+            {#if $editingField === "baseRevenue"}
+                <input
+                    type="number"
+                    bind:value={projectCard.baseRevenue}
+                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
+                    on:blur={stopEditing}
+                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                />
+            {:else}
+                <div
+                    class="text-[12px] leading-tight"
+                    on:click={() => startEditing("baseRevenue")}
+                >
+                    Base Revenue: {projectCard.baseRevenue}k
+                </div>
+            {/if}
+        </div>
+        <div class="relative h-[7mm]">
+            {#if $editingField === "comboClientThreshold"}
+                <input
+                    type="number"
+                    bind:value={projectCard.comboClientThreshold}
+                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
+                    on:blur={stopEditing}
+                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                />
+            {:else}
+                <div
+                    class="text-[12px] leading-tight"
+                    on:click={() => startEditing("comboClientThreshold")}
+                >
+                    Combo Client Threshold: {projectCard.comboClientThreshold}
+                </div>
+            {/if}
+        </div>
+        <div class="relative h-[7mm]">
+            {#if $editingField === "comboClientEffect"}
+                <textarea
+                    bind:value={projectCard.comboClientEffect}
+                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
+                    on:blur={stopEditing}
+                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                ></textarea>
+            {:else}
+                <div
+                    class="text-[12px] leading-tight"
+                    on:click={() => startEditing("comboClientEffect")}
+                >
+                    Combo Client Effect: {projectCard.comboClientEffect}
+                </div>
+            {/if}
+        </div>
+        <div class="relative h-[7mm]">
+            {#if $editingField === "optimalStaffing"}
+                <input
+                    type="text"
+                    bind:value={projectCard.optimalStaffing}
+                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
+                    on:blur={stopEditing}
+                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                />
+            {:else}
+                <div
+                    class="text-[12px] leading-tight"
+                    on:click={() => startEditing("optimalStaffing")}
+                >
+                    Optimal Staffing: {projectCard.optimalStaffing.join(", ")}
+                </div>
+            {/if}
+        </div>
+        <div class="relative h-[7mm]">
+            {#if $editingField === "penaltyThreshold"}
+                <input
+                    type="number"
+                    bind:value={projectCard.penaltyThreshold}
+                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
+                    on:blur={stopEditing}
+                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                />
+            {:else}
+                <div
+                    class="text-[12px] leading-tight"
+                    on:click={() => startEditing("penaltyThreshold")}
+                >
+                    Penalty Threshold: {projectCard.penaltyThreshold}
+                </div>
+            {/if}
+        </div>
+        <div class="relative h-[7mm]">
+            {#if $editingField === "penaltyEffect"}
+                <textarea
+                    bind:value={projectCard.penaltyEffect}
+                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
+                    on:blur={stopEditing}
+                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                ></textarea>
+            {:else}
+                <div
+                    class="text-[12px] leading-tight"
+                    on:click={() => startEditing("penaltyEffect")}
+                >
+                    Penalty Effect: {projectCard.penaltyEffect}
+                </div>
+            {/if}
+        </div>
     </div>
 </div>
 
@@ -286,6 +298,10 @@
     .project-card {
         background-color: white;
         color: black;
+    }
+
+    .project-card .edited {
+        background-color: rgb(197, 197, 197);
     }
 
     .project-card button {
@@ -318,5 +334,23 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .compact-select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background: none;
+        border: none;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+        color: inherit;
+        cursor: pointer;
+    }
+
+    .compact-select option {
+        background: white;
+        color: black;
     }
 </style>

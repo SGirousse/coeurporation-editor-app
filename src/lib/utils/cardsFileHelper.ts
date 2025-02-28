@@ -50,13 +50,12 @@ export async function writeFileContent(resourceCards: ResourceCardType[], codirE
     const resourceCardsWithBase64Images = await cardIllustrationToBase64Images(resourceCards);
     const codirEventCardsWithBase64Images = await cardIllustrationToBase64Images(codirEventCards);
     const actionCardsWithBase64Images = await cardIllustrationToBase64Images(actionCards);
-    const projectCardsWithBase64Images = await cardIllustrationToBase64Images(projectCards);
 
     let data = {
         [CARD_JSON_DATA_CARD_RESOURCES]: resourceCardsWithBase64Images,
         [CARD_JSON_DATA_CARD_CODIREVENTS]: codirEventCardsWithBase64Images,
         [CARD_JSON_DATA_CARD_ACTIONS]: actionCardsWithBase64Images,
-        [CARD_JSON_DATA_CARD_PROJECTS]: projectCardsWithBase64Images,
+        [CARD_JSON_DATA_CARD_PROJECTS]: projectCards,
     }
 
     let jsonified = {

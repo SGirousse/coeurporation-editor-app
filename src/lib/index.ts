@@ -54,7 +54,7 @@ export class ProjectCardType implements CardType {
     public illustration: string = "";
     public lore: string = "Lore";
     public effect: string = "Effect";
-    public client: string = "Client";
+    public client: string = "";
     public optimalRevenue: number = 20;
     public baseRevenue: number = 10;
     public comboClientThreshold: number = 3;
