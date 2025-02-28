@@ -1,7 +1,6 @@
 <script lang="ts">
     import { writable } from "svelte/store";
     import {
-        PrinterOutline,
         TrashBinOutline,
         BatteryOutline,
         DollarOutline,
@@ -9,13 +8,8 @@
     import type { CardType } from "$lib/index.ts";
 
     export let card: CardType;
-    export let onDeleteAccessor;
-    let isEditing = writable(false);
+    export let onDeleteAccessor: any;
     let editingField = writable<string | null>(null);
-
-    function saveCard() {
-        isEditing.set(false);
-    }
 
     function deleteCard() {
         onDeleteAccessor.deleteCard(card);
@@ -105,11 +99,11 @@
                     <input
                         type="text"
                         bind:value={card.grade}
-                        class="edited absolute -top-3 -right-1 {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white text-center focus:outline-none"
+                        class="text-[12px] edited absolute -top-3 -right-1 {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white text-center focus:outline-none"
                     />
                 {:else}
                     <div
-                        class="absolute -top-3 -right-1 {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white"
+                        class="text-[12px] absolute -top-3 -right-1 {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white"
                         on:click={() => startEditing("grade")}
                     >
                         {card.grade}
@@ -136,17 +130,17 @@
                 {/if}
             </div>
 
-            <div class="relative h-[24mm] bg-amber-200">
+            <div class="relative h-[24mm]">
                 {#if $editingField === "effect"}
                     <textarea
                         bind:value={card.effect}
-                        class="edited border-none p-0 text-sm leading-tight focus:outline-none text-justify"
+                        class="edited border-none p-0 text-[12px] leading-tight focus:outline-none text-justify"
                         on:blur={stopEditing}
                         on:keydown={(e) => e.key === "Enter" && stopEditing()}
                     ></textarea>
                 {:else}
                     <div
-                        class="h-full overflow-hidden text-sm leading-tight effect_area align-text-top text-justify"
+                        class="h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify"
                         on:click={() => startEditing("effect")}
                     >
                         {card.effect}
@@ -155,14 +149,14 @@
             </div>
 
             <div class="flex h-[9mm] items-center justify-between">
-                {#if "burnoutPoints" in card }
+                {#if "burnoutPoints" in card}
                     <div class="flex items-center w-[15mm]">
                         <BatteryOutline />
                         {#if $editingField === "burnoutPoints"}
                             <input
                                 type="number"
                                 bind:value={card.burnoutPoints}
-                                class="edited border-none p-0 leading-tight focus:outline-none"
+                                class="text-[12px] edited border-none p-0 leading-tight focus:outline-none"
                                 placeholder="e.g. 3"
                                 on:blur={stopEditing}
                                 on:keydown={(e) =>
@@ -170,7 +164,7 @@
                             />
                         {:else}
                             <button
-                                class="truncate-2-lines pl-1"
+                                class="text-[12px] truncate-2-lines pl-1"
                                 on:click={() => startEditing("burnoutPoints")}
                                 >{#if card.burnoutPoints}{card.burnoutPoints}{:else}0{/if}</button
                             >
@@ -184,16 +178,15 @@
                             <input
                                 type="number"
                                 bind:value={card.cost}
-                                class="edited border-none p-0 leading-tight focus:outline-none"
+                                class="text-[12px] edited border-none p-0 leading-tight focus:outline-none"
                                 placeholder="e.g. 20"
                                 on:blur={stopEditing}
                                 on:keydown={(e) =>
                                     e.key === "Enter" && stopEditing()}
                             />
                         {:else}
-                        
                             <button
-                                class="truncate-2-lines pl-1"
+                                class="text-[12px] truncate-2-lines pl-1"
                                 on:click={() => startEditing("cost")}
                                 >{#if card.cost}{card.cost}{:else}0{/if}</button
                             >
@@ -232,6 +225,7 @@
         border-radius: 5px;
         color: black;
     }
+
     .effect_area {
         background-color: white;
         color: black;
