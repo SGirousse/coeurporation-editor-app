@@ -10,6 +10,10 @@
     export let card: CardType;
     export let onDeleteAccessor: any;
     let editingField = writable<string | null>(null);
+    let gradeColor = "";
+    if ("grade" in card) {
+        updateGradeValue(card.grade as string);
+    }
 
     function deleteCard() {
         onDeleteAccessor.deleteCard(card);
@@ -28,6 +32,35 @@
         }
     }
 
+    async function handleSelectChange(event: any) {
+        updateGradeValue(event.target.value);
+    }
+
+    async function updateGradeValue(grade: string) {
+        if (grade && "grade" in card) {
+            card.grade = grade;
+            switch (card.grade) {
+                case "A":
+                    gradeColor = "bg-green-500";
+                    break;
+                case "B":
+                    gradeColor = "bg-blue-500";
+                    break;
+                case "C":
+                    gradeColor = "bg-yellow-500";
+                    break;
+                case "D":
+                    gradeColor = "bg-orange-500";
+                    break;
+                case "E":
+                    gradeColor = "bg-purple-500";
+                    break;
+                default:
+                    gradeColor = "bg-gray-500";
+            }
+        }
+    }
+
     function startEditing(field: string) {
         editingField.set(field);
     }
@@ -35,20 +68,6 @@
     function stopEditing() {
         editingField.set(null);
     }
-
-    $: gradeColor = card.grade
-        ? card.grade === "A"
-            ? "bg-green-500"
-            : card.grade === "B"
-              ? "bg-blue-500"
-              : card.grade === "C"
-                ? "bg-yellow-500"
-                : card.grade === "D"
-                  ? "bg-orange-500"
-                  : card.grade === "Stg"
-                    ? "bg-purple-500"
-                    : "bg-gray-500"
-        : "";
 </script>
 
 <div
@@ -74,12 +93,12 @@
                     on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 />
             {:else}
-                <div
+                <button
                     class="h-[8mm] truncate text-lg font-bold"
                     on:click={() => startEditing("title")}
                 >
                     {card.title}
-                </div>
+                </button>
             {/if}
 
             <div class="relative h-[34mm] mb-1">
@@ -94,20 +113,28 @@
                     on:change={handleImageChange}
                     class="absolute inset-0 opacity-0 cursor-pointer"
                 />
-
-                {#if $editingField === "grade"}
-                    <input
-                        type="text"
-                        bind:value={card.grade}
-                        class="text-[12px] edited absolute -top-3 -right-1 {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white text-center focus:outline-none"
-                    />
-                {:else}
-                    <div
-                        class="text-[12px] absolute -top-3 -right-1 {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white"
-                        on:click={() => startEditing("grade")}
+                {#if "grade" in card}
+                    <select
+                        name="grade"
+                        class="compact-select text-[12px] absolute -top-3 -right-1 {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white text-center focus:outline-none"
+                        on:change={handleSelectChange}
                     >
-                        {card.grade}
-                    </div>
+                        <option value="A" selected={card.grade === "A"}
+                            >A</option
+                        >
+                        <option value="B" selected={card.grade === "B"}
+                            >B</option
+                        >
+                        <option value="C" selected={card.grade === "C"}
+                            >C</option
+                        >
+                        <option value="D" selected={card.grade === "D"}
+                            >D</option
+                        >
+                        <option value="E" selected={card.grade === "E"}
+                            >E</option
+                        >
+                    </select>
                 {/if}
             </div>
 
@@ -121,6 +148,8 @@
                         on:keydown={(e) => e.key === "Enter" && stopEditing()}
                     ></textarea>
                 {:else}
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
                         class="truncate-2-lines text-[9px] italic text-justify"
                         on:click={() => startEditing("lore")}
@@ -139,6 +168,8 @@
                         on:keydown={(e) => e.key === "Enter" && stopEditing()}
                     ></textarea>
                 {:else}
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
                         class="h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify"
                         on:click={() => startEditing("effect")}
@@ -244,5 +275,20 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .compact-select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        background-image: none;
+    }
+
+    .compact-select option {
+        background: white;
+        color: black;
     }
 </style>

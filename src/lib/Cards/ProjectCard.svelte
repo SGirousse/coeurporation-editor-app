@@ -31,15 +31,18 @@
         { id: "010", name: "Moula Bank", file: logo_moulabank },
     ];
 
+    updateClientValue(projectCard.client);
+
     function deleteCard() {
         onDeleteAccessor.deleteProjectCard(projectCard);
     }
 
-    function handleSelectChange(event: any) {
-        const selectedClientId = event.target.value;
-        const selectedClient = clients.find(
-            (client) => client.id === selectedClientId,
-        );
+    async function handleSelectChange(event: any) {
+        updateClientValue(event.target.value);
+    }
+
+    async function updateClientValue(clientId: string) {
+        const selectedClient = clients.find((client) => client.id === clientId);
 
         if (selectedClient) {
             projectCard.client = selectedClient.id;
@@ -142,6 +145,8 @@
                     on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 ></textarea>
             {:else}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class="overflow-hidden text-[12px] leading-tight text-ellipsis"
                     on:click={() => startEditing("effect")}
@@ -176,6 +181,8 @@
                     on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 />
             {:else}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class="text-[12px] leading-tight"
                     on:click={() => startEditing("optimalRevenue")}
@@ -195,6 +202,8 @@
                     on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 />
             {:else}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class="text-[12px] leading-tight"
                     on:click={() => startEditing("baseRevenue")}
@@ -213,6 +222,8 @@
                     on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 />
             {:else}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class="text-[12px] leading-tight"
                     on:click={() => startEditing("comboClientThreshold")}
@@ -230,6 +241,8 @@
                     on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 ></textarea>
             {:else}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class="text-[12px] leading-tight"
                     on:click={() => startEditing("comboClientEffect")}
@@ -248,6 +261,8 @@
                     on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 />
             {:else}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class="text-[12px] leading-tight"
                     on:click={() => startEditing("optimalStaffing")}
@@ -266,6 +281,8 @@
                     on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 />
             {:else}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class="text-[12px] leading-tight"
                     on:click={() => startEditing("penaltyThreshold")}
@@ -283,6 +300,8 @@
                     on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 ></textarea>
             {:else}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class="text-[12px] leading-tight"
                     on:click={() => startEditing("penaltyEffect")}
