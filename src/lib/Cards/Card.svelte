@@ -6,6 +6,7 @@
         DollarOutline,
     } from "flowbite-svelte-icons";
     import type { CardType } from "$lib/index.ts";
+    import defaultIllustration from "$lib/assets/illustration/default.jpg";
 
     export let card: CardType;
     export let onDeleteAccessor: any;
@@ -13,6 +14,12 @@
     let gradeColor = "";
     if ("grade" in card) {
         updateGradeValue(card.grade as string);
+    }
+    if (card.illustration === undefined || card.illustration === "") {
+        card.illustration = defaultIllustration;
+    } else {
+        console.log(card.title);
+        console.log(card.illustration);
     }
 
     function deleteCard() {
