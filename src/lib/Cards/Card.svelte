@@ -17,9 +17,6 @@
     }
     if (card.illustration === undefined || card.illustration === "") {
         card.illustration = defaultIllustration;
-    } else {
-        console.log(card.title);
-        console.log(card.illustration);
     }
 
     function deleteCard() {
