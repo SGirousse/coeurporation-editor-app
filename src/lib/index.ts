@@ -58,7 +58,7 @@ export class ProjectCardType implements CardType {
     public optimalRevenue: number = 20;
     public baseRevenue: number = 10;
     public comboClientThreshold: number = 3;
-    public comboClientEffect: string = "";
+    public comboClientEffect: string = "Combo client effect";
     public optimalStaffing: string[] = ["A", "B", "C"];
     public penaltyThreshold: number = 3;
     public penaltyEffect: string = "";

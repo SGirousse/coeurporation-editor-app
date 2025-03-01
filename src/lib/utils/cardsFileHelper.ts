@@ -28,7 +28,8 @@ async function cardIllustrationToBase64Images(cardsWithIllustration: CardType[] 
         cardsWithIllustration.map(async (cardWithIllustration) => {
             if (
                 cardWithIllustration.illustration &&
-                !cardWithIllustration.illustration.startsWith("data:")
+                !cardWithIllustration.illustration.startsWith("data:") &&
+                !cardWithIllustration.illustration.endsWith("assets/illustration/default.jpg")
             ) {
                 cardWithIllustration.illustration = await convertImageToBase64(
                     cardWithIllustration.illustration,

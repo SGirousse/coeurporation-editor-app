@@ -5,6 +5,7 @@
         BatteryOutline,
         DollarOutline,
     } from "flowbite-svelte-icons";
+    import { marked } from 'marked';
     import type { CardType } from "$lib/index.ts";
     import defaultIllustration from "$lib/assets/illustration/default.jpg";
 
@@ -181,16 +182,16 @@
                         bind:value={card.effect}
                         class="edited border-none p-0 text-[12px] leading-tight focus:outline-none text-justify"
                         on:blur={stopEditing}
-                        on:keydown={(e) => e.key === "Enter" && stopEditing()}
                     ></textarea>
                 {:else}
+
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
-                        class="h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify"
+                        class="h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         on:click={() => startEditing("effect")}
                     >
-                        {card.effect}
+                    {@html marked(card.effect)}
                     </div>
                 {/if}
             </div>

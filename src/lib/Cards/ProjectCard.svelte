@@ -1,6 +1,7 @@
 <script lang="ts">
     import { writable } from "svelte/store";
     import { TrashBinOutline } from "flowbite-svelte-icons";
+    import { marked } from "marked";
 
     import type { ProjectCardType } from "$lib/index.ts";
 
@@ -140,18 +141,17 @@
             {#if $editingField === "effect"}
                 <textarea
                     bind:value={projectCard.effect}
-                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
+                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none text-justify"
                     on:blur={stopEditing}
-                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 ></textarea>
             {:else}
                 <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
-                    class="overflow-hidden text-[12px] leading-tight text-ellipsis"
+                    class="h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                     on:click={() => startEditing("effect")}
                 >
-                    {projectCard.effect}
+                    {@html marked(projectCard.effect)}
                 </div>
             {/if}
         </div>
@@ -232,13 +232,12 @@
                 </div>
             {/if}
         </div>
-        <div class="relative h-[7mm]">
+        <div class="h-[20mm]">
             {#if $editingField === "comboClientEffect"}
                 <textarea
                     bind:value={projectCard.comboClientEffect}
-                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
+                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none text-justify"
                     on:blur={stopEditing}
-                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
                 ></textarea>
             {:else}
                 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -247,7 +246,7 @@
                     class="text-[12px] leading-tight"
                     on:click={() => startEditing("comboClientEffect")}
                 >
-                    Combo Client Effect: {projectCard.comboClientEffect}
+                    {@html marked(projectCard.comboClientEffect)}
                 </div>
             {/if}
         </div>
