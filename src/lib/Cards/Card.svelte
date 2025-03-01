@@ -59,6 +59,12 @@
                 case "E":
                     gradeColor = "bg-purple-500";
                     break;
+                case "S":
+                    gradeColor = "bg-amber-500";
+                    break;
+                case "Stg":
+                    gradeColor = "bg-teal-500";
+                    break;
                 default:
                     gradeColor = "bg-gray-500";
             }
@@ -123,6 +129,9 @@
                         class="compact-select text-[12px] absolute -top-3 -right-1 {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white text-center focus:outline-none"
                         on:change={handleSelectChange}
                     >
+                    <option value="Stg" selected={card.grade === "Stg"}
+                        >Stg</option
+                    >
                         <option value="A" selected={card.grade === "A"}
                             >A</option
                         >
@@ -137,6 +146,9 @@
                         >
                         <option value="E" selected={card.grade === "E"}
                             >E</option
+                        >
+                        <option value="S" selected={card.grade === "S"}
+                            >S</option
                         >
                     </select>
                 {/if}
