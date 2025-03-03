@@ -1,6 +1,12 @@
 <script lang="ts">
     import { writable } from "svelte/store";
-    import { TrashBinOutline } from "flowbite-svelte-icons";
+    import {
+        TrashBinOutline,
+        AwardOutline,
+        BitcoinSolid,
+        DollarOutline,
+        AwardSolid,
+    } from "flowbite-svelte-icons";
     import { marked } from "marked";
 
     import type { ProjectCardType } from "$lib/index.ts";
@@ -31,6 +37,7 @@
         { id: "009", name: "Turbo Motor", file: logo_turbomotor },
         { id: "010", name: "Moula Bank", file: logo_moulabank },
     ];
+    let gradeColor = "bg-gray-500";
 
     updateClientValue(projectCard.client);
 
@@ -52,6 +59,40 @@
             projectCard.client = "";
         }
     }
+    async function handleSelectGradeChange(event: any) {
+        updateGradeValue(event.target.value);
+    }
+
+    async function updateGradeValue(grade: string) {
+        console.log(grade);
+        console.log(gradeColor);
+        switch (grade) {
+            case "A":
+                gradeColor = "bg-green-500";
+                break;
+            case "B":
+                gradeColor = "bg-blue-500";
+                break;
+            case "C":
+                gradeColor = "bg-yellow-500";
+                break;
+            case "D":
+                gradeColor = "bg-orange-500";
+                break;
+            case "E":
+                gradeColor = "bg-purple-500";
+                break;
+            case "S":
+                gradeColor = "bg-amber-500";
+                break;
+            case "Stg":
+                gradeColor = "bg-teal-500";
+                break;
+            default:
+                gradeColor = "bg-white";
+        }
+        console.log(gradeColor);
+    }
 
     let editingField = writable<string | null>(null);
 
@@ -65,7 +106,7 @@
 </script>
 
 <div
-    class="group relative flex h-[120mm] w-[70mm] flex-col rounded-lg border p-4 shadow-lg project-card"
+    class="group relative flex h-[70mm] w-[120mm] flex-col rounded-lg border p-1 shadow-lg project-card"
 >
     <div class="absolute top-2 right-2 flex space-x-2 z-10">
         <button
@@ -76,40 +117,29 @@
         </button>
     </div>
 
-    <div
-        class="flex h-[20mm]
-    "
-    >
-        <div class="flex flex-col w-[44mm] m-0">
-            <div
-                class="flex h-[8mm]
-        "
-            >
-                <div class="relative h-[9mm]">
-                    {#if $editingField === "title"}
-                        <input
-                            type="text"
-                            bind:value={projectCard.title}
-                            class="edited border-none p-0 text-lg font-bold focus:outline-none"
-                            on:blur={stopEditing}
-                            on:keydown={(e) =>
-                                e.key === "Enter" && stopEditing()}
-                        />
-                    {:else}
-                        <button
-                            class="truncate text-lg font-bold"
-                            on:click={() => startEditing("title")}
-                        >
-                            {projectCard.title}
-                        </button>
-                    {/if}
-                </div>
+    <div class="flex-grow flex cardcontent p-1">
+        <!-- Left part with text data -->
+        <div class="flex flex-col w-[95mm] m-0 mr-2">
+            <div class="relative h-[6mm] w-full">
+                {#if $editingField === "title"}
+                    <input
+                        type="text"
+                        bind:value={projectCard.title}
+                        class="w-full edited border-none p-0 text-lg font-bold focus:outline-none"
+                        on:blur={stopEditing}
+                        on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                    />
+                {:else}
+                    <button
+                        class="w-full truncate text-lg font-bold"
+                        on:click={() => startEditing("title")}
+                    >
+                        {projectCard.title}
+                    </button>
+                {/if}
             </div>
 
-            <div
-                class="relative h-[9mm]
-        "
-            >
+            <div class="h-[9mm]">
                 {#if $editingField === "lore"}
                     <textarea
                         bind:value={projectCard.lore}
@@ -119,195 +149,299 @@
                     ></textarea>
                 {:else}
                     <button
-                        class="truncate-2-lines text-xs italic top-0"
+                        class="w-full truncate-2-lines text-xs italic top-0"
                         on:click={() => startEditing("lore")}
                     >
                         {projectCard.lore}
                     </button>
                 {/if}
             </div>
+
+            <div class="h-[18mm] relative mt-2">
+                <div
+                    class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
+                >
+                    Effect
+                </div>
+                {#if $editingField === "effect"}
+                    <textarea
+                        bind:value={projectCard.effect}
+                        class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
+                        on:blur={stopEditing}
+                    ></textarea>
+                {:else}
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div
+                        class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
+                        on:click={() => startEditing("effect")}
+                    >
+                        {@html marked(projectCard.effect)}
+                    </div>
+                {/if}
+            </div>
+
+            <div class="h-[15mm] relative mt-2">
+                <div
+                    class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
+                >
+                    Combo client effect (
+                    {#if $editingField === "comboClientThreshold"}
+                        <input
+                            type="number"
+                            bind:value={projectCard.comboClientThreshold}
+                            class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
+                            on:blur={stopEditing}
+                        />
+                    {:else}
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <div
+                            class="text-[12px] leading-tight"
+                            on:click={() =>
+                                startEditing("comboClientThreshold")}
+                        >
+                            {projectCard.comboClientThreshold}
+                        </div>
+                    {/if}
+                    )
+                </div>
+
+                {#if $editingField === "comboClientEffect"}
+                    <textarea
+                        bind:value={projectCard.comboClientEffect}
+                        class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
+                        on:blur={stopEditing}
+                    ></textarea>
+                {:else}
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div
+                        class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
+                        on:click={() => startEditing("comboClientEffect")}
+                    >
+                        {@html marked(projectCard.comboClientEffect)}
+                    </div>
+                {/if}
+            </div>
+            <div class="h-[10mm] relative mt-2">
+                <div
+                    class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
+                >
+                    Penalty effect (
+                    {#if $editingField === "penaltyThreshold"}
+                        <input
+                            type="number"
+                            bind:value={projectCard.penaltyThreshold}
+                            class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
+                            on:blur={stopEditing}
+                        />
+                    {:else}
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <div
+                            class="text-[12px] leading-tight"
+                            on:click={() => startEditing("penaltyThreshold")}
+                        >
+                            {projectCard.penaltyThreshold}
+                        </div>
+                    {/if}
+                    )
+                </div>
+
+                {#if $editingField === "penaltyEffect"}
+                    <textarea
+                        bind:value={projectCard.penaltyEffect}
+                        class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
+                        on:blur={stopEditing}
+                    ></textarea>
+                {:else}
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div
+                        class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
+                        on:click={() => startEditing("penaltyEffect")}
+                    >
+                        {@html marked(projectCard.penaltyEffect)}
+                    </div>
+                {/if}
+            </div>
+
+            <!-- <div class="relative h-[7mm]">
+                {#if $editingField === "optimalStaffing"}
+                    <input
+                        type="text"
+                        bind:value={projectCard.optimalStaffing}
+                        class="border-none p-0 text-[12px] leading-tight focus:outline-none"
+                        on:blur={stopEditing}
+                        on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                    />
+                {:else}
+                    <div
+                        class="text-[12px] leading-tight"
+                        on:click={() => startEditing("optimalStaffing")}
+                    >
+                        Optimal Staffing: {projectCard.optimalStaffing.join(
+                            ", ",
+                        )}
+                    </div>
+                {/if}
+            </div> -->
         </div>
-        <div class="relative">
+        <!-- Right part with illustration / number data -->
+        <div class="relative w-[20mm]">
             <img
                 src={projectCard.illustration}
                 alt="Project Illustration"
-                class="h-[17mm] w-[17mm]"
+                class="h-[20mm] rounded-full"
             />
-        </div>
-    </div>
-
-    <div class="flex flex-col space-y-2 mt-4">
-        <div class="h-[20mm]">
-            {#if $editingField === "effect"}
-                <textarea
-                    bind:value={projectCard.effect}
-                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none text-justify"
-                    on:blur={stopEditing}
-                ></textarea>
-            {:else}
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <div
-                    class="h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
-                    on:click={() => startEditing("effect")}
+            <div class="leading-tight text-center">
+                <select
+                    name="clients"
+                    class="compact-select"
+                    on:change={handleSelectChange}
                 >
-                    {@html marked(projectCard.effect)}
-                </div>
-            {/if}
-        </div>
-        <div class="h-[7mm] text-[12px] leading-tight">
-            Client: <select
-                name="clients"
-                class="compact-select"
-                on:change={handleSelectChange}
+                    {#each clients as client, index}
+                        <option
+                            value={client.id}
+                            selected={projectCard.client === client.id}
+                            >{client.name}</option
+                        >
+                    {/each}
+                </select>
+            </div>
+            <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+            <div
+                class="relative h-[7mm] flex items-center space-x-1 text-[12px] leading-tight"
             >
-                {#each clients as client, index}
-                    <option
-                        value={client.id}
-                        selected={projectCard.client === client.id}
-                        >{client.name}</option
-                    >
-                {/each}
-            </select>
-        </div>
+                <DollarOutline />
+                {#if $editingField === "baseRevenue"}
+                    <input
+                        type="number"
+                        bind:value={projectCard.baseRevenue}
+                        class="edited w-full border-none p-0 text-[12px] leading-tight focus:outline-none"
+                        on:blur={stopEditing}
+                    />
+                {:else}
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div on:click={() => startEditing("baseRevenue")}>
+                        {projectCard.baseRevenue}
+                    </div>
+                {/if}k
+            </div>
+            <div
+                class="relative h-[7mm] flex items-center space-x-1 text-[12px] leading-tight"
+            >
+                <BitcoinSolid />
+                {#if $editingField === "optimalRevenue"}
+                    <input
+                        type="number"
+                        bind:value={projectCard.optimalRevenue}
+                        class="edited w-full border-none p-0 text-[12px] leading-tight focus:outline-none"
+                        on:blur={stopEditing}
+                    />
+                {:else}
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div on:click={() => startEditing("optimalRevenue")}>
+                        {projectCard.optimalRevenue}
+                    </div>
+                {/if}k
+            </div>
+            <div
+                class="relative h-[7mm] flex items-center space-x-1 text-[12px] leading-tight"
+            >
+                <AwardSolid />
+                {#if $editingField === "reputation"}
+                    <input
+                        type="number"
+                        bind:value={projectCard.reputation}
+                        class="edited w-full border-none p-0 text-[12px] leading-tight focus:outline-none"
+                        on:blur={stopEditing}
+                    />
+                {:else}
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div on:click={() => startEditing("reputation")}>
+                        {projectCard.reputation}
+                    </div>
+                {/if}
+            </div>
 
-        <div class="relative h-[7mm]">
-            {#if $editingField === "optimalRevenue"}
-                <input
-                    type="number"
-                    bind:value={projectCard.optimalRevenue}
-                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
-                    on:blur={stopEditing}
-                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
-                />
-            {:else}
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <div
-                    class="text-[12px] leading-tight"
-                    on:click={() => startEditing("optimalRevenue")}
+            <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+            <!-- <div class="p-0 text-[12px] leading-tight">Optimal Staffing</div> -->
+            <div>
+                <select
+                    name="grade1"
+                    class="compact-select {gradeColor} flex h-8 w-8 rounded-full text-white text-center focus:outline-none p-0 m-0"
+                    on:change={handleSelectGradeChange}
                 >
-                    Optimal Revenue: {projectCard.optimalRevenue}k
-                </div>
-            {/if}
-        </div>
-
-        <div class="relative h-[7mm]">
-            {#if $editingField === "baseRevenue"}
-                <input
-                    type="number"
-                    bind:value={projectCard.baseRevenue}
-                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
-                    on:blur={stopEditing}
-                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
-                />
-            {:else}
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <div
-                    class="text-[12px] leading-tight"
-                    on:click={() => startEditing("baseRevenue")}
+                    <option value="Stg">Stg</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                </select>
+                <select
+                    name="grade2"
+                    class="compact-select {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white text-center focus:outline-none"
+                    on:change={handleSelectGradeChange}
                 >
-                    Base Revenue: {projectCard.baseRevenue}k
-                </div>
-            {/if}
-        </div>
-        <div class="relative h-[7mm]">
-            {#if $editingField === "comboClientThreshold"}
-                <input
-                    type="number"
-                    bind:value={projectCard.comboClientThreshold}
-                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
-                    on:blur={stopEditing}
-                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
-                />
-            {:else}
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <div
-                    class="text-[12px] leading-tight"
-                    on:click={() => startEditing("comboClientThreshold")}
+                    <option value="no" selected></option>
+                    <option value="Stg">Stg</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                </select>
+                <!-- <select
+                    name="grade"
+                    class="compact-select {gradeColor}"
+                    on:change={handleSelectGradeChange}
                 >
-                    Combo Client Threshold: {projectCard.comboClientThreshold}
-                </div>
-            {/if}
-        </div>
-        <div class="h-[20mm]">
-            {#if $editingField === "comboClientEffect"}
-                <textarea
-                    bind:value={projectCard.comboClientEffect}
-                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none text-justify"
-                    on:blur={stopEditing}
-                ></textarea>
-            {:else}
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <div
-                    class="text-[12px] leading-tight"
-                    on:click={() => startEditing("comboClientEffect")}
+                    <option value="no" selected></option>
+                    <option value="Stg">Stg</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                </select>
+                <select
+                    name="grade"
+                    class="compact-select {gradeColor}"
+                    on:change={handleSelectGradeChange}
                 >
-                    {@html marked(projectCard.comboClientEffect)}
-                </div>
-            {/if}
-        </div>
-        <div class="relative h-[7mm]">
-            {#if $editingField === "optimalStaffing"}
-                <input
-                    type="text"
-                    bind:value={projectCard.optimalStaffing}
-                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
-                    on:blur={stopEditing}
-                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
-                />
-            {:else}
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <div
-                    class="text-[12px] leading-tight"
-                    on:click={() => startEditing("optimalStaffing")}
+                    <option value="no" selected></option>
+                    <option value="Stg">Stg</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                </select>
+                <select
+                    name="grade"
+                    class="compact-select {gradeColor}"
+                    on:change={handleSelectGradeChange}
                 >
-                    Optimal Staffing: {projectCard.optimalStaffing.join(", ")}
-                </div>
-            {/if}
-        </div>
-        <div class="relative h-[7mm]">
-            {#if $editingField === "penaltyThreshold"}
-                <input
-                    type="number"
-                    bind:value={projectCard.penaltyThreshold}
-                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
-                    on:blur={stopEditing}
-                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
-                />
-            {:else}
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <div
-                    class="text-[12px] leading-tight"
-                    on:click={() => startEditing("penaltyThreshold")}
-                >
-                    Penalty Threshold: {projectCard.penaltyThreshold}
-                </div>
-            {/if}
-        </div>
-        <div class="relative h-[7mm]">
-            {#if $editingField === "penaltyEffect"}
-                <textarea
-                    bind:value={projectCard.penaltyEffect}
-                    class="border-none p-0 text-[12px] leading-tight focus:outline-none"
-                    on:blur={stopEditing}
-                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
-                ></textarea>
-            {:else}
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <div
-                    class="text-[12px] leading-tight"
-                    on:click={() => startEditing("penaltyEffect")}
-                >
-                    Penalty Effect: {projectCard.penaltyEffect}
-                </div>
-            {/if}
+                    <option value="no" selected></option>
+                    <option value="Stg">Stg</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="S">S</option>
+                </select> -->
+            </div>
         </div>
     </div>
 </div>
@@ -332,6 +466,12 @@
         resize: none;
     }
 
+    .cardcontent {
+        border: 1px solid black;
+        border-radius: 5px;
+        color: black;
+    }
+
     .truncate {
         overflow: hidden;
         white-space: nowrap;
@@ -345,14 +485,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .text-ellipsis {
-        display: -webkit-box;
-        -webkit-line-clamp: 3; /* Number of lines to show */
-        line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
 
     .compact-select {
         appearance: none;
@@ -361,10 +493,11 @@
         background: none;
         border: none;
         padding: 0;
-        font-size: inherit;
+        font-size: 12px;
         font-family: inherit;
         color: inherit;
         cursor: pointer;
+        text-align-last: center;
     }
 
     .compact-select option {

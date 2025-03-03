@@ -5,7 +5,7 @@
         BatteryOutline,
         DollarOutline,
     } from "flowbite-svelte-icons";
-    import { marked } from 'marked';
+    import { marked } from "marked";
     import type { CardType } from "$lib/index.ts";
     import defaultIllustration from "$lib/assets/illustration/default.jpg";
 
@@ -130,9 +130,9 @@
                         class="compact-select text-[12px] absolute -top-3 -right-1 {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white text-center focus:outline-none"
                         on:change={handleSelectChange}
                     >
-                    <option value="Stg" selected={card.grade === "Stg"}
-                        >Stg</option
-                    >
+                        <option value="Stg" selected={card.grade === "Stg"}
+                            >Stg</option
+                        >
                         <option value="A" selected={card.grade === "A"}
                             >A</option
                         >
@@ -184,14 +184,13 @@
                         on:blur={stopEditing}
                     ></textarea>
                 {:else}
-
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
                         class="h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         on:click={() => startEditing("effect")}
                     >
-                    {@html marked(card.effect)}
+                        {@html marked(card.effect)}
                     </div>
                 {/if}
             </div>
@@ -270,6 +269,7 @@
     }
 
     .cardcontent {
+        border: 1px solid black;
         border-radius: 5px;
         color: black;
     }
