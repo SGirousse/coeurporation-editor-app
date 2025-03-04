@@ -125,7 +125,7 @@
     <Cropper
         image={tmpIllustration}
         crop={{ x: 0, y: 0 }}
-        cropSize={{ width: 220, height: 128 }}
+        cropSize={{ width: 220, height: 128.5 }}
         zoom={1}
         minZoom={0.1}
         zoomSpeed={0.1}
