@@ -2,13 +2,12 @@
     import { writable } from "svelte/store";
     import {
         TrashBinOutline,
-        AwardOutline,
         BitcoinSolid,
         DollarOutline,
         AwardSolid,
     } from "flowbite-svelte-icons";
     import { marked } from "marked";
-
+    import Grade from "./Component/Grade.svelte";
     import type { ProjectCardType } from "$lib/index.ts";
 
     import logo_cebocorp from "$lib/assets/companies/logo/001_cebocorp.png";
@@ -37,7 +36,6 @@
         { id: "009", name: "Turbo Motor", file: logo_turbomotor },
         { id: "010", name: "Moula Bank", file: logo_moulabank },
     ];
-    let gradeColor = "bg-gray-500";
 
     updateClientValue(projectCard.client);
 
@@ -58,40 +56,6 @@
         } else {
             projectCard.client = "";
         }
-    }
-    async function handleSelectGradeChange(event: any) {
-        updateGradeValue(event.target.value);
-    }
-
-    async function updateGradeValue(grade: string) {
-        console.log(grade);
-        console.log(gradeColor);
-        switch (grade) {
-            case "A":
-                gradeColor = "bg-green-500";
-                break;
-            case "B":
-                gradeColor = "bg-blue-500";
-                break;
-            case "C":
-                gradeColor = "bg-yellow-500";
-                break;
-            case "D":
-                gradeColor = "bg-orange-500";
-                break;
-            case "E":
-                gradeColor = "bg-purple-500";
-                break;
-            case "S":
-                gradeColor = "bg-amber-500";
-                break;
-            case "Stg":
-                gradeColor = "bg-teal-500";
-                break;
-            default:
-                gradeColor = "bg-white";
-        }
-        console.log(gradeColor);
     }
 
     let editingField = writable<string | null>(null);
@@ -266,28 +230,8 @@
                     </div>
                 {/if}
             </div>
-
-            <!-- <div class="relative h-[7mm]">
-                {#if $editingField === "optimalStaffing"}
-                    <input
-                        type="text"
-                        bind:value={projectCard.optimalStaffing}
-                        class="border-none p-0 text-[12px] leading-tight focus:outline-none"
-                        on:blur={stopEditing}
-                        on:keydown={(e) => e.key === "Enter" && stopEditing()}
-                    />
-                {:else}
-                    <div
-                        class="text-[12px] leading-tight"
-                        on:click={() => startEditing("optimalStaffing")}
-                    >
-                        Optimal Staffing: {projectCard.optimalStaffing.join(
-                            ", ",
-                        )}
-                    </div>
-                {/if}
-            </div> -->
         </div>
+
         <!-- Right part with illustration / number data -->
         <div class="relative w-[20mm]">
             <img
@@ -370,77 +314,10 @@
             </div>
 
             <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-            <!-- <div class="p-0 text-[12px] leading-tight">Optimal Staffing</div> -->
-            <div>
-                <select
-                    name="grade1"
-                    class="compact-select {gradeColor} flex h-8 w-8 rounded-full text-white text-center focus:outline-none p-0 m-0"
-                    on:change={handleSelectGradeChange}
-                >
-                    <option value="Stg">Stg</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="S">S</option>
-                </select>
-                <select
-                    name="grade2"
-                    class="compact-select {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white text-center focus:outline-none"
-                    on:change={handleSelectGradeChange}
-                >
-                    <option value="no" selected></option>
-                    <option value="Stg">Stg</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="S">S</option>
-                </select>
-                <!-- <select
-                    name="grade"
-                    class="compact-select {gradeColor}"
-                    on:change={handleSelectGradeChange}
-                >
-                    <option value="no" selected></option>
-                    <option value="Stg">Stg</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="S">S</option>
-                </select>
-                <select
-                    name="grade"
-                    class="compact-select {gradeColor}"
-                    on:change={handleSelectGradeChange}
-                >
-                    <option value="no" selected></option>
-                    <option value="Stg">Stg</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="S">S</option>
-                </select>
-                <select
-                    name="grade"
-                    class="compact-select {gradeColor}"
-                    on:change={handleSelectGradeChange}
-                >
-                    <option value="no" selected></option>
-                    <option value="Stg">Stg</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="S">S</option>
-                </select> -->
+            <div class="flex flex-wrap">
+                {#each projectCard.optimalStaffing as staffing}
+                    <Grade bind:grade={staffing} />
+                {/each}
             </div>
         </div>
     </div>
@@ -484,24 +361,5 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    .compact-select {
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background: none;
-        border: none;
-        padding: 0;
-        font-size: 12px;
-        font-family: inherit;
-        color: inherit;
-        cursor: pointer;
-        text-align-last: center;
-    }
-
-    .compact-select option {
-        background: white;
-        color: black;
     }
 </style>

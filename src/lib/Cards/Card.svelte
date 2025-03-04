@@ -8,14 +8,12 @@
     import { marked } from "marked";
     import type { CardType } from "$lib/index.ts";
     import defaultIllustration from "$lib/assets/illustration/default.jpg";
+    import Grade from "./Component/Grade.svelte";
 
-    export let card: CardType;
-    export let onDeleteAccessor: any;
+    let { card = $bindable(), cardGrade=$bindable(), onDeleteAccessor } = $props();
+    // export let card: CardType;
+    // export let onDeleteAccessor: any;
     let editingField = writable<string | null>(null);
-    let gradeColor = "";
-    if ("grade" in card) {
-        updateGradeValue(card.grade as string);
-    }
     if (card.illustration === undefined || card.illustration === "") {
         card.illustration = defaultIllustration;
     }
@@ -25,6 +23,7 @@
     }
 
     function handleImageChange(event: any) {
+        console.log(event.target.files[0]);
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -35,41 +34,8 @@
             };
             reader.readAsDataURL(file);
         }
-    }
-
-    async function handleSelectChange(event: any) {
-        updateGradeValue(event.target.value);
-    }
-
-    async function updateGradeValue(grade: string) {
-        if (grade && "grade" in card) {
-            card.grade = grade;
-            switch (card.grade) {
-                case "A":
-                    gradeColor = "bg-green-500";
-                    break;
-                case "B":
-                    gradeColor = "bg-blue-500";
-                    break;
-                case "C":
-                    gradeColor = "bg-yellow-500";
-                    break;
-                case "D":
-                    gradeColor = "bg-orange-500";
-                    break;
-                case "E":
-                    gradeColor = "bg-purple-500";
-                    break;
-                case "S":
-                    gradeColor = "bg-amber-500";
-                    break;
-                case "Stg":
-                    gradeColor = "bg-teal-500";
-                    break;
-                default:
-                    gradeColor = "bg-gray-500";
-            }
-        }
+        console.log(card);
+        console.log(card.illustration);
     }
 
     function startEditing(field: string) {
@@ -86,7 +52,7 @@
 >
     <div class="absolute top-2 right-2 flex space-x-2 z-10">
         <button
-            on:click={deleteCard}
+            onclick={deleteCard}
             class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
         >
             <TrashBinOutline class="text-red-600" />
@@ -100,13 +66,13 @@
                     type="text"
                     bind:value={card.title}
                     class="edited border-none p-0 text-lg font-bold focus:outline-none"
-                    on:blur={stopEditing}
-                    on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                    onblur={stopEditing}
+                    onkeydown={(e) => e.key === "Enter" && stopEditing()}
                 />
             {:else}
                 <button
                     class="h-[8mm] truncate text-lg font-bold"
-                    on:click={() => startEditing("title")}
+                    onclick={() => startEditing("title")}
                 >
                     {card.title}
                 </button>
@@ -121,37 +87,14 @@
                 <input
                     type="file"
                     accept="image/*"
-                    on:change={handleImageChange}
+                    onchange={handleImageChange}
                     class="absolute inset-0 opacity-0 cursor-pointer"
                 />
                 {#if "grade" in card}
-                    <select
-                        name="grade"
-                        class="compact-select text-[12px] absolute -top-3 -right-1 {gradeColor} flex h-8 w-8 items-center justify-center rounded-full text-white text-center focus:outline-none"
-                        on:change={handleSelectChange}
-                    >
-                        <option value="Stg" selected={card.grade === "Stg"}
-                            >Stg</option
-                        >
-                        <option value="A" selected={card.grade === "A"}
-                            >A</option
-                        >
-                        <option value="B" selected={card.grade === "B"}
-                            >B</option
-                        >
-                        <option value="C" selected={card.grade === "C"}
-                            >C</option
-                        >
-                        <option value="D" selected={card.grade === "D"}
-                            >D</option
-                        >
-                        <option value="E" selected={card.grade === "E"}
-                            >E</option
-                        >
-                        <option value="S" selected={card.grade === "S"}
-                            >S</option
-                        >
-                    </select>
+                    <div class="absolute -top-3 -right-1">
+                        <Grade bind:grade={cardGrade} />
+                    </div>
+                    {cardGrade}
                 {/if}
             </div>
 
@@ -161,15 +104,14 @@
                         rows="2"
                         bind:value={card.lore}
                         class="edited border-none p-0 text-[9px] leading-tight italic focus:outline-none text-justify"
-                        on:blur={stopEditing}
-                        on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                        onblur={stopEditing}
                     ></textarea>
                 {:else}
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
                         class="truncate-2-lines text-[9px] italic text-justify"
-                        on:click={() => startEditing("lore")}
+                        onclick={() => startEditing("lore")}
                     >
                         {card.lore}
                     </div>
@@ -181,14 +123,14 @@
                     <textarea
                         bind:value={card.effect}
                         class="edited border-none p-0 text-[12px] leading-tight focus:outline-none text-justify"
-                        on:blur={stopEditing}
+                        onblur={stopEditing}
                     ></textarea>
                 {:else}
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
                         class="h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
-                        on:click={() => startEditing("effect")}
+                        onclick={() => startEditing("effect")}
                     >
                         {@html marked(card.effect)}
                     </div>
@@ -205,14 +147,12 @@
                                 bind:value={card.burnoutPoints}
                                 class="text-[12px] edited border-none p-0 leading-tight focus:outline-none"
                                 placeholder="e.g. 3"
-                                on:blur={stopEditing}
-                                on:keydown={(e) =>
-                                    e.key === "Enter" && stopEditing()}
+                                onblur={stopEditing}
                             />
                         {:else}
                             <button
                                 class="text-[12px] truncate-2-lines pl-1"
-                                on:click={() => startEditing("burnoutPoints")}
+                                onclick={() => startEditing("burnoutPoints")}
                                 >{#if card.burnoutPoints}{card.burnoutPoints}{:else}0{/if}</button
                             >
                         {/if}
@@ -227,14 +167,12 @@
                                 bind:value={card.cost}
                                 class="text-[12px] edited border-none p-0 leading-tight focus:outline-none"
                                 placeholder="e.g. 20"
-                                on:blur={stopEditing}
-                                on:keydown={(e) =>
-                                    e.key === "Enter" && stopEditing()}
+                                onblur={stopEditing}
                             />
                         {:else}
                             <button
                                 class="text-[12px] truncate-2-lines pl-1"
-                                on:click={() => startEditing("cost")}
+                                onclick={() => startEditing("cost")}
                                 >{#if card.cost}{card.cost}{:else}0{/if}</button
                             >
                         {/if}
@@ -292,20 +230,5 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    .compact-select {
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-        background-image: none;
-    }
-
-    .compact-select option {
-        background: white;
-        color: black;
     }
 </style>

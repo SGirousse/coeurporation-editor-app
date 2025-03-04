@@ -18,3 +18,21 @@
 }
 
 @source "../node_modules/flowbite-svelte/dist";
+
+.compact-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    padding: 0;
+    font-size: 12px;
+    font-family: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-align-last: center;
+}
+
+.compact-select option {
+    background: white;
+    color: black;
+}
