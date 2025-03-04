@@ -142,7 +142,7 @@
 
             <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
             <div class="flex h-[4mm] items-center justify-between pt-1">
-                <div class="w-1/3">
+                <div class="w-full">
                     {#if card.cardType == "ResourceCardType"}
                         <CartPlusAltSolid />
                     {:else if card.cardType == "CodirEventCardType"}
@@ -172,8 +172,10 @@
                     </div>
                 {/if}
                 {#if "cost" in card}
-                    <div class="flex items-center w-1/3">
-                        <DollarOutline />
+                    <div
+                        class="flex items-center justify-end w-1/3 text-[12px]"
+                    >
+                        <DollarOutline size="sm" />
                         {#if $editingField === "cost"}
                             <input
                                 type="number"
@@ -184,7 +186,7 @@
                             />
                         {:else}
                             <button
-                                class="text-[12px] truncate-2-lines pl-1"
+                                class="footer-element text-[12px]"
                                 onclick={() => startEditing("cost")}
                                 >{#if card.cost}{card.cost}{:else}0{/if}</button
                             >
@@ -211,6 +213,11 @@
         text-align: left;
         width: 100%;
         height: 100%;
+    }
+
+    .standard-card button.footer-element {
+        text-align: end;
+        width: fit-content;
     }
 
     .standard-card textarea {
