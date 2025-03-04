@@ -22,9 +22,7 @@ function newPageElement(pageNb: number): HTMLDivElement {
 async function appendPageToZip(zip: JSZip, pageElement: HTMLDivElement, pageNb: number) {
     const dataUrl = await toPng(pageElement);
     const base64Data = dataUrl.split(',')[1];
-    console.log(zip)
     zip.file(`page_${pageNb}.png`, base64Data, { base64: true });
-    console.log(zip)
     document.body.removeChild(pageElement);
 }
 
@@ -42,7 +40,6 @@ async function appendCardsPagesToZip(zip: JSZip, cards: CardType[], cardsPerPage
 
     let pageElement = newPageElement(pageNb);
     for (const card of cards) {
-        console.log(card.title)
         if (cardCount > 0 && cardCount % cardsPerPage === 0) {
             await appendPageToZip(zip, pageElement, pageNb);
             pageNb++;
