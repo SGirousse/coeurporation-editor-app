@@ -18,3 +18,37 @@
 }
 
 @source "../node_modules/flowbite-svelte/dist";
+
+ul,
+ol {
+    list-style-position: inside;
+
+}
+
+ul {
+    list-style-type: disc;
+}
+
+ol {
+    list-style-type: decimal;
+}
+
+
+.compact-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    padding: 0;
+    font-size: 12px;
+    font-family: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-align-last: center;
+    background-image: none;
+}
+
+.compact-select option {
+    background: white;
+    color: black;
+}

@@ -11,7 +11,7 @@ export class ResourceCardType implements CardType {
     public title: string = "Title";
     public illustration: string = "";
     public lore: string = "Lore";
-    public effect: string = "Effect";
+    public effect: string = "Effet";
     public grade: string = "A";
     public burnoutPoints: number = 3;
     public cost: number = 25;
@@ -27,7 +27,7 @@ export class CodirEventCardType implements CardType {
     public title: string = "Title";
     public illustration: string = "";
     public lore: string = "Lore";
-    public effect: string = "Effect";
+    public effect: string = "Effet";
 
     constructor(init?: Partial<CodirEventCardType>) {
         Object.assign(this, init);
@@ -40,7 +40,7 @@ export class ActionCardType implements CardType {
     public title: string = "Title";
     public illustration: string = "";
     public lore: string = "Lore";
-    public effect: string = "Effect";
+    public effect: string = "Effet";
 
     constructor(init?: Partial<ActionCardType>) {
         Object.assign(this, init);
@@ -53,13 +53,14 @@ export class ProjectCardType implements CardType {
     public title: string = "Title";
     public illustration: string = "";
     public lore: string = "Lore";
-    public effect: string = "Effect";
+    public effect: string = "_Effect_";
     public client: string = "001";
     public optimalRevenue: number = 20;
     public baseRevenue: number = 10;
+    public reputation: number = 1;
     public comboClientThreshold: number = 3;
-    public comboClientEffect: string = "Combo client effect";
-    public optimalStaffing: string[] = ["A", "B", "C"];
+    public comboClientEffect: string = "_Combo client effect_";
+    public optimalStaffing: string[] = ["A", "B", "", "", "", ""];
     public penaltyThreshold: number = 3;
     public penaltyEffect: string = "";
 
