@@ -8,7 +8,6 @@
     let { illustration = $bindable("") } = $props();
 
     // Boolean for modals activation/deactivation
-    let isFileSelectActive = $state(false);
     let isCropActive = $state(false);
 
     // Files to be cropped and the crop informations (pre-initialized)
