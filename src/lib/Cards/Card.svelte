@@ -12,6 +12,7 @@
     import type { CardType } from "$lib/index.ts";
     import defaultIllustration from "$lib/assets/illustration/default.jpg";
     import Grade from "./Component/Grade.svelte";
+    import ImageSelector from "$lib/Editor/ImageSelector.svelte";
 
     export let card: CardType;
     export let onDeleteAccessor: any;
@@ -22,19 +23,6 @@
 
     function deleteCard() {
         onDeleteAccessor.deleteCard(card);
-    }
-
-    function handleImageChange(event: any) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (reader.result) {
-                    card.illustration = reader.result as string;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
     }
 
     function startEditing(field: string) {
@@ -78,17 +66,8 @@
             {/if}
 
             <div class="relative h-[34mm] mb-1">
-                <img
-                    src={card.illustration}
-                    alt="Card Illustration"
-                    class="h-full w-full rounded-lg object-cover"
-                />
-                <input
-                    type="file"
-                    accept="image/*"
-                    onchange={handleImageChange}
-                    class="absolute inset-0 opacity-0 cursor-pointer"
-                />
+                <ImageSelector bind:illustration={card.illustration} />
+
                 {#if "grade" in card}
                     <div class="absolute -top-3 -right-1">
                         <Grade bind:grade={card.grade as string} />

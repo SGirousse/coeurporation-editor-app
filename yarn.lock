@@ -1702,6 +1702,13 @@ svelte-check@^4.0.0:
     picocolors "^1.0.0"
     sade "^1.7.4"
 
+svelte-easy-crop@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/svelte-easy-crop/-/svelte-easy-crop-4.0.0.tgz#399d0c4c330f6f0f3f85c025d3a87725cf2e002f"
+  integrity sha512-/asrrCYypXwCsPqJ07m7s7QArJwrdfEt7D1UN9hC4WF3GgEtuqmGuVi5DGeJVtBpKu5388gYFtCgQz9lA+/Rtg==
+  dependencies:
+    svelte "^5.15.0"
+
 svelte-eslint-parser@^0.43.0:
   version "0.43.0"
   resolved "https://registry.npmjs.org/svelte-eslint-parser/-/svelte-eslint-parser-0.43.0.tgz"
@@ -1717,6 +1724,26 @@ svelte@^5.0.0:
   version "5.20.2"
   resolved "https://registry.npmjs.org/svelte/-/svelte-5.20.2.tgz"
   integrity sha512-aYXJreNUiyTob0QOzRZeBXZMGeFZDch6SrSRV8QTncZb6zj0O3BEdUzPpojuHQ1pTvk+KX7I6rZCXPUf8pTPxA==
+  dependencies:
+    "@ampproject/remapping" "^2.3.0"
+    "@jridgewell/sourcemap-codec" "^1.5.0"
+    "@types/estree" "^1.0.5"
+    acorn "^8.12.1"
+    acorn-typescript "^1.4.13"
+    aria-query "^5.3.1"
+    axobject-query "^4.1.0"
+    clsx "^2.1.1"
+    esm-env "^1.2.1"
+    esrap "^1.4.3"
+    is-reference "^3.0.3"
+    locate-character "^3.0.0"
+    magic-string "^0.30.11"
+    zimmerframe "^1.1.2"
+
+svelte@^5.15.0:
+  version "5.21.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.21.0.tgz#974ee093c7c470d829b74d119a82fd3192b4168b"
+  integrity sha512-+pUFl4d0cu2KoxTtwjzByneCXbUzsNlGc4zMDDT/r2usp3VowYEGu1mFvbjcxmWTkwoy3tyhOg7fsz5aJo0wHw==
   dependencies:
     "@ampproject/remapping" "^2.3.0"
     "@jridgewell/sourcemap-codec" "^1.5.0"
