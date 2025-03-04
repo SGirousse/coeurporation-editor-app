@@ -1,5 +1,8 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export interface CardType {
     cardType: string;
+    id: string;
     title: string;
     illustration: string;
     lore: string;
@@ -8,6 +11,7 @@ export interface CardType {
 
 export class ResourceCardType implements CardType {
     cardType: string;
+    public id: string = uuidv4();
     public title: string = "Title";
     public illustration: string = "";
     public lore: string = "Lore";
@@ -24,6 +28,7 @@ export class ResourceCardType implements CardType {
 
 export class CodirEventCardType implements CardType {
     cardType: string;
+    public id: string = uuidv4();
     public title: string = "Title";
     public illustration: string = "";
     public lore: string = "Lore";
@@ -37,6 +42,7 @@ export class CodirEventCardType implements CardType {
 
 export class ActionCardType implements CardType {
     cardType: string;
+    public id: string = uuidv4();
     public title: string = "Title";
     public illustration: string = "";
     public lore: string = "Lore";
@@ -50,6 +56,7 @@ export class ActionCardType implements CardType {
 
 export class ProjectCardType implements CardType {
     cardType: string;
+    public id: string = uuidv4();
     public title: string = "Title";
     public illustration: string = "";
     public lore: string = "Lore";

@@ -52,6 +52,7 @@
 </script>
 
 <div
+    id={`card-${card.id}`}
     class="group relative flex h-[88.9mm] w-[63.5mm] flex-col rounded-lg border p-1 shadow-lg standard-card"
 >
     <div class="absolute top-2 right-2 flex space-x-2 z-10">

@@ -70,6 +70,7 @@
 </script>
 
 <div
+    id={`card-${projectCard.id}`}
     class="group relative flex h-[70mm] w-[120mm] flex-col rounded-lg border p-1 shadow-lg project-card"
 >
     <div class="absolute top-2 right-2 flex space-x-2 z-10">

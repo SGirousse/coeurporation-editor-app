@@ -10,6 +10,7 @@
 		readFileContent,
 		writeFileContent,
 	} from "$lib/utils/cardsFileHelper";
+	import { cardsToPngsZipped } from "$lib/utils/cardsExport2Print";
 	import { Fileupload, Button } from "flowbite-svelte";
 
 	let files: FileList | undefined = undefined;
@@ -43,13 +44,21 @@
 			projectCards,
 		);
 	}
+
+	async function exportCardsForPrint() {
+		const allCards = [...resourceCards, ...codirEventCards, ...actionCards];
+		cardsToPngsZipped(allCards, projectCards);
+	}
 </script>
 
 <div class="flex items-center justify-between mb-4">
 	<div>
 		<Fileupload id="with_helper" class="mb-2" bind:files />
 	</div>
-	<Button onclick={saveCardsToFile}>Save</Button>
+	<div class="flex items-center space-x-2">
+		<Button onclick={saveCardsToFile}>Save</Button>
+		<Button onclick={exportCardsForPrint}>Print</Button>
+	</div>
 </div>
 
 <div class="flex min-h-screen items-center justify-center">
