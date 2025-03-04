@@ -7,7 +7,7 @@
         AwardSolid,
     } from "flowbite-svelte-icons";
     import { marked } from "marked";
-    import Grade from "./Component/Grade.svelte";
+    import Grade from "../Cards/Component/Grade.svelte";
     import type { ProjectCardType } from "$lib/index.ts";
 
     import logo_cebocorp from "$lib/assets/companies/logo/001_cebocorp.png";
@@ -40,7 +40,7 @@
     updateClientValue(projectCard.client);
 
     function deleteCard() {
-        onDeleteAccessor.deleteProjectCard(projectCard);
+        onDeleteAccessor.deleteCard(projectCard);
     }
 
     async function handleSelectChange(event: any) {
