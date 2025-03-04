@@ -19,6 +19,21 @@
 
 @source "../node_modules/flowbite-svelte/dist";
 
+ul,
+ol {
+    list-style-position: inside;
+
+}
+
+ul {
+    list-style-type: disc;
+}
+
+ol {
+    list-style-type: decimal;
+}
+
+
 .compact-select {
     appearance: none;
     -webkit-appearance: none;
@@ -30,6 +45,7 @@
     color: inherit;
     cursor: pointer;
     text-align-last: center;
+    background-image: none;
 }
 
 .compact-select option {

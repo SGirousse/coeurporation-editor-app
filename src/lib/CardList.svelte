@@ -81,7 +81,7 @@
     <div class="flex flex-wrap">
       {#each resourceCards as resourceCard, index}
         <div class="p-2">
-          <Card card={resourceCard} cardGrade={resourceCard.grade} {onDeleteAccessor} />
+          <Card card={resourceCard} {onDeleteAccessor} />
         </div>
       {/each}
       <div class="p-2">

@@ -4,15 +4,17 @@
         TrashBinOutline,
         BatteryOutline,
         DollarOutline,
+        CartPlusAltSolid,
+        ChartMixedDollarSolid,
+        BugSolid,
     } from "flowbite-svelte-icons";
     import { marked } from "marked";
     import type { CardType } from "$lib/index.ts";
     import defaultIllustration from "$lib/assets/illustration/default.jpg";
     import Grade from "./Component/Grade.svelte";
 
-    let { card = $bindable(), cardGrade=$bindable(), onDeleteAccessor } = $props();
-    // export let card: CardType;
-    // export let onDeleteAccessor: any;
+    export let card: CardType;
+    export let onDeleteAccessor: any;
     let editingField = writable<string | null>(null);
     if (card.illustration === undefined || card.illustration === "") {
         card.illustration = defaultIllustration;
@@ -23,7 +25,6 @@
     }
 
     function handleImageChange(event: any) {
-        console.log(event.target.files[0]);
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -34,8 +35,6 @@
             };
             reader.readAsDataURL(file);
         }
-        console.log(card);
-        console.log(card.illustration);
     }
 
     function startEditing(field: string) {
@@ -92,9 +91,8 @@
                 />
                 {#if "grade" in card}
                     <div class="absolute -top-3 -right-1">
-                        <Grade bind:grade={cardGrade} />
+                        <Grade bind:grade={card.grade as string} />
                     </div>
-                    {cardGrade}
                 {/if}
             </div>
 
@@ -118,18 +116,23 @@
                 {/if}
             </div>
 
-            <div class="relative h-[24mm]">
+            <div class="relative h-[24mm] mt-2 pb-1">
+                <div
+                    class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
+                >
+                    Effet
+                </div>
                 {#if $editingField === "effect"}
                     <textarea
                         bind:value={card.effect}
-                        class="edited border-none p-0 text-[12px] leading-tight focus:outline-none text-justify"
+                        class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
                         onblur={stopEditing}
                     ></textarea>
                 {:else}
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
-                        class="h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
+                        class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         onclick={() => startEditing("effect")}
                     >
                         {@html marked(card.effect)}
@@ -137,9 +140,19 @@
                 {/if}
             </div>
 
-            <div class="flex h-[9mm] items-center justify-between">
+            <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+            <div class="flex h-[5mm] items-center justify-between pt-1">
+                <div class="w-1/3">
+                    {#if card.cardType == "ResourceCardType"}
+                        <CartPlusAltSolid />
+                    {:else if card.cardType == "CodirEventCardType"}
+                        <ChartMixedDollarSolid />
+                    {:else if card.cardType == "ActionCardType"}
+                        <BugSolid />
+                    {/if}
+                </div>
                 {#if "burnoutPoints" in card}
-                    <div class="flex items-center w-[15mm]">
+                    <div class="flex items-center w-1/3">
                         <BatteryOutline />
                         {#if $editingField === "burnoutPoints"}
                             <input
@@ -159,7 +172,7 @@
                     </div>
                 {/if}
                 {#if "cost" in card}
-                    <div class="flex items-center w-[15mm]">
+                    <div class="flex items-center w-1/3">
                         <DollarOutline />
                         {#if $editingField === "cost"}
                             <input

@@ -1,9 +1,5 @@
 <script lang="ts">
-import { setContext } from "svelte";
-let { grade = $bindable("") } = $props();
-
-
-    setContext("grade", grade);
+    let { grade = $bindable("") } = $props();
 
     const grades = [
         { value: "", color: "bg-white" },
@@ -23,10 +19,8 @@ let { grade = $bindable("") } = $props();
         updateGradeValue(event.target.value);
     }
 
-    async function updateGradeValue(grade: string){
-        const gradeItem = grades.find(
-            (gradeItem) => gradeItem.value === grade,
-        );
+    async function updateGradeValue(grade: string) {
+        const gradeItem = grades.find((gradeItem) => gradeItem.value === grade);
         if (gradeItem) {
             grade = gradeItem.value;
             gradeColor = gradeItem.color;
@@ -36,8 +30,9 @@ let { grade = $bindable("") } = $props();
 
 <select
     name="grades"
-    class="{gradeColor} compact-select flex h-8 w-8 rounded-full text-white text-center focus:outline-none p-0 m-0"
+    class="{gradeColor} compact-select flex h-6 w-6 rounded-full text-white text-center focus:outline-none p-0 m-0"
     onchange={handleSelectGradeChange}
+    bind:value={grade}
 >
     {#each grades as gradeData}
         <option value={gradeData.value} selected={grade === gradeData.value}

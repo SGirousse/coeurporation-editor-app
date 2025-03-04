@@ -83,7 +83,7 @@
 
     <div class="flex-grow flex cardcontent p-1">
         <!-- Left part with text data -->
-        <div class="flex flex-col w-[95mm] m-0 mr-2">
+        <div class="flex flex-col w-[93mm] m-0 mr-2">
             <div class="relative h-[6mm] w-full">
                 {#if $editingField === "title"}
                     <input
@@ -109,7 +109,6 @@
                         bind:value={projectCard.lore}
                         class="edited border-none p-0 text-xs leading-tight italic focus:outline-none resize-none w-full h-full"
                         on:blur={stopEditing}
-                        on:keydown={(e) => e.key === "Enter" && stopEditing()}
                     ></textarea>
                 {:else}
                     <button
@@ -125,7 +124,7 @@
                 <div
                     class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
                 >
-                    Effect
+                    Effet
                 </div>
                 {#if $editingField === "effect"}
                     <textarea
@@ -233,7 +232,7 @@
         </div>
 
         <!-- Right part with illustration / number data -->
-        <div class="relative w-[20mm]">
+        <div class="relative w-[21mm]">
             <img
                 src={projectCard.illustration}
                 alt="Project Illustration"
@@ -314,9 +313,11 @@
             </div>
 
             <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-            <div class="flex flex-wrap">
+            <div class="flex flex-wrap pt-1">
                 {#each projectCard.optimalStaffing as staffing}
-                    <Grade bind:grade={staffing} />
+                    <div class="m-[1px]">
+                        <Grade bind:grade={staffing} />
+                    </div>
                 {/each}
             </div>
         </div>
