@@ -147,6 +147,7 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                     optimalStaffing: card.optimalStaffing,
                     penaltyThreshold: card.penaltyThreshold,
                     penaltyEffect: card.penaltyEffect,
+                    reputation: card.reputation
                 }));
             }
         }
