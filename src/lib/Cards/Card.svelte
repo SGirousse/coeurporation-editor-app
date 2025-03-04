@@ -32,6 +32,23 @@
     function stopEditing() {
         editingField.set(null);
     }
+
+    /**
+     * Interprets the markdown to some html and then replaces some variables with the game informatons.
+     *
+     * Supported variables ATM :
+     * - `%cardTitle%` (`card.title`)
+     *
+     * @param rawText html text to be transformed.
+     */
+    async function coeurpormarked(rawText: string): Promise<string> {
+        const markedText = await marked(rawText);
+        const coeurpormarkedText = markedText.replaceAll(
+            "%cardTitle%",
+            card.title,
+        );
+        return coeurpormarkedText;
+    }
 </script>
 
 <div
@@ -114,7 +131,13 @@
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         onclick={() => startEditing("effect")}
                     >
-                        {@html marked(card.effect)}
+                        {#await coeurpormarked(card.effect)}
+                            <p>...parsing card effect</p>
+                        {:then htmlText}
+                            {@html htmlText}
+                        {:catch error}
+                            <p style="color: red">{error.message}</p>
+                        {/await}
                     </div>
                 {/if}
             </div>
