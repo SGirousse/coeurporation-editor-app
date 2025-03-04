@@ -96,7 +96,7 @@
                 {/if}
             </div>
 
-            <div class="relative h-[9mm]">
+            <div class="relative h-[7mm]">
                 {#if $editingField === "lore"}
                     <textarea
                         rows="2"
@@ -116,7 +116,7 @@
                 {/if}
             </div>
 
-            <div class="relative h-[24mm] mt-2 pb-1">
+            <div class="relative h-[27mm] mt-2">
                 <div
                     class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
                 >
@@ -141,7 +141,7 @@
             </div>
 
             <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-            <div class="flex h-[5mm] items-center justify-between pt-1">
+            <div class="flex h-[4mm] items-center justify-between pt-1">
                 <div class="w-1/3">
                     {#if card.cardType == "ResourceCardType"}
                         <CartPlusAltSolid />
