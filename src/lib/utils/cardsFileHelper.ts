@@ -11,16 +11,22 @@ const CARD_JSON_META_VERSION = "version"
 const CURRENT_VERSION = "0.1"
 
 async function convertImageToBase64(imageUrl: string): Promise<string> {
-    const response = await fetch(imageUrl);
-    const blob = await response.blob();
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        if (reader.result) {
+    try {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result as string);
-            reader.onerror = reject;
+            reader.onerror = (error) => {
+                console.error("Failed to convert image to base64:", error);
+                reject(error);
+            };
             reader.readAsDataURL(blob);
-        }
-    });
+        });
+    } catch (error) {
+        console.error("Failed to fetch image:", error);
+        throw error;
+    }
 }
 
 async function cardIllustrationToBase64Images(cardsWithIllustration: CardType[] = []): Promise<CardType[]> {
@@ -28,8 +34,7 @@ async function cardIllustrationToBase64Images(cardsWithIllustration: CardType[] 
         cardsWithIllustration.map(async (cardWithIllustration) => {
             if (
                 cardWithIllustration.illustration &&
-                !cardWithIllustration.illustration.startsWith("data:") &&
-                !cardWithIllustration.illustration.endsWith("assets/illustration/default.jpg")
+                !cardWithIllustration.illustration.startsWith("data:")
             ) {
                 cardWithIllustration.illustration = await convertImageToBase64(
                     cardWithIllustration.illustration,
