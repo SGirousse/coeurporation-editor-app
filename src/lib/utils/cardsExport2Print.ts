@@ -54,11 +54,8 @@ async function appendCardsPagesToZip(zip: JSZip, cards: CardType[], cardsPerPage
         }
     }
 
-    // do not generate a final empty page
-    if (cardCount % cardsPerPage !== 0) {
-        await appendPageToZip(zip, pageElement, pageNb);
-        pageNb++;
-    }
+    await appendPageToZip(zip, pageElement, pageNb);
+    pageNb++;
 
     return pageNb;
 }
