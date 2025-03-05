@@ -108,19 +108,20 @@
   }
 </script>
 
-<div class="flex p-2">
-  <Heading tag="h1" class="mb-2" customSize="text-5xl font-extrabold">
-    Cartes <Span gradient>{title}</Span>
-    <Secondary
-      >({#if filteredCards.length != cards.length}{filteredCards.length} sur&nbsp;
-      {/if}{cards.length})</Secondary
-    >
-  </Heading>
+<div class="flex flex-col md:flex-row p-2">
+  <div class="flex items-center justify-center w-full p-2">
+    <Heading tag="h1" customSize="text-4xl font-extrabold" class="p-2">
+      Cartes <Span gradient>{title}</Span>
+      <Secondary>
+        ({#if filteredCards.length != cards.length}{filteredCards.length} sur&nbsp;{/if}{cards.length})
+      </Secondary>
+    </Heading>
+  </div>
 
   <!-- Filter and sort buttons-->
-  <div class="flex items-center space-x-2 w-full">
+  <div class="flex flex-col md:flex-row items-center space-x-2 w-full p-2">
     <!-- Filter input-->
-    <div class="flex p-2 input-container">
+    <div class="flex p-2 input-container w-full">
       <Input
         bind:value={searchQuery}
         placeholder="Search cards by title..."
@@ -132,50 +133,56 @@
     </div>
 
     <!-- Sort buttons-->
-    <GradientButton color="greenToBlue" on:click={sortByTitle}
-      ><SortOutline /> Titre</GradientButton
-    >
-    {#if type == ResourceCardType}
-      <GradientButton color="greenToBlue" on:click={sortByGrade}
-        ><SortOutline /> Grade</GradientButton
+    <div class="flex items-center space-x-2">
+      <GradientButton color="greenToBlue" on:click={sortByTitle}
+        ><SortOutline /> Titre</GradientButton
       >
-      <GradientButton color="greenToBlue"
-        ><FilterOutline /> Grade</GradientButton
-      >
-      <Dropdown class="w-44 p-3 space-y-3 text-sm">
-        {#each grades.map((grade) => grade.value) as gradeValue}
-          <li>
-            <Checkbox checked on:click={() => toggleGradeSelection(gradeValue)}
-              >{gradeValue}</Checkbox
-            >
-          </li>
-        {/each}
-      </Dropdown>
-    {/if}
-    {#if type == ProjectCardType}
-      <GradientButton color="greenToBlue" on:click={sortByClient}
-        ><SortOutline /> Client</GradientButton
-      >
-      <GradientButton color="greenToBlue"
-        ><FilterOutline /> Client</GradientButton
-      >
-      <Dropdown class="w-44 p-3 space-y-3 text-sm">
-        {#each clients as client}
-          <li>
-            <Checkbox checked on:click={() => toggleClientSelection(client.id)}
-              >{client.name}</Checkbox
-            >
-          </li>
-        {/each}
-      </Dropdown>
-    {/if}
-  </div>
+      {#if type == ResourceCardType}
+        <GradientButton color="greenToBlue" on:click={sortByGrade}
+          ><SortOutline /> Grade</GradientButton
+        >
+        <GradientButton color="greenToBlue"
+          ><FilterOutline /> Grade</GradientButton
+        >
+        <Dropdown class="w-44 p-3 space-y-3 text-sm">
+          {#each grades.map((grade) => grade.value) as gradeValue}
+            <li>
+              <Checkbox
+                checked
+                on:click={() => toggleGradeSelection(gradeValue)}
+                >{gradeValue}</Checkbox
+              >
+            </li>
+          {/each}
+        </Dropdown>
+      {/if}
+      {#if type == ProjectCardType}
+        <GradientButton color="greenToBlue" on:click={sortByClient}
+          ><SortOutline /> Client</GradientButton
+        >
+        <GradientButton color="greenToBlue"
+          ><FilterOutline /> Client</GradientButton
+        >
+        <Dropdown class="w-44 p-3 space-y-3 text-sm">
+          {#each clients as client}
+            <li>
+              <Checkbox
+                checked
+                on:click={() => toggleClientSelection(client.id)}
+                >{client.name}</Checkbox
+              >
+            </li>
+          {/each}
+        </Dropdown>
+      {/if}
+      <!-- </div>
 
-  <!-- New card button -->
-  <div class="flex items-center space-x-2">
-    <Button pill={true} class="p-2!" on:click={addNewCard}
-      ><AddColumnAfterOutline class="w-6 h-6" /></Button
-    >
+  <div class="flex items-center space-x-2"> -->
+      <!-- New card button -->
+      <Button pill={true} class="p-2!" on:click={addNewCard}
+        ><AddColumnAfterOutline class="w-6 h-6" /></Button
+      >
+    </div>
   </div>
 </div>
 
@@ -189,7 +196,6 @@
       {/if}
     </div>
   {/each}
-  <div class="p-2"></div>
 </div>
 
 <style>

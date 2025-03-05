@@ -63,12 +63,15 @@
 <Navbar class="fixed top-0 w-full z-100 h-16">
 	<NavBrand href="/">
 		<span
-			class="flex items-center self-center text-center text-xl font-semibold whitespace-nowrap"
+			class="flex justify-center items-center self-center text-center text-xl font-semibold whitespace-nowrap"
 		>
-			<HeartOutline class="mr-2" />Coeurporation
+			<span class="hidden sm:block"><HeartOutline class="m-0" /></span>
+			<span class="hidden md:block">poration Editor App </span>
 		</span>
 	</NavBrand>
-	<div class="flex items-center justify-between mb-4 space-x-2">
+	<div
+		class="flex items-center justify-center self-center text-center space-x-2"
+	>
 		<div>
 			<Fileupload id="with_helper" bind:files />
 		</div>
