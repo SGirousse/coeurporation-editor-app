@@ -98,6 +98,19 @@ export const grades = [
     { value: "S", color: "bg-amber-500" },
 ];
 
+export class ClientType {
+    public uuid: string = uuidv4();
+    public id: string = "000"
+    public name: string = ""
+    public illustration: string = "";
+    public comboThreshold: number = 0
+    public comboEffect: string = ""
+
+    constructor(init?: Partial<ClientType>) {
+        Object.assign(this, init);
+    }
+}
+
 export const clients = [
     { id: "001", name: "Cébo Corp", comboThreshold: 3, comboEffect: "", file: logo_cebocorp },
     { id: "002", name: "FullCarburant", comboThreshold: 3, comboEffect: "", file: logo_fullcarburant },

@@ -11,7 +11,7 @@
     import { type CardType } from "$lib";
     import defaultIllustration from "$lib/assets/illustration/default.jpg";
     import Grade from "./Fields/Grade.svelte";
-    import ImageSelector from "$lib/components/Editor/ImageSelector.svelte";
+    import ImageSelector from "$lib/components/Helper/ImageSelector.svelte";
 
     import { coeurpormarked } from "$lib/utils/coeurpormarked";
 
@@ -196,10 +196,6 @@
     .standard-card {
         background-color: white;
         color: black;
-    }
-
-    .standard-card .edited {
-        background-color: rgb(197, 197, 197);
     }
 
     .standard-card button {

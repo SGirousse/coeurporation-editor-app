@@ -33,6 +33,9 @@ ol {
     list-style-type: decimal;
 }
 
+.edited {
+    background-color: rgb(197, 197, 197);
+}
 
 .compact-select {
     appearance: none;

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Card from "../Cards/Card.svelte";
-  import { grades, clients } from "$lib";
-  import ProjectCard from "../Cards/ProjectCard.svelte";
+  import Card from "./Card.svelte";
+  import { grades } from "$lib";
+  import ProjectCard from "./ProjectCard.svelte";
   import {
     ProjectCardType,
     ResourceCardType,
@@ -22,7 +22,12 @@
     FilterOutline,
     SortOutline,
   } from "flowbite-svelte-icons";
-  let { cards = $bindable([]), title, type } = $props();
+  let {
+    cards = $bindable([]),
+    title,
+    type,
+    clients = $bindable([]),
+  } = $props();
 
   let filteredCards: CardType[] = $state([]);
   let searchQuery: string = $state("");
@@ -53,13 +58,11 @@
     }
   }
 
-  function toggleClientSelection(clientName: string) {
-    if (selectedClients.includes(clientName)) {
-      selectedClients = selectedClients.filter(
-        (client) => client !== clientName,
-      );
+  function toggleClientSelection(clientId: string) {
+    if (selectedClients.includes(clientId)) {
+      selectedClients = selectedClients.filter((client) => client !== clientId);
     } else {
-      selectedClients = [...selectedClients, clientName];
+      selectedClients = [...selectedClients, clientId];
     }
   }
 
@@ -175,9 +178,7 @@
           {/each}
         </Dropdown>
       {/if}
-      <!-- </div>
 
-  <div class="flex items-center space-x-2"> -->
       <!-- New card button -->
       <Button pill={true} class="p-2!" on:click={addNewCard}
         ><AddColumnAfterOutline class="w-6 h-6" /></Button
@@ -190,7 +191,11 @@
   {#each filteredCards as card}
     <div class="p-2">
       {#if type == ProjectCardType}
-        <ProjectCard projectCard={card as ProjectCardType} {onDeleteAccessor} />
+        <ProjectCard
+          {clients}
+          projectCard={card as ProjectCardType}
+          {onDeleteAccessor}
+        />
       {:else}
         <Card {card} {onDeleteAccessor} />
       {/if}

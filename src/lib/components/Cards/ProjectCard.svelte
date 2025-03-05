@@ -3,17 +3,15 @@
     import {
         TrashBinOutline,
         BitcoinSolid,
+        AwardSolid,
         RocketOutline,
         EuroOutline,
-        AwardOutline,
     } from "flowbite-svelte-icons";
     import Grade from "./Fields/Grade.svelte";
-    import type { ProjectCardType } from "$lib/index.ts";
-    import { clients } from "$lib";
     import { coeurpormarked } from "$lib/utils/coeurpormarked";
+    import type { ClientType } from "$lib";
 
-    export let projectCard: ProjectCardType;
-    export let onDeleteAccessor: any;
+    let { projectCard = $bindable(), clients, onDeleteAccessor } = $props();
 
     updateClientValue(projectCard.client);
 
@@ -26,11 +24,13 @@
     }
 
     async function updateClientValue(clientId: string) {
-        const selectedClient = clients.find((client) => client.id === clientId);
+        const selectedClient = clients.find(
+            (client: ClientType) => client.id === clientId,
+        );
 
         if (selectedClient) {
             projectCard.client = selectedClient.id;
-            projectCard.illustration = selectedClient.file;
+            projectCard.illustration = selectedClient.illustration;
         } else {
             projectCard.client = "";
         }
@@ -53,7 +53,7 @@
 >
     <div class="absolute top-2 right-2 flex space-x-2 z-10">
         <button
-            on:click={deleteCard}
+            onclick={deleteCard}
             class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
         >
             <TrashBinOutline class="text-red-600" />
@@ -62,20 +62,20 @@
 
     <div class="flex-grow flex cardcontent p-1">
         <!-- Left part with text data -->
-        <div class="flex flex-col w-[92mm] mr-2 space-y-1">
+        <div class="flex flex-col w-[93mm] m-0 mr-2">
             <div class="relative h-[6mm] w-full">
                 {#if $editingField === "title"}
                     <input
                         type="text"
                         bind:value={projectCard.title}
                         class="w-full edited border-none p-0 text-lg font-bold focus:outline-none"
-                        on:blur={stopEditing}
-                        on:keydown={(e) => e.key === "Enter" && stopEditing()}
+                        onblur={stopEditing}
+                        onkeydown={(e) => e.key === "Enter" && stopEditing()}
                     />
                 {:else}
                     <button
                         class="w-full truncate text-lg font-bold"
-                        on:click={() => startEditing("title")}
+                        onclick={() => startEditing("title")}
                     >
                         {projectCard.title}
                     </button>
@@ -87,12 +87,12 @@
                     <textarea
                         bind:value={projectCard.lore}
                         class="edited border-none p-0 text-xs leading-tight italic focus:outline-none resize-none w-full h-full"
-                        on:blur={stopEditing}
+                        onblur={stopEditing}
                     ></textarea>
                 {:else}
                     <button
                         class="w-full truncate-2-lines text-xs italic top-0"
-                        on:click={() => startEditing("lore")}
+                        onclick={() => startEditing("lore")}
                     >
                         {#await coeurpormarked(projectCard.lore, projectCard)}
                             <p>...parsing card effect</p>
@@ -105,7 +105,7 @@
                 {/if}
             </div>
 
-            <div class="h-[22mm] relative mt-2">
+            <div class="h-[18mm] relative mt-2">
                 <div
                     class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
                 >
@@ -115,14 +115,14 @@
                     <textarea
                         bind:value={projectCard.effect}
                         class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
-                        on:blur={stopEditing}
+                        onblur={stopEditing}
                     ></textarea>
                 {:else}
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
-                        on:click={() => startEditing("effect")}
+                        onclick={() => startEditing("effect")}
                     >
                         {#await coeurpormarked(projectCard.effect, projectCard)}
                             <p>...parsing card effect</p>
@@ -134,7 +134,7 @@
                     </div>
                 {/if}
             </div>
-            <div class="h-[18mm] relative mt-2">
+            <div class="h-[10mm] relative mt-2">
                 <div
                     class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
                 >
@@ -144,14 +144,14 @@
                             type="number"
                             bind:value={projectCard.penaltyThreshold}
                             class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                            on:blur={stopEditing}
+                            onblur={stopEditing}
                         />
                     {:else}
                         <!-- svelte-ignore a11y_click_events_have_key_events -->
                         <!-- svelte-ignore a11y_no_static_element_interactions -->
                         <div
                             class="text-[12px] leading-tight"
-                            on:click={() => startEditing("penaltyThreshold")}
+                            onclick={() => startEditing("penaltyThreshold")}
                         >
                             {projectCard.penaltyThreshold}
                         </div>
@@ -163,14 +163,14 @@
                     <textarea
                         bind:value={projectCard.penaltyEffect}
                         class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
-                        on:blur={stopEditing}
+                        onblur={stopEditing}
                     ></textarea>
                 {:else}
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
-                        on:click={() => startEditing("penaltyEffect")}
+                        onclick={() => startEditing("penaltyEffect")}
                     >
                         {#await coeurpormarked(projectCard.penaltyEffect, projectCard)}
                             <p>...parsing card effect</p>
@@ -186,27 +186,25 @@
 
         <!-- Right part with illustration / number data -->
         <div class="relative w-[22mm]">
-            <div class="mb-2">
-                <img
-                    src={projectCard.illustration}
-                    alt="Project Illustration"
-                    class="h-[22mm] rounded-full"
-                />
-                <div class="leading-tight text-center">
-                    <select
-                        name="clients"
-                        class="compact-select"
-                        on:change={handleSelectChange}
-                    >
-                        {#each clients as client, index}
-                            <option
-                                value={client.id}
-                                selected={projectCard.client === client.id}
-                                >{client.name}</option
-                            >
-                        {/each}
-                    </select>
-                </div>
+            <img
+                src={projectCard.illustration}
+                alt="Project Illustration"
+                class="h-[22mm] rounded-full"
+            />
+            <div class="leading-tight text-center">
+                <select
+                    name="clients"
+                    class="compact-select"
+                    onchange={handleSelectChange}
+                >
+                    {#each clients as client, index}
+                        <option
+                            value={client.id}
+                            selected={projectCard.client === client.id}
+                            >{client.name}</option
+                        >
+                    {/each}
+                </select>
             </div>
 
             <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
@@ -222,15 +220,34 @@
                             type="number"
                             bind:value={projectCard.baseRevenue}
                             class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                            on:blur={stopEditing}
+                            onblur={stopEditing}
                         />
                     {:else}
                         <!-- svelte-ignore a11y_click_events_have_key_events -->
                         <!-- svelte-ignore a11y_no_static_element_interactions -->
-                        <div on:click={() => startEditing("baseRevenue")}>
+                        <div onclick={() => startEditing("baseRevenue")}>
                             {projectCard.baseRevenue}
                         </div>
                     {/if}k
+                </div>
+                <div
+                    class="flex items-center justify-start text-[12px] leading-tight"
+                >
+                    <AwardSolid />
+                    {#if $editingField === "reputation"}
+                        <input
+                            type="number"
+                            bind:value={projectCard.reputation}
+                            class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
+                            onblur={stopEditing}
+                        />
+                    {:else}
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <div onclick={() => startEditing("reputation")}>
+                            {projectCard.reputation}
+                        </div>
+                    {/if}
                 </div>
                 <div
                     class="flex items-center justify-start text-[12px] leading-tight"
@@ -241,12 +258,12 @@
                             type="number"
                             bind:value={projectCard.optimalRevenue}
                             class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                            on:blur={stopEditing}
+                            onblur={stopEditing}
                         />
                     {:else}
                         <!-- svelte-ignore a11y_click_events_have_key_events -->
                         <!-- svelte-ignore a11y_no_static_element_interactions -->
-                        <div on:click={() => startEditing("optimalRevenue")}>
+                        <div onclick={() => startEditing("optimalRevenue")}>
                             {projectCard.optimalRevenue}
                         </div>
                     {/if}k
@@ -254,29 +271,11 @@
                 <div
                     class="flex items-center justify-start text-[12px] leading-tight"
                 >
-                    <AwardOutline />
-                    {#if $editingField === "reputation"}
-                        <input
-                            type="number"
-                            bind:value={projectCard.reputation}
-                            class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                            on:blur={stopEditing}
-                        />
-                    {:else}
-                        <!-- svelte-ignore a11y_click_events_have_key_events -->
-                        <!-- svelte-ignore a11y_no_static_element_interactions -->
-                        <div on:click={() => startEditing("reputation")}>
-                            {projectCard.reputation}
-                        </div>
-                    {/if}
-                </div>
-                <div
-                    class="flex items-center justify-start text-[12px] leading-tight"
-                >
                     <RocketOutline />
                     <div>
                         {clients.find(
-                            (client) => client.id === projectCard.client,
+                            (client: ClientType) =>
+                                client.id === projectCard.client,
                         )?.comboThreshold}
                     </div>
                 </div>
@@ -285,12 +284,12 @@
             <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
 
             <!-- Staffing section -->
-            <div
-                class="flex flex-wrap mt-2 mb-2 justify-center items-center w-full"
-            >
-                {#each projectCard.optimalStaffing as staffing}
+            <div class="flex flex-wrap pt-1">
+                {#each projectCard.optimalStaffing as staffing, index}
                     <div class="m-[1px]">
-                        <Grade bind:grade={staffing} />
+                        <Grade
+                            bind:grade={projectCard.optimalStaffing[index]}
+                        />
                     </div>
                 {/each}
             </div>

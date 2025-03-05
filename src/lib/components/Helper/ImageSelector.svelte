@@ -1,11 +1,16 @@
 <script lang="ts">
+    import { v4 as uuidv4 } from "uuid";
     import {
         CheckCircleOutline,
         CloseCircleOutline,
     } from "flowbite-svelte-icons";
     import Cropper from "svelte-easy-crop";
 
-    let { illustration = $bindable("") } = $props();
+    let {
+        illustration = $bindable(""),
+        uuid = uuidv4(),
+        imageShape = "rect",
+    } = $props();
 
     // Boolean for modals activation/deactivation
     let isCropActive = $state(false);
@@ -13,6 +18,7 @@
     // Files to be cropped and the crop informations (pre-initialized)
     let tmpIllustration = $state("");
     let cropArea = $state({ pixels: { x: 0, y: 0, width: 0, height: 0 } });
+    let cropSize = $state({ width: 220, height: 128.5 });
 
     /**
      * Load file and then start a crop session on it.
@@ -30,7 +36,14 @@
             };
             reader.readAsDataURL(file);
 
-            isCropActive = true;
+            // Calculate crop size based on parent div dimensions
+            const parentDiv = document.getElementById(uuid);
+            if (parentDiv) {
+                const rect = parentDiv.getBoundingClientRect();
+                cropSize = { width: rect.width, height: rect.height };
+
+                isCropActive = true;
+            }
         }
     }
 
@@ -96,39 +109,40 @@
     }
 </script>
 
-{#if !isCropActive}
-    <img
-        src={illustration}
-        alt="Card Illustration"
-        class="h-full w-full rounded-lg object-cover"
-    />
-    <input
-        type="file"
-        accept="image/*"
-        onchange={handleImageChange}
-        class="absolute inset-0 opacity-0 cursor-pointer"
-    />
-{:else}
-    <div class="absolute bottom-2 right-2 flex space-x-2 z-10">
-        <button
-            onclick={onCropComplete}
-            class="rounded-full opacity-0 transition-opacity group-hover:opacity-100"
-            ><CheckCircleOutline class="text-green-600" /></button
-        >
-        <button
-            onclick={cancelCrop}
-            class="rounded-full opacity-0 transition-opacity group-hover:opacity-100"
-            ><CloseCircleOutline class="text-red-600" /></button
-        >
-    </div>
-    <Cropper
-        image={tmpIllustration}
-        crop={{ x: 0, y: 0 }}
-        cropSize={{ width: 220, height: 128.5 }}
-        zoom={1}
-        minZoom={0.1}
-        zoomSpeed={0.1}
-        restrictPosition={false}
-        oncropcomplete={(e) => (cropArea = e)}
-    />
-{/if}
+<div id={uuid} class="relative w-full h-full">
+    {#if !isCropActive}
+        <img
+            src={illustration}
+            alt="Card Illustration"
+            class="h-full w-full object-cover {imageShape == 'rect'
+                ? 'rounded-lg'
+                : 'rounded-full'}"
+        />
+        <input
+            type="file"
+            accept="image/*"
+            onchange={handleImageChange}
+            class="absolute inset-0 opacity-0 cursor-pointer"
+        />
+    {:else}
+        <div class="absolute bottom-2 right-2 flex space-x-2 z-10">
+            <button onclick={onCropComplete} class="rounded-full opacity-100"
+                ><CheckCircleOutline class="text-green-600" /></button
+            >
+            <button onclick={cancelCrop} class="rounded-full opacity-100"
+                ><CloseCircleOutline class="text-red-600" /></button
+            >
+        </div>
+        <Cropper
+            image={tmpIllustration}
+            crop={{ x: 0, y: 0 }}
+            {cropSize}
+            zoom={1}
+            minZoom={0.1}
+            zoomSpeed={0.1}
+            restrictPosition={false}
+            oncropcomplete={(e) => (cropArea = e)}
+            cropShape={imageShape}
+        />
+    {/if}
+</div>

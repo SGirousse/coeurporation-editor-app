@@ -1,10 +1,11 @@
 <script lang="ts">
-	import CardLists from "$lib/components/CardsManager/CardLists.svelte";
+	import Game from "$lib/components/Editor/Game.svelte";
 	import type {
 		ResourceCardType,
 		CodirEventCardType,
 		ActionCardType,
 		ProjectCardType,
+		ClientType,
 	} from "$lib/index.ts";
 	import {
 		readFileContent,
@@ -25,6 +26,7 @@
 	let codirEventCards: CodirEventCardType[] = $state([]);
 	let actionCards: ActionCardType[] = $state([]);
 	let projectCards: ProjectCardType[] = $state([]);
+	let clients: ClientType[] = $state([]);
 
 	async function saveCardsToFile() {
 		writeFileContent(
@@ -32,6 +34,7 @@
 			codirEventCards,
 			actionCards,
 			projectCards,
+			clients,
 		);
 	}
 
@@ -48,11 +51,13 @@
 					codirEventCards: newCodirEventCards,
 					actionCards: newActionCards,
 					projectCards: newProjectCards,
+					clients: newClients,
 				}) => {
 					resourceCards = newResourceCards;
 					codirEventCards = newCodirEventCards;
 					actionCards = newActionCards;
 					projectCards = newProjectCards;
+					clients = newClients;
 				},
 			);
 			files = undefined;
@@ -84,10 +89,11 @@
 </Navbar>
 
 <div class="mt-16 flex items-center justify-center">
-	<CardLists
+	<Game
 		bind:resourceCards
 		bind:codirEventCards
 		bind:actionCards
 		bind:projectCards
+		bind:clients
 	/>
 </div>

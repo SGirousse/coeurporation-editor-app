@@ -5,12 +5,14 @@
         ActionCardType,
         ProjectCardType,
     } from "$lib/index.js";
-    import CardList from "./CardList.svelte";
+    import CardList from "../Cards/CardList.svelte";
+    import ClientList from "../Clients/ClientList.svelte";
     let {
         resourceCards = $bindable([new ResourceCardType()]),
         codirEventCards = $bindable([new CodirEventCardType()]),
         actionCards = $bindable([new ActionCardType()]),
         projectCards = $bindable([new ProjectCardType()]),
+        clients = $bindable([]),
     } = $props();
 </script>
 
@@ -34,5 +36,8 @@
         bind:cards={projectCards}
         title={"Projets"}
         type={ProjectCardType}
+        {clients}
     />
+
+    <ClientList bind:clients />
 </div>

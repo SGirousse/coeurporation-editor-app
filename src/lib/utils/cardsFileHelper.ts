@@ -1,14 +1,16 @@
-import { type CardType, ResourceCardType, CodirEventCardType, ActionCardType, ProjectCardType } from "$lib/index.js";
+import { type CardType, ResourceCardType, CodirEventCardType, ActionCardType, ProjectCardType, ClientType } from "$lib/index.js";
+import { clients as clientList } from "$lib/index.js";
 
-const CARD_JSON_DATA = "data"
-const CARD_JSON_DATA_CARD_RESOURCES = "resources"
-const CARD_JSON_DATA_CARD_CODIREVENTS = "codirEvents"
-const CARD_JSON_DATA_CARD_ACTIONS = "actions"
-const CARD_JSON_DATA_CARD_PROJECTS = "projects"
-const CARD_JSON_META = "meta"
-const CARD_JSON_META_VERSION = "version"
+const GAME_JSON_DATA = "data";
+const GAME_JSON_DATA_CARD_RESOURCES = "resources";
+const GAME_JSON_DATA_CARD_CODIREVENTS = "codirEvents";
+const GAME_JSON_DATA_CARD_ACTIONS = "actions";
+const GAME_JSON_DATA_CARD_PROJECTS = "projects";
+const GAME_JSON_DATA_INFO_CLIENTS = "clients";
+const GAME_JSON_META = "meta";
+const GAME_JSON_META_VERSION = "version";
 
-const CURRENT_VERSION = "0.1"
+const CURRENT_VERSION = "0.1";
 
 async function convertImageToBase64(imageUrl: string): Promise<string> {
     try {
@@ -29,45 +31,47 @@ async function convertImageToBase64(imageUrl: string): Promise<string> {
     }
 }
 
-async function cardIllustrationToBase64Images(cardsWithIllustration: CardType[] = []): Promise<CardType[]> {
-    const cardsWithBase64Images = await Promise.all(
-        cardsWithIllustration.map(async (cardWithIllustration) => {
+async function elementIllustrationToBase64Images(elementsithIllustration: (CardType | ClientType)[] = []): Promise<(CardType | ClientType)[]> {
+    const elementsWithBase64Images = await Promise.all(
+        elementsithIllustration.map(async (elementWithIllustration) => {
             if (
-                cardWithIllustration.illustration &&
-                !cardWithIllustration.illustration.startsWith("data:")
+                elementWithIllustration.illustration &&
+                !elementWithIllustration.illustration.startsWith("data:")
             ) {
-                cardWithIllustration.illustration = await convertImageToBase64(
-                    cardWithIllustration.illustration,
+                elementWithIllustration.illustration = await convertImageToBase64(
+                    elementWithIllustration.illustration,
                 );
             }
-            return cardWithIllustration;
+            return elementWithIllustration;
         }),
     );
 
-    return cardsWithBase64Images
+    return elementsWithBase64Images;
 }
 
-export async function writeFileContent(resourceCards: ResourceCardType[], codirEventCards: CodirEventCardType[], actionCards: ActionCardType[], projectCards: ProjectCardType[]) {
+export async function writeFileContent(resourceCards: ResourceCardType[], codirEventCards: CodirEventCardType[], actionCards: ActionCardType[], projectCards: ProjectCardType[], clients: ClientType[]) {
 
     let meta = {
-        [CARD_JSON_META_VERSION]: CURRENT_VERSION
-    }
+        [GAME_JSON_META_VERSION]: CURRENT_VERSION
+    };
 
-    const resourceCardsWithBase64Images = await cardIllustrationToBase64Images(resourceCards);
-    const codirEventCardsWithBase64Images = await cardIllustrationToBase64Images(codirEventCards);
-    const actionCardsWithBase64Images = await cardIllustrationToBase64Images(actionCards);
+    const resourceCardsWithBase64Images = await elementIllustrationToBase64Images(resourceCards);
+    const codirEventCardsWithBase64Images = await elementIllustrationToBase64Images(codirEventCards);
+    const actionCardsWithBase64Images = await elementIllustrationToBase64Images(actionCards);
+    const clientsWithBase64Images = await elementIllustrationToBase64Images(clients);
 
     let data = {
-        [CARD_JSON_DATA_CARD_RESOURCES]: resourceCardsWithBase64Images,
-        [CARD_JSON_DATA_CARD_CODIREVENTS]: codirEventCardsWithBase64Images,
-        [CARD_JSON_DATA_CARD_ACTIONS]: actionCardsWithBase64Images,
-        [CARD_JSON_DATA_CARD_PROJECTS]: projectCards,
-    }
+        [GAME_JSON_DATA_CARD_RESOURCES]: resourceCardsWithBase64Images,
+        [GAME_JSON_DATA_CARD_CODIREVENTS]: codirEventCardsWithBase64Images,
+        [GAME_JSON_DATA_CARD_ACTIONS]: actionCardsWithBase64Images,
+        [GAME_JSON_DATA_CARD_PROJECTS]: projectCards,
+        [GAME_JSON_DATA_INFO_CLIENTS]: clientsWithBase64Images,
+    };
 
     let jsonified = {
-        [CARD_JSON_META]: meta,
-        [CARD_JSON_DATA]: data
-    }
+        [GAME_JSON_META]: meta,
+        [GAME_JSON_DATA]: data
+    };
 
     const json = JSON.stringify(jsonified, null, 2);
 
@@ -80,11 +84,12 @@ export async function writeFileContent(resourceCards: ResourceCardType[], codirE
     URL.revokeObjectURL(url);
 }
 
-export async function readFileContent(files: FileList): Promise<{ resourceCards: ResourceCardType[], codirEventCards: CodirEventCardType[], actionCards: ActionCardType[], projectCards: ProjectCardType[] }> {
+export async function readFileContent(files: FileList): Promise<{ resourceCards: ResourceCardType[], codirEventCards: CodirEventCardType[], actionCards: ActionCardType[], projectCards: ProjectCardType[], clients: ClientType[] }> {
     let resourceCards: ResourceCardType[] = [];
     let codirEventCards: CodirEventCardType[] = [];
     let actionCards: ActionCardType[] = [];
     let projectCards: ProjectCardType[] = [];
+    let clients: ClientType[] = [];
 
     for (const file of files) {
         const reader = new FileReader();
@@ -94,18 +99,17 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
             reader.readAsText(file);
         });
 
-        const cardsData = JSON.parse(fileContent);
+        const gameContent = JSON.parse(fileContent);
 
-        const cards = cardsData[CARD_JSON_DATA];
-        const meta = cardsData[CARD_JSON_META];
+        const gameData = gameContent[GAME_JSON_DATA];
+        const meta = gameContent[GAME_JSON_META];
 
-        if (meta[CARD_JSON_META_VERSION] !== CURRENT_VERSION) {
-            throw new Error(`${meta[CARD_JSON_META_VERSION]} is not supported`)
+        if (meta[GAME_JSON_META_VERSION] !== CURRENT_VERSION) {
+            throw new Error(`${meta[GAME_JSON_META_VERSION]} is not supported`);
         }
 
-
-        if (CARD_JSON_DATA_CARD_RESOURCES in cards) {
-            for (const card of cards[CARD_JSON_DATA_CARD_RESOURCES]) {
+        if (GAME_JSON_DATA_CARD_RESOURCES in gameData) {
+            for (const card of gameData[GAME_JSON_DATA_CARD_RESOURCES]) {
                 resourceCards.push(new ResourceCardType({
                     title: card.title,
                     illustration: card.illustration,
@@ -117,8 +121,8 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                 }));
             }
         }
-        if (CARD_JSON_DATA_CARD_CODIREVENTS in cards) {
-            for (const card of cards[CARD_JSON_DATA_CARD_CODIREVENTS]) {
+        if (GAME_JSON_DATA_CARD_CODIREVENTS in gameData) {
+            for (const card of gameData[GAME_JSON_DATA_CARD_CODIREVENTS]) {
                 codirEventCards.push(new CodirEventCardType({
                     title: card.title,
                     illustration: card.illustration,
@@ -127,8 +131,8 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                 }));
             }
         }
-        if (CARD_JSON_DATA_CARD_ACTIONS in cards) {
-            for (const card of cards[CARD_JSON_DATA_CARD_ACTIONS]) {
+        if (GAME_JSON_DATA_CARD_ACTIONS in gameData) {
+            for (const card of gameData[GAME_JSON_DATA_CARD_ACTIONS]) {
                 actionCards.push(new ActionCardType({
                     title: card.title,
                     illustration: card.illustration,
@@ -137,8 +141,8 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                 }));
             }
         }
-        if (CARD_JSON_DATA_CARD_PROJECTS in cards) {
-            for (const card of cards[CARD_JSON_DATA_CARD_PROJECTS]) {
+        if (GAME_JSON_DATA_CARD_PROJECTS in gameData) {
+            for (const card of gameData[GAME_JSON_DATA_CARD_PROJECTS]) {
                 projectCards.push(new ProjectCardType({
                     title: card.title,
                     illustration: card.illustration,
@@ -154,7 +158,29 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                 }));
             }
         }
+        if (GAME_JSON_DATA_INFO_CLIENTS in gameData) {
+            for (const client of gameData[GAME_JSON_DATA_INFO_CLIENTS]) {
+                clients.push(new ClientType({
+                    id: client.id,
+                    name: client.name,
+                    illustration: client.illustration,
+                    comboThreshold: client.comboThreshold,
+                    comboEffect: client.comboEffect,
+                }));
+            }
+        } else {
+            // temporary fix, to be removed
+            for (const cli of clientList) {
+                clients.push(new ClientType({
+                    id: cli.id,
+                    name: cli.name,
+                    illustration: cli.file,
+                    comboThreshold: cli.comboThreshold,
+                    comboEffect: "",
+                }));
+            }
+        }
     }
 
-    return { resourceCards, codirEventCards, actionCards, projectCards };
+    return { resourceCards, codirEventCards, actionCards, projectCards, clients };
 }
