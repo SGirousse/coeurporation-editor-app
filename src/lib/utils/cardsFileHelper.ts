@@ -1,5 +1,4 @@
 import { type CardType, ResourceCardType, CodirEventCardType, ActionCardType, ProjectCardType, ClientType } from "$lib/index.js";
-import { clients as clientList } from "$lib/index.js";
 
 const GAME_JSON_DATA = "data";
 const GAME_JSON_DATA_CARD_RESOURCES = "resources";
@@ -166,17 +165,6 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                     illustration: client.illustration,
                     comboThreshold: client.comboThreshold,
                     comboEffect: client.comboEffect,
-                }));
-            }
-        } else {
-            // temporary fix, to be removed
-            for (const cli of clientList) {
-                clients.push(new ClientType({
-                    id: cli.id,
-                    name: cli.name,
-                    illustration: cli.file,
-                    comboThreshold: cli.comboThreshold,
-                    comboEffect: "",
                 }));
             }
         }

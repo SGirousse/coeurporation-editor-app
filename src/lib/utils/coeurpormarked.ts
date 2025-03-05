@@ -1,5 +1,5 @@
 import { marked } from "marked";
-import { grades, clients, type CardType } from "$lib";
+import { grades, type CardType } from "$lib";
 
 const ICON_BATTERY = `<svg class="w-4 h-4 inline-block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M7 13v-2h7v2H7Z"/>
@@ -9,7 +9,7 @@ const ICON_BATTERY = `<svg class="w-4 h-4 inline-block" aria-hidden="true" xmlns
 
 
 const ICON_HAPPYNESS = `<svg class="w-4 h-4 inline-block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.99 9H15M8.99 9H9m12 3a9 9 0 1 1-18 0 9 9 0 0 1-18 0ZM7 13c0 1 .507 2.397 1.494 3.216a5.5 5.5 0 0 0 7.022 0C16.503 15.397 17 14 17 13c0 0-1.99 1-4.995 1S7 13 7 13Z"/>
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 9h.01M8.99 9H9m12 3a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM6.6 13a5.5 5.5 0 0 0 10.81 0H6.6Z"/>
                         </svg>`;
 
 const ICON_AWARD = `<svg class="w-4 h-4 inline-block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -57,7 +57,8 @@ export async function coeurpormarked(rawText: string, card: CardType): Promise<s
         .replaceAll("%cardOR%", `${card.optimalRevenue}k€`)
         .replaceAll("%cardRep%", `${card.reputation}${ICON_AWARD}`)
         .replaceAll("%cardPenT%", `${card.penaltyThreshold}`)
-        .replaceAll("%cardClient%", `${clients.find((client) => client.id === card.client)?.name}`)
+    // FIXME as the clients list is not global anymore
+    // .replaceAll("%cardClient%", `${clients.find((client) => client.id === card.client)?.name}`)
 
     coeurpormarkedText = coeurpormarkedText.replace(new RegExp(`%grade([A-Z]+)%`, "gi"), (match, p1) => {
         return replaceGrade(p1)

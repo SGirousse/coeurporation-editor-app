@@ -1,17 +1,6 @@
 
 import { v4 as uuidv4 } from 'uuid';
 
-import logo_cebocorp from "$lib/assets/companies/logo/001_cebocorp.png";
-import logo_fullcarburant from "$lib/assets/companies/logo/002_fullcarburant.png";
-import logo_etatfroncais from "$lib/assets/companies/logo/003_etatfroncais.png";
-import logo_superkopter from "$lib/assets/companies/logo/004_superkopter.png";
-import logo_laklass from "$lib/assets/companies/logo/005_laklass.png";
-import logo_novosanst from "$lib/assets/companies/logo/006_novosanst.png";
-import logo_telko from "$lib/assets/companies/logo/007_telko.png";
-import logo_flycar from "$lib/assets/companies/logo/008_flycar.png";
-import logo_turbomotor from "$lib/assets/companies/logo/009_turbomotor.png";
-import logo_moulabank from "$lib/assets/companies/logo/010_moulabank.png";
-
 export interface CardType {
     cardType: string;
     id: string;
@@ -111,15 +100,3 @@ export class ClientType {
     }
 }
 
-export const clients = [
-    { id: "001", name: "Cébo Corp", comboThreshold: 3, comboEffect: "", file: logo_cebocorp },
-    { id: "002", name: "FullCarburant", comboThreshold: 3, comboEffect: "", file: logo_fullcarburant },
-    { id: "003", name: "Etat Fronçais", comboThreshold: 5, comboEffect: "", file: logo_etatfroncais },
-    { id: "004", name: "SuperKopter", comboThreshold: 3, comboEffect: "", file: logo_superkopter },
-    { id: "005", name: "La Klass", comboThreshold: 3, comboEffect: "", file: logo_laklass },
-    { id: "006", name: "Novo Sans T", comboThreshold: 3, comboEffect: "", file: logo_novosanst },
-    { id: "007", name: "TELKO", comboThreshold: 3, comboEffect: "", file: logo_telko },
-    { id: "008", name: "FlyCar", comboThreshold: 2, comboEffect: "", file: logo_flycar },
-    { id: "009", name: "Turbo Motor", comboThreshold: 3, comboEffect: "", file: logo_turbomotor },
-    { id: "010", name: "Moula Bank", comboThreshold: 3, comboEffect: "", file: logo_moulabank },
-];
