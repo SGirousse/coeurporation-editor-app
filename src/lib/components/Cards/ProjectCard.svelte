@@ -240,7 +240,7 @@
                         <input
                             type="number"
                             bind:value={projectCard.optimalRevenue}
-                            class="edited w-full border-none p-0 text-[12px] leading-tight focus:outline-none"
+                            class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
                             on:blur={stopEditing}
                         />
                     {:else}
@@ -259,7 +259,7 @@
                         <input
                             type="number"
                             bind:value={projectCard.reputation}
-                            class="edited w-full border-none p-0 text-[12px] leading-tight focus:outline-none"
+                            class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
                             on:blur={stopEditing}
                         />
                     {:else}
