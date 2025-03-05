@@ -1,16 +1,7 @@
 <script lang="ts">
-    let { grade = $bindable("") } = $props();
+    import { grades } from "$lib";
 
-    const grades = [
-        { value: "", color: "bg-white" },
-        { value: "Stg", color: "bg-teal-500" },
-        { value: "A", color: "bg-green-500" },
-        { value: "B", color: "bg-blue-500" },
-        { value: "C", color: "bg-yellow-500" },
-        { value: "D", color: "bg-orange-500" },
-        { value: "E", color: "bg-purple-500" },
-        { value: "S", color: "bg-amber-500" },
-    ];
+    let { grade = $bindable("") } = $props();
 
     let gradeColor = $state("");
     updateGradeValue(grade);

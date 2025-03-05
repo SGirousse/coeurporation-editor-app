@@ -19,17 +19,17 @@
 
 @source "../node_modules/flowbite-svelte/dist";
 
-ul,
+.standard-card ul,
 ol {
     list-style-position: inside;
 
 }
 
-ul {
+.standard-card ul {
     list-style-type: disc;
 }
 
-ol {
+.standard-card ol {
     list-style-type: decimal;
 }
 

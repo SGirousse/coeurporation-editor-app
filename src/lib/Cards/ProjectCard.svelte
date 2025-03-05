@@ -7,35 +7,12 @@
         AwardSolid,
     } from "flowbite-svelte-icons";
     import { marked } from "marked";
-    import Grade from "../Cards/Component/Grade.svelte";
+    import Grade from "./Component/Grade.svelte";
     import type { ProjectCardType } from "$lib/index.ts";
-
-    import logo_cebocorp from "$lib/assets/companies/logo/001_cebocorp.png";
-    import logo_fullcarburant from "$lib/assets/companies/logo/002_fullcarburant.png";
-    import logo_etatfroncais from "$lib/assets/companies/logo/003_etatfroncais.png";
-    import logo_superkopter from "$lib/assets/companies/logo/004_superkopter.png";
-    import logo_laklass from "$lib/assets/companies/logo/005_laklass.png";
-    import logo_novosanst from "$lib/assets/companies/logo/006_novosanst.png";
-    import logo_telko from "$lib/assets/companies/logo/007_telko.png";
-    import logo_flycar from "$lib/assets/companies/logo/008_flycar.png";
-    import logo_turbomotor from "$lib/assets/companies/logo/009_turbomotor.png";
-    import logo_moulabank from "$lib/assets/companies/logo/010_moulabank.png";
+    import { clients } from "$lib";
 
     export let projectCard: ProjectCardType;
     export let onDeleteAccessor: any;
-
-    const clients = [
-        { id: "001", name: "Cébo Corp", file: logo_cebocorp },
-        { id: "002", name: "FullCarburant", file: logo_fullcarburant },
-        { id: "003", name: "Etat Fronçais", file: logo_etatfroncais },
-        { id: "004", name: "SuperKopter", file: logo_superkopter },
-        { id: "005", name: "La Klass", file: logo_laklass },
-        { id: "006", name: "Novo Sans T", file: logo_novosanst },
-        { id: "007", name: "TELKO", file: logo_telko },
-        { id: "008", name: "FlyCar", file: logo_flycar },
-        { id: "009", name: "Turbo Motor", file: logo_turbomotor },
-        { id: "010", name: "Moula Bank", file: logo_moulabank },
-    ];
 
     updateClientValue(projectCard.client);
 

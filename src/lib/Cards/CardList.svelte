@@ -1,6 +1,7 @@
 <script lang="ts">
   import Card from "./Card.svelte";
-  import ProjectCard from "../Editor/ProjectCard.svelte";
+  import { grades, clients } from "$lib";
+  import ProjectCard from "./ProjectCard.svelte";
   import {
     ProjectCardType,
     ResourceCardType,
@@ -13,8 +14,14 @@
     Button,
     Input,
     GradientButton,
+    Dropdown,
+    Checkbox,
   } from "flowbite-svelte";
-  import { AddColumnAfterOutline, SortOutline } from "flowbite-svelte-icons";
+  import {
+    AddColumnAfterOutline,
+    FilterOutline,
+    SortOutline,
+  } from "flowbite-svelte-icons";
   let { cards = $bindable([]), title, type } = $props();
 
   let filteredCards: CardType[] = $state([]);
@@ -22,6 +29,12 @@
   let isGradeSortAsc: boolean = $state(false);
   let isTitleSortAsc: boolean = $state(false);
   let isClientSortAsc: boolean = $state(false);
+  let selectedGrades: string[] = $state(
+    type == ResourceCardType ? grades.map((grade) => grade.value) : [],
+  );
+  let selectedClients: string[] = $state(
+    type == ProjectCardType ? clients.map((client) => client.id) : [],
+  );
 
   function addNewCard() {
     const newCard = new type();
@@ -32,13 +45,34 @@
     cards = cards.filter((card) => card !== cardToDelete);
   }
 
+  function toggleGradeSelection(gradeValue: string) {
+    if (selectedGrades.includes(gradeValue)) {
+      selectedGrades = selectedGrades.filter((grade) => grade !== gradeValue);
+    } else {
+      selectedGrades = [...selectedGrades, gradeValue];
+    }
+  }
+
+  function toggleClientSelection(clientName: string) {
+    if (selectedClients.includes(clientName)) {
+      selectedClients = selectedClients.filter(
+        (client) => client !== clientName,
+      );
+    } else {
+      selectedClients = [...selectedClients, clientName];
+    }
+  }
+
   let onDeleteAccessor = {
     deleteCard,
   };
 
   $effect(() => {
-    filteredCards = cards.filter((card) =>
-      card.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    filteredCards = cards.filter(
+      (card) =>
+        card.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        (selectedGrades.length == 0 || selectedGrades.includes(card.grade)) &&
+        (selectedClients.length == 0 || selectedClients.includes(card.client)),
     );
   });
 
@@ -105,11 +139,35 @@
       <GradientButton color="greenToBlue" on:click={sortByGrade}
         ><SortOutline /> Grade</GradientButton
       >
+      <GradientButton color="greenToBlue"
+        ><FilterOutline /> Grade</GradientButton
+      >
+      <Dropdown class="w-44 p-3 space-y-3 text-sm">
+        {#each grades.map((grade) => grade.value) as gradeValue}
+          <li>
+            <Checkbox checked on:click={() => toggleGradeSelection(gradeValue)}
+              >{gradeValue}</Checkbox
+            >
+          </li>
+        {/each}
+      </Dropdown>
     {/if}
     {#if type == ProjectCardType}
       <GradientButton color="greenToBlue" on:click={sortByClient}
         ><SortOutline /> Client</GradientButton
       >
+      <GradientButton color="greenToBlue"
+        ><FilterOutline /> Client</GradientButton
+      >
+      <Dropdown class="w-44 p-3 space-y-3 text-sm">
+        {#each clients as client}
+          <li>
+            <Checkbox checked on:click={() => toggleClientSelection(client.id)}
+              >{client.name}</Checkbox
+            >
+          </li>
+        {/each}
+      </Dropdown>
     {/if}
   </div>
 
