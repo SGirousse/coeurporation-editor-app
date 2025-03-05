@@ -77,8 +77,6 @@ export class ProjectCardType implements CardType {
     public optimalRevenue: number = 20;
     public baseRevenue: number = 10;
     public reputation: number = 1;
-    public comboClientThreshold: number = 3;
-    public comboClientEffect: string = "_Combo client effect_";
     public optimalStaffing: string[] = ["A", "B", "", "", "", ""];
     public penaltyThreshold: number = 3;
     public penaltyEffect: string = "";
@@ -101,14 +99,14 @@ export const grades = [
 ];
 
 export const clients = [
-    { id: "001", name: "Cébo Corp", file: logo_cebocorp },
-    { id: "002", name: "FullCarburant", file: logo_fullcarburant },
-    { id: "003", name: "Etat Fronçais", file: logo_etatfroncais },
-    { id: "004", name: "SuperKopter", file: logo_superkopter },
-    { id: "005", name: "La Klass", file: logo_laklass },
-    { id: "006", name: "Novo Sans T", file: logo_novosanst },
-    { id: "007", name: "TELKO", file: logo_telko },
-    { id: "008", name: "FlyCar", file: logo_flycar },
-    { id: "009", name: "Turbo Motor", file: logo_turbomotor },
-    { id: "010", name: "Moula Bank", file: logo_moulabank },
+    { id: "001", name: "Cébo Corp", comboThreshold: 3, comboEffect: "", file: logo_cebocorp },
+    { id: "002", name: "FullCarburant", comboThreshold: 3, comboEffect: "", file: logo_fullcarburant },
+    { id: "003", name: "Etat Fronçais", comboThreshold: 5, comboEffect: "", file: logo_etatfroncais },
+    { id: "004", name: "SuperKopter", comboThreshold: 3, comboEffect: "", file: logo_superkopter },
+    { id: "005", name: "La Klass", comboThreshold: 3, comboEffect: "", file: logo_laklass },
+    { id: "006", name: "Novo Sans T", comboThreshold: 3, comboEffect: "", file: logo_novosanst },
+    { id: "007", name: "TELKO", comboThreshold: 3, comboEffect: "", file: logo_telko },
+    { id: "008", name: "FlyCar", comboThreshold: 2, comboEffect: "", file: logo_flycar },
+    { id: "009", name: "Turbo Motor", comboThreshold: 3, comboEffect: "", file: logo_turbomotor },
+    { id: "010", name: "Moula Bank", comboThreshold: 3, comboEffect: "", file: logo_moulabank },
 ];

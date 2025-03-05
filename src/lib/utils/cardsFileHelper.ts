@@ -147,8 +147,6 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                     client: card.client,
                     optimalRevenue: card.optimalRevenue,
                     baseRevenue: card.baseRevenue,
-                    comboClientThreshold: card.comboClientThreshold,
-                    comboClientEffect: card.comboClientEffect,
                     optimalStaffing: card.optimalStaffing,
                     penaltyThreshold: card.penaltyThreshold,
                     penaltyEffect: card.penaltyEffect,
