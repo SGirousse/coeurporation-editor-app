@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Card from "./Card.svelte";
+  import Card from "../Cards/Card.svelte";
   import { grades, clients } from "$lib";
-  import ProjectCard from "./ProjectCard.svelte";
+  import ProjectCard from "../Cards/ProjectCard.svelte";
   import {
     ProjectCardType,
     ResourceCardType,
@@ -112,7 +112,7 @@
   <Heading tag="h1" class="mb-2" customSize="text-5xl font-extrabold">
     Cartes <Span gradient>{title}</Span>
     <Secondary
-      >({#if searchQuery}{filteredCards.length} sur&nbsp;
+      >({#if filteredCards.length != cards.length}{filteredCards.length} sur&nbsp;
       {/if}{cards.length})</Secondary
     >
   </Heading>

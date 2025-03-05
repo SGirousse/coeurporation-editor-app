@@ -11,8 +11,8 @@
     import { marked } from "marked";
     import type { CardType } from "$lib/index.ts";
     import defaultIllustration from "$lib/assets/illustration/default.jpg";
-    import Grade from "./Component/Grade.svelte";
-    import ImageSelector from "$lib/Editor/ImageSelector.svelte";
+    import Grade from "./Fields/Grade.svelte";
+    import ImageSelector from "$lib/components/Editor/ImageSelector.svelte";
 
     export let card: CardType;
     export let onDeleteAccessor: any;

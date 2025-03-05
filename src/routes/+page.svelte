@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CardLists from "$lib/Cards/CardLists.svelte";
+	import CardLists from "$lib/components/CardsManager/CardLists.svelte";
 	import type {
 		ResourceCardType,
 		CodirEventCardType,

@@ -7,7 +7,7 @@
         AwardSolid,
     } from "flowbite-svelte-icons";
     import { marked } from "marked";
-    import Grade from "./Component/Grade.svelte";
+    import Grade from "./Fields/Grade.svelte";
     import type { ProjectCardType } from "$lib/index.ts";
     import { clients } from "$lib";
 
