@@ -41,7 +41,6 @@
 	}
 
 	$effect(() => {
-		console.log(files);
 		if (files) {
 			readFileContent(files).then(
 				({

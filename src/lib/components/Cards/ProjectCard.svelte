@@ -6,10 +6,10 @@
         DollarOutline,
         AwardSolid,
     } from "flowbite-svelte-icons";
-    import { marked } from "marked";
     import Grade from "./Fields/Grade.svelte";
     import type { ProjectCardType } from "$lib/index.ts";
     import { clients } from "$lib";
+    import { coeurpormarked } from "$lib/utils/coeurpormarked";
 
     export let projectCard: ProjectCardType;
     export let onDeleteAccessor: any;
@@ -93,7 +93,13 @@
                         class="w-full truncate-2-lines text-xs italic top-0"
                         on:click={() => startEditing("lore")}
                     >
-                        {projectCard.lore}
+                        {#await coeurpormarked(projectCard.lore, projectCard)}
+                            <p>...parsing card effect</p>
+                        {:then htmlText}
+                            {@html htmlText}
+                        {:catch error}
+                            <p style="color: red">{error.message}</p>
+                        {/await}
                     </button>
                 {/if}
             </div>
@@ -117,7 +123,13 @@
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         on:click={() => startEditing("effect")}
                     >
-                        {@html marked(projectCard.effect)}
+                        {#await coeurpormarked(projectCard.effect, projectCard)}
+                            <p>...parsing card effect</p>
+                        {:then htmlText}
+                            {@html htmlText}
+                        {:catch error}
+                            <p style="color: red">{error.message}</p>
+                        {/await}
                     </div>
                 {/if}
             </div>
@@ -161,7 +173,13 @@
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         on:click={() => startEditing("comboClientEffect")}
                     >
-                        {@html marked(projectCard.comboClientEffect)}
+                        {#await coeurpormarked(projectCard.comboClientEffect, projectCard)}
+                            <p>...parsing card effect</p>
+                        {:then htmlText}
+                            {@html htmlText}
+                        {:catch error}
+                            <p style="color: red">{error.message}</p>
+                        {/await}
                     </div>
                 {/if}
             </div>
@@ -203,7 +221,13 @@
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         on:click={() => startEditing("penaltyEffect")}
                     >
-                        {@html marked(projectCard.penaltyEffect)}
+                        {#await coeurpormarked(projectCard.penaltyEffect, projectCard)}
+                            <p>...parsing card effect</p>
+                        {:then htmlText}
+                            {@html htmlText}
+                        {:catch error}
+                            <p style="color: red">{error.message}</p>
+                        {/await}
                     </div>
                 {/if}
             </div>

@@ -3,16 +3,17 @@
     import {
         TrashBinOutline,
         BatteryOutline,
-        DollarOutline,
+        EuroOutline,
         CartPlusAltSolid,
         ChartMixedDollarSolid,
         BugSolid,
     } from "flowbite-svelte-icons";
-    import { marked } from "marked";
-    import type { CardType } from "$lib/index.ts";
+    import { type CardType } from "$lib";
     import defaultIllustration from "$lib/assets/illustration/default.jpg";
     import Grade from "./Fields/Grade.svelte";
     import ImageSelector from "$lib/components/Editor/ImageSelector.svelte";
+
+    import { coeurpormarked } from "$lib/utils/coeurpormarked";
 
     export let card: CardType;
     export let onDeleteAccessor: any;
@@ -31,23 +32,6 @@
 
     function stopEditing() {
         editingField.set(null);
-    }
-
-    /**
-     * Interprets the markdown to some html and then replaces some variables with the game informatons.
-     *
-     * Supported variables ATM :
-     * - `%cardTitle%` (`card.title`)
-     *
-     * @param rawText html text to be transformed.
-     */
-    async function coeurpormarked(rawText: string): Promise<string> {
-        const markedText = await marked(rawText);
-        const coeurpormarkedText = markedText.replaceAll(
-            "%cardTitle%",
-            card.title,
-        );
-        return coeurpormarkedText;
     }
 </script>
 
@@ -108,7 +92,13 @@
                         class="truncate-2-lines text-[9px] italic text-justify"
                         onclick={() => startEditing("lore")}
                     >
-                        {card.lore}
+                        {#await coeurpormarked(card.lore, card)}
+                            <p>...parsing card effect</p>
+                        {:then htmlText}
+                            {@html htmlText}
+                        {:catch error}
+                            <p style="color: red">{error.message}</p>
+                        {/await}
                     </div>
                 {/if}
             </div>
@@ -132,7 +122,7 @@
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         onclick={() => startEditing("effect")}
                     >
-                        {#await coeurpormarked(card.effect)}
+                        {#await coeurpormarked(card.effect, card)}
                             <p>...parsing card effect</p>
                         {:then htmlText}
                             {@html htmlText}
@@ -178,7 +168,7 @@
                     <div
                         class="flex items-center justify-end w-1/3 text-[12px]"
                     >
-                        <DollarOutline size="sm" />
+                        <EuroOutline size="sm" />
                         {#if $editingField === "cost"}
                             <input
                                 type="number"

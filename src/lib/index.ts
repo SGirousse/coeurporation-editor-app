@@ -100,8 +100,6 @@ export const grades = [
     { value: "S", color: "bg-amber-500" },
 ];
 
-
-
 export const clients = [
     { id: "001", name: "Cébo Corp", file: logo_cebocorp },
     { id: "002", name: "FullCarburant", file: logo_fullcarburant },
