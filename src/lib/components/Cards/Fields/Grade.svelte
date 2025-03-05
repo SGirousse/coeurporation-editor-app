@@ -4,7 +4,6 @@
     let { grade = $bindable("") } = $props();
 
     let gradeColor = $state("");
-    updateGradeValue(grade);
 
     async function handleSelectGradeChange(event: any) {
         updateGradeValue(event.target.value);
@@ -17,6 +16,10 @@
             gradeColor = gradeItem.color;
         }
     }
+
+    $effect(() => {
+        updateGradeValue(grade);
+    });
 </script>
 
 <select

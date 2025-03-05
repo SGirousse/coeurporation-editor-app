@@ -151,7 +151,7 @@
           {#each grades.map((grade) => grade.value) as gradeValue}
             <li>
               <Checkbox
-                checked
+                checked={selectedGrades.includes(gradeValue)}
                 on:click={() => toggleGradeSelection(gradeValue)}
                 >{gradeValue}</Checkbox
               >
@@ -170,7 +170,7 @@
           {#each clients as client}
             <li>
               <Checkbox
-                checked
+                checked={selectedClients.includes(client.id)}
                 on:click={() => toggleClientSelection(client.id)}
                 >{client.name}</Checkbox
               >
