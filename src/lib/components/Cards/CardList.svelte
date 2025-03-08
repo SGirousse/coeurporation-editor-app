@@ -111,7 +111,7 @@
   }
 </script>
 
-<div class="flex flex-col md:flex-row p-2">
+<div class="sticky top-16 z-10 bg-auto bg-white dark:bg-gray-800">
   <div class="flex items-center justify-center w-full p-2">
     <Heading tag="h1" customSize="text-4xl font-extrabold" class="p-2">
       Cartes <Span gradient>{title}</Span>
