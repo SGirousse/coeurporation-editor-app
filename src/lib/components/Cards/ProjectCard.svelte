@@ -13,8 +13,6 @@
 
     let { projectCard = $bindable(), clients, onDeleteAccessor } = $props();
 
-    updateClientValue(projectCard.client);
-
     function deleteCard() {
         onDeleteAccessor.deleteCard(projectCard);
     }
@@ -29,10 +27,13 @@
         );
 
         if (selectedClient) {
-            projectCard.client = selectedClient.id;
-            projectCard.illustration = selectedClient.illustration;
+            projectCard = {
+                ...projectCard,
+                client: selectedClient.id,
+                illustration: selectedClient.illustration,
+            };
         } else {
-            projectCard.client = "";
+            projectCard = { ...projectCard, client: "", illustration: "" };
         }
     }
 
@@ -45,6 +46,10 @@
     function stopEditing() {
         editingField.set(null);
     }
+
+    $effect(() => {
+        updateClientValue(projectCard.client);
+    });
 </script>
 
 <div
@@ -94,7 +99,7 @@
                         class="w-full truncate-2-lines text-xs italic top-0"
                         onclick={() => startEditing("lore")}
                     >
-                        {#await coeurpormarked(projectCard.lore, projectCard)}
+                        {#await coeurpormarked(projectCard.lore, projectCard, clients)}
                             <p>...parsing card effect</p>
                         {:then htmlText}
                             {@html htmlText}
@@ -124,7 +129,7 @@
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         onclick={() => startEditing("effect")}
                     >
-                        {#await coeurpormarked(projectCard.effect, projectCard)}
+                        {#await coeurpormarked(projectCard.effect, projectCard, clients)}
                             <p>...parsing card effect</p>
                         {:then htmlText}
                             {@html htmlText}
@@ -172,7 +177,7 @@
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         onclick={() => startEditing("penaltyEffect")}
                     >
-                        {#await coeurpormarked(projectCard.penaltyEffect, projectCard)}
+                        {#await coeurpormarked(projectCard.penaltyEffect, projectCard, clients)}
                             <p>...parsing card effect</p>
                         {:then htmlText}
                             {@html htmlText}
@@ -197,7 +202,7 @@
                     class="compact-select"
                     onchange={handleSelectChange}
                 >
-                    {#each clients as client, index}
+                    {#each clients as client, _}
                         <option
                             value={client.id}
                             selected={projectCard.client === client.id}
@@ -285,8 +290,9 @@
 
             <!-- Staffing section -->
             <div class="flex flex-wrap pt-1">
-                {#each projectCard.optimalStaffing as staffing, index}
+                {#each projectCard.optimalStaffing as _, index}
                     <div class="m-[1px]">
+                        <!-- svelte-ignore binding_property_non_reactive -->
                         <Grade
                             bind:grade={projectCard.optimalStaffing[index]}
                         />

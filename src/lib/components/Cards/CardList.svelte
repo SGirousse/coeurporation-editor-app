@@ -192,8 +192,8 @@
     <div class="p-2">
       {#if type == ProjectCardType}
         <ProjectCard
-          {clients}
           projectCard={card as ProjectCardType}
+          {clients}
           {onDeleteAccessor}
         />
       {:else}

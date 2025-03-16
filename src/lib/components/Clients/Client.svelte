@@ -1,9 +1,7 @@
 <script lang="ts">
-    import type { ClientType } from "$lib";
     import ImageSelector from "../Helper/ImageSelector.svelte";
 
-    export let client: ClientType;
-    // let { client = $bindable() } = $props();
+    let { client = $bindable() } = $props();
 </script>
 
 <div
@@ -21,7 +19,7 @@
     <div class="w-full flex justify-center">
         <div class="relative w-[44mm] h-[44mm] edited rounded-full">
             <ImageSelector
-                bind:illustration={client.illustration}
+                illustration={client.illustration}
                 imageShape="round"
             />
         </div>
