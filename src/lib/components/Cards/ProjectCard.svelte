@@ -110,7 +110,7 @@
                 {/if}
             </div>
 
-            <div class="h-[18mm] relative mt-2">
+            <div class="h-[27mm] relative mt-2">
                 <div
                     class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
                 >
@@ -139,7 +139,7 @@
                     </div>
                 {/if}
             </div>
-            <div class="h-[10mm] relative mt-2">
+            <div class="h-[18mm] relative mt-2">
                 <div
                     class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
                 >
