@@ -145,19 +145,19 @@
                     {/if}
                 </div>
                 {#if "burnoutPoints" in card}
-                    <div class="flex items-center w-1/3">
+                    <div class="flex items-center justify-end w-1/3">
                         <BatteryOutline />
                         {#if $editingField === "burnoutPoints"}
                             <input
                                 type="number"
                                 bind:value={card.burnoutPoints}
-                                class="text-[12px] edited border-none p-0 leading-tight focus:outline-none"
+                                class="text-[12px] edited border-none p-0 leading-tight focus:outline-none footer-element"
                                 placeholder="e.g. 3"
                                 onblur={stopEditing}
                             />
                         {:else}
                             <button
-                                class="text-[12px] truncate-2-lines pl-1"
+                                class="text-[12px] footer-element"
                                 onclick={() => startEditing("burnoutPoints")}
                                 >{#if card.burnoutPoints}{card.burnoutPoints}{:else}0{/if}</button
                             >
@@ -173,7 +173,7 @@
                             <input
                                 type="number"
                                 bind:value={card.cost}
-                                class="text-[12px] edited border-none p-0 leading-tight focus:outline-none"
+                                class="text-[12px] edited border-none p-0 leading-tight focus:outline-none footer-element"
                                 placeholder="e.g. 20"
                                 onblur={stopEditing}
                             />

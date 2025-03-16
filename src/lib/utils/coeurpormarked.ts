@@ -78,15 +78,15 @@ function replaceGrade(gradeValue: string): string {
 
 function replaceVariable(text: string, variable: string, icon: string): string {
 
-    text = text.replace(new RegExp(`%${variable}-(\\d+)%`, "g"), (match, p1) => {
+    text = text.replace(new RegExp(`%${variable}-(\\d+)%`, "g"), (_, p1) => {
         return `<span class="${variable == "bp" ? COLOR_CLASS_POSITIVE : COLOR_CLASS_NEGATIVE}">-${p1}&nbsp;${icon}</span>`;
     });
 
-    text = text.replace(new RegExp(`%${variable}[+](\\d+)%`, "g"), (match, p1) => {
+    text = text.replace(new RegExp(`%${variable}[+](\\d+)%`, "g"), (_, p1) => {
         return `<span class="${variable == "bp" ? COLOR_CLASS_NEGATIVE : COLOR_CLASS_POSITIVE}">+${p1}&nbsp;${icon}</span>`;
     });
 
-    text = text.replace(new RegExp(`%${variable}[_](\\d+)%`, "g"), (match, p1) => {
+    text = text.replace(new RegExp(`%${variable}[_](\\d+)%`, "g"), (_, p1) => {
         return `<span>${p1}&nbsp;${icon}</span>`;
     });
 
