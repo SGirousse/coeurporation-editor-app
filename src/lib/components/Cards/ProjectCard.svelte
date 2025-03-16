@@ -27,13 +27,11 @@
         );
 
         if (selectedClient) {
-            projectCard = {
-                ...projectCard,
-                client: selectedClient.id,
-                illustration: selectedClient.illustration,
-            };
+            projectCard.client = selectedClient.id;
+            projectCard.illustration = selectedClient.illustration;
         } else {
-            projectCard = { ...projectCard, client: "", illustration: "" };
+            projectCard.client = clients[0].id;
+            projectCard.illustration = clients[0].illustration;
         }
     }
 
