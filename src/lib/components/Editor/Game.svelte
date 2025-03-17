@@ -8,11 +8,11 @@
     import CardList from "../Cards/CardList.svelte";
     import ClientList from "../Clients/ClientList.svelte";
     let {
-        resourceCards = $bindable([new ResourceCardType()]),
-        codirEventCards = $bindable([new CodirEventCardType()]),
-        actionCards = $bindable([new ActionCardType()]),
-        projectCards = $bindable([new ProjectCardType()]),
-        clients = $bindable([]),
+        resourceCards = $bindable(),
+        codirEventCards = $bindable(),
+        actionCards = $bindable(),
+        projectCards = $bindable(),
+        clients = $bindable(),
     } = $props();
 </script>
 

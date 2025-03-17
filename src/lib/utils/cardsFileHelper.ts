@@ -83,12 +83,12 @@ export async function writeFileContent(resourceCards: ResourceCardType[], codirE
     URL.revokeObjectURL(url);
 }
 
-export async function readFileContent(files: FileList): Promise<{ resourceCards: ResourceCardType[], codirEventCards: CodirEventCardType[], actionCards: ActionCardType[], projectCards: ProjectCardType[], clients: ClientType[] }> {
-    let resourceCards: ResourceCardType[] = [];
-    let codirEventCards: CodirEventCardType[] = [];
-    let actionCards: ActionCardType[] = [];
-    let projectCards: ProjectCardType[] = [];
-    let clients: ClientType[] = [];
+export async function readFileContent(files: FileList): Promise<{ resourceCards: any[], codirEventCards: any[], actionCards: any[], projectCards: any[], clients: any[] }> {
+    let resourceCards = [];
+    let codirEventCards = [];
+    let actionCards = [];
+    let projectCards = [];
+    let clients = [];
 
     for (const file of files) {
         const reader = new FileReader();
@@ -109,7 +109,9 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
 
         if (GAME_JSON_DATA_CARD_RESOURCES in gameData) {
             for (const card of gameData[GAME_JSON_DATA_CARD_RESOURCES]) {
-                resourceCards.push(new ResourceCardType({
+                resourceCards.push({
+                    id: card.id,
+                    cardType: card.cardType,
                     title: card.title,
                     illustration: card.illustration,
                     lore: card.lore,
@@ -117,32 +119,38 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                     grade: card.grade,
                     burnoutPoints: card.burnoutPoints,
                     cost: card.cost,
-                }));
+                });
             }
         }
         if (GAME_JSON_DATA_CARD_CODIREVENTS in gameData) {
             for (const card of gameData[GAME_JSON_DATA_CARD_CODIREVENTS]) {
-                codirEventCards.push(new CodirEventCardType({
+                codirEventCards.push({
+                    id: card.id,
+                    cardType: card.cardType,
                     title: card.title,
                     illustration: card.illustration,
                     lore: card.lore,
                     effect: card.effect,
-                }));
+                });
             }
         }
         if (GAME_JSON_DATA_CARD_ACTIONS in gameData) {
             for (const card of gameData[GAME_JSON_DATA_CARD_ACTIONS]) {
-                actionCards.push(new ActionCardType({
+                actionCards.push({
+                    id: card.id,
+                    cardType: card.cardType,
                     title: card.title,
                     illustration: card.illustration,
                     lore: card.lore,
                     effect: card.effect,
-                }));
+                });
             }
         }
         if (GAME_JSON_DATA_CARD_PROJECTS in gameData) {
             for (const card of gameData[GAME_JSON_DATA_CARD_PROJECTS]) {
-                projectCards.push(new ProjectCardType({
+                projectCards.push({
+                    id: card.id,
+                    cardType: card.cardType,
                     title: card.title,
                     illustration: card.illustration,
                     lore: card.lore,
@@ -154,18 +162,18 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                     penaltyThreshold: card.penaltyThreshold,
                     penaltyEffect: card.penaltyEffect,
                     reputation: card.reputation
-                }));
+                });
             }
         }
         if (GAME_JSON_DATA_INFO_CLIENTS in gameData) {
             for (const client of gameData[GAME_JSON_DATA_INFO_CLIENTS]) {
-                clients.push(new ClientType({
+                clients.push({
                     id: client.id,
                     name: client.name,
                     illustration: client.illustration,
                     comboThreshold: client.comboThreshold,
                     comboEffect: client.comboEffect,
-                }));
+                });
             }
         }
     }

@@ -19,7 +19,7 @@
     <div class="w-full flex justify-center">
         <div class="relative w-[44mm] h-[44mm] edited rounded-full">
             <ImageSelector
-                illustration={client.illustration}
+                bind:illustration={client.illustration}
                 imageShape="round"
             />
         </div>

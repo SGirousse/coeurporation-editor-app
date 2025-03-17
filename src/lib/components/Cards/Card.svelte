@@ -8,15 +8,14 @@
         ChartMixedDollarSolid,
         BugSolid,
     } from "flowbite-svelte-icons";
-    import { type CardType } from "$lib";
     import defaultIllustration from "$lib/assets/illustration/default.jpg";
     import Grade from "./Fields/Grade.svelte";
     import ImageSelector from "$lib/components/Helper/ImageSelector.svelte";
 
     import { coeurpormarked } from "$lib/utils/coeurpormarked";
 
-    export let card: CardType;
-    export let onDeleteAccessor: any;
+    let { card = $bindable(), onDeleteAccessor } = $props();
+
     let editingField = writable<string | null>(null);
     if (card.illustration === undefined || card.illustration === "") {
         card.illustration = defaultIllustration;
@@ -53,6 +52,7 @@
             {#if $editingField === "title"}
                 <input
                     type="text"
+                    placeholder="Titre"
                     bind:value={card.title}
                     class="edited border-none p-0 text-lg font-bold focus:outline-none"
                     onblur={stopEditing}
@@ -80,6 +80,7 @@
             <div class="relative h-[7mm]">
                 {#if $editingField === "lore"}
                     <textarea
+                        placeholder="Lore de la carte"
                         rows="2"
                         bind:value={card.lore}
                         class="edited border-none p-0 text-[9px] leading-tight italic focus:outline-none text-justify"
@@ -111,6 +112,7 @@
                 </div>
                 {#if $editingField === "effect"}
                     <textarea
+                        placeholder="Description de l'effet de la carte"
                         bind:value={card.effect}
                         class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
                         onblur={stopEditing}

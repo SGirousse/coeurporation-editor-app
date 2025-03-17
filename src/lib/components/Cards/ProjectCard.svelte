@@ -11,10 +11,10 @@
     import { coeurpormarked } from "$lib/utils/coeurpormarked";
     import type { ClientType } from "$lib";
 
-    let { projectCard = $bindable(), clients, onDeleteAccessor } = $props();
+    let { card = $bindable(), onDeleteAccessor, clients } = $props();
 
     function deleteCard() {
-        onDeleteAccessor.deleteCard(projectCard);
+        onDeleteAccessor.deleteCard(card);
     }
 
     async function handleSelectChange(event: any) {
@@ -27,11 +27,11 @@
         );
 
         if (selectedClient) {
-            projectCard.client = selectedClient.id;
-            projectCard.illustration = selectedClient.illustration;
+            card.client = selectedClient.id;
+            card.illustration = selectedClient.illustration;
         } else {
-            projectCard.client = clients[0].id;
-            projectCard.illustration = clients[0].illustration;
+            card.client = clients[0].id;
+            card.illustration = clients[0].illustration;
         }
     }
 
@@ -46,12 +46,12 @@
     }
 
     $effect(() => {
-        updateClientValue(projectCard.client);
+        updateClientValue(card.client);
     });
 </script>
 
 <div
-    id={`card-${projectCard.id}`}
+    id={`card-${card.id}`}
     class="group relative flex h-[70mm] w-[120mm] flex-col rounded-lg border p-1 shadow-lg project-card"
 >
     <div class="absolute top-2 right-2 flex space-x-2 z-10">
@@ -70,7 +70,7 @@
                 {#if $editingField === "title"}
                     <input
                         type="text"
-                        bind:value={projectCard.title}
+                        bind:value={card.title}
                         class="w-full edited border-none p-0 text-lg font-bold focus:outline-none"
                         onblur={stopEditing}
                         onkeydown={(e) => e.key === "Enter" && stopEditing()}
@@ -80,7 +80,7 @@
                         class="w-full truncate text-lg font-bold"
                         onclick={() => startEditing("title")}
                     >
-                        {projectCard.title}
+                        {card.title}
                     </button>
                 {/if}
             </div>
@@ -88,7 +88,7 @@
             <div class="h-[9mm]">
                 {#if $editingField === "lore"}
                     <textarea
-                        bind:value={projectCard.lore}
+                        bind:value={card.lore}
                         class="edited border-none p-0 text-xs leading-tight italic focus:outline-none resize-none w-full h-full"
                         onblur={stopEditing}
                     ></textarea>
@@ -97,7 +97,7 @@
                         class="w-full truncate-2-lines text-xs italic top-0"
                         onclick={() => startEditing("lore")}
                     >
-                        {#await coeurpormarked(projectCard.lore, projectCard, clients)}
+                        {#await coeurpormarked(card.lore, card, clients)}
                             <p>...parsing card effect</p>
                         {:then htmlText}
                             {@html htmlText}
@@ -116,7 +116,7 @@
                 </div>
                 {#if $editingField === "effect"}
                     <textarea
-                        bind:value={projectCard.effect}
+                        bind:value={card.effect}
                         class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
                         onblur={stopEditing}
                     ></textarea>
@@ -127,7 +127,7 @@
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         onclick={() => startEditing("effect")}
                     >
-                        {#await coeurpormarked(projectCard.effect, projectCard, clients)}
+                        {#await coeurpormarked(card.effect, card, clients)}
                             <p>...parsing card effect</p>
                         {:then htmlText}
                             {@html htmlText}
@@ -145,7 +145,7 @@
                     {#if $editingField === "penaltyThreshold"}
                         <input
                             type="number"
-                            bind:value={projectCard.penaltyThreshold}
+                            bind:value={card.penaltyThreshold}
                             class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
                             onblur={stopEditing}
                         />
@@ -156,7 +156,7 @@
                             class="text-[12px] leading-tight"
                             onclick={() => startEditing("penaltyThreshold")}
                         >
-                            {projectCard.penaltyThreshold}
+                            {card.penaltyThreshold}
                         </div>
                     {/if}
                     )
@@ -164,7 +164,7 @@
 
                 {#if $editingField === "penaltyEffect"}
                     <textarea
-                        bind:value={projectCard.penaltyEffect}
+                        bind:value={card.penaltyEffect}
                         class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
                         onblur={stopEditing}
                     ></textarea>
@@ -175,7 +175,7 @@
                         class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
                         onclick={() => startEditing("penaltyEffect")}
                     >
-                        {#await coeurpormarked(projectCard.penaltyEffect, projectCard, clients)}
+                        {#await coeurpormarked(card.penaltyEffect, card, clients)}
                             <p>...parsing card effect</p>
                         {:then htmlText}
                             {@html htmlText}
@@ -190,7 +190,7 @@
         <!-- Right part with illustration / number data -->
         <div class="relative w-[22mm]">
             <img
-                src={projectCard.illustration}
+                src={card.illustration}
                 alt="Project Illustration"
                 class="h-[22mm] rounded-full"
             />
@@ -203,7 +203,7 @@
                     {#each clients as client, _}
                         <option
                             value={client.id}
-                            selected={projectCard.client === client.id}
+                            selected={card.client === client.id}
                             >{client.name}</option
                         >
                     {/each}
@@ -221,7 +221,7 @@
                     {#if $editingField === "baseRevenue"}
                         <input
                             type="number"
-                            bind:value={projectCard.baseRevenue}
+                            bind:value={card.baseRevenue}
                             class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
                             onblur={stopEditing}
                         />
@@ -229,7 +229,7 @@
                         <!-- svelte-ignore a11y_click_events_have_key_events -->
                         <!-- svelte-ignore a11y_no_static_element_interactions -->
                         <div onclick={() => startEditing("baseRevenue")}>
-                            {projectCard.baseRevenue}
+                            {card.baseRevenue}
                         </div>
                     {/if}k
                 </div>
@@ -240,7 +240,7 @@
                     {#if $editingField === "reputation"}
                         <input
                             type="number"
-                            bind:value={projectCard.reputation}
+                            bind:value={card.reputation}
                             class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
                             onblur={stopEditing}
                         />
@@ -248,7 +248,7 @@
                         <!-- svelte-ignore a11y_click_events_have_key_events -->
                         <!-- svelte-ignore a11y_no_static_element_interactions -->
                         <div onclick={() => startEditing("reputation")}>
-                            {projectCard.reputation}
+                            {card.reputation}
                         </div>
                     {/if}
                 </div>
@@ -259,7 +259,7 @@
                     {#if $editingField === "optimalRevenue"}
                         <input
                             type="number"
-                            bind:value={projectCard.optimalRevenue}
+                            bind:value={card.optimalRevenue}
                             class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
                             onblur={stopEditing}
                         />
@@ -267,7 +267,7 @@
                         <!-- svelte-ignore a11y_click_events_have_key_events -->
                         <!-- svelte-ignore a11y_no_static_element_interactions -->
                         <div onclick={() => startEditing("optimalRevenue")}>
-                            {projectCard.optimalRevenue}
+                            {card.optimalRevenue}
                         </div>
                     {/if}k
                 </div>
@@ -277,8 +277,7 @@
                     <RocketOutline />
                     <div>
                         {clients.find(
-                            (client: ClientType) =>
-                                client.id === projectCard.client,
+                            (client: ClientType) => client.id === card.client,
                         )?.comboThreshold}
                     </div>
                 </div>
@@ -288,12 +287,10 @@
 
             <!-- Staffing section -->
             <div class="flex flex-wrap pt-1">
-                {#each projectCard.optimalStaffing as _, index}
+                {#each card.optimalStaffing as _, index}
                     <div class="m-[1px]">
                         <!-- svelte-ignore binding_property_non_reactive -->
-                        <Grade
-                            bind:grade={projectCard.optimalStaffing[index]}
-                        />
+                        <Grade bind:grade={card.optimalStaffing[index]} />
                     </div>
                 {/each}
             </div>

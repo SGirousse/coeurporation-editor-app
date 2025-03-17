@@ -45,8 +45,7 @@ const MSG_WRONG_ATTRIBUTE = "<div class='bg-red-500'>Cette variable n'est pas su
      * @param rawText html text to be transformed.
      * @param card card data to be used for data extraction.
      */
-export async function coeurpormarked(rawText: string, card: CardType, clients: ClientType[] = []): Promise<string> {
-    console.log(clients)
+export async function coeurpormarked(rawText: string = "", card: CardType, clients: ClientType[] = []): Promise<string> {
     const markedText = await marked(rawText);
 
     let coeurpormarkedText = markedText

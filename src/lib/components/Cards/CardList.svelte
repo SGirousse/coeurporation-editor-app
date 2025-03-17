@@ -22,12 +22,9 @@
     FilterOutline,
     SortOutline,
   } from "flowbite-svelte-icons";
-  let {
-    cards = $bindable([]),
-    title,
-    type,
-    clients = $bindable([]),
-  } = $props();
+  import { newCard } from "$lib/utils/cardGenerator";
+
+  let { cards = $bindable([]), title, type, clients = [] } = $props();
 
   let filteredCards: CardType[] = $state([]);
   let searchQuery: string = $state("");
@@ -42,8 +39,7 @@
   );
 
   function addNewCard() {
-    const newCard = new type();
-    cards = [...cards, newCard];
+    cards.push(newCard(type));
   }
 
   function deleteCard(cardToDelete: CardType) {
@@ -188,16 +184,16 @@
 </div>
 
 <div class="flex flex-wrap justify-center">
-  {#each filteredCards as card}
+  {#each filteredCards as _, index}
     <div class="p-2">
       {#if type == ProjectCardType}
         <ProjectCard
-          projectCard={card as ProjectCardType}
-          {clients}
+          bind:card={filteredCards[index]}
           {onDeleteAccessor}
+          {clients}
         />
       {:else}
-        <Card {card} {onDeleteAccessor} />
+        <Card bind:card={filteredCards[index]} {onDeleteAccessor} />
       {/if}
     </div>
   {/each}

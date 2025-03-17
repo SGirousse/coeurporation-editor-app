@@ -60,7 +60,7 @@
     </div>
 </div>
 <div class="flex flex-wrap justify-center">
-    {#each filteredClients as client}
-        <Client {client} />
+    {#each filteredClients as _, index}
+        <Client bind:client={filteredClients[index]} />
     {/each}
 </div>
