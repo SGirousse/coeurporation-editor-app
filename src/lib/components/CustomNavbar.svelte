@@ -60,9 +60,7 @@
         <span
             class="flex justify-center items-center self-center text-center text-xl font-semibold whitespace-nowrap space-x-1"
         >
-            <span class="hidden md:block"
-                >Coeurporation Editor App ({base})</span
-            >
+            <span class="hidden md:block">Coeurporation Editor App</span>
         </span>
     </NavBrand>
     <NavHamburger />
