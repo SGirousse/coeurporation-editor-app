@@ -22,6 +22,7 @@
     } from "flowbite-svelte";
     import { FloppyDiskAltOutline, UploadOutline } from "flowbite-svelte-icons";
     import { page } from "$app/state";
+    import { base } from "$app/paths";
 
     let files: FileList | undefined = $state();
     let uploadSaveModal = $state(false);
@@ -59,7 +60,9 @@
         <span
             class="flex justify-center items-center self-center text-center text-xl font-semibold whitespace-nowrap space-x-1"
         >
-            <span class="hidden md:block">Coeurporation Editor App</span>
+            <span class="hidden md:block"
+                >Coeurporation Editor App ({base})</span
+            >
         </span>
     </NavBrand>
     <NavHamburger />
@@ -67,9 +70,9 @@
         activeUrl={page.url.pathname}
         activeClass="underline decoration-primary-800 bg-primary-700 text-white md:bg-transparent md:text-primary-700 md:dark:text-white dark:bg-primary-600 md:dark:bg-transparent"
     >
-        <NavLi href="/">Home</NavLi>
-        <NavLi href="/editor">Editeur</NavLi>
-        <NavLi href="/print">Impression</NavLi>
+        <NavLi href="{base}/">Home</NavLi>
+        <NavLi href="{base}/editor">Editeur</NavLi>
+        <NavLi href="{base}/print">Impression</NavLi>
     </NavUl>
     <div
         class="flex items-center justify-center self-center text-center space-x-2"
