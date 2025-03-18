@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from "$app/paths";
 	import { Card, Heading, Hr, Span } from "flowbite-svelte";
 	import { EditOutline, PrinterOutline } from "flowbite-svelte-icons";
 </script>
@@ -7,7 +8,7 @@
 	<div
 		class="flex flex-wrap justify-center items-center md:space-x-2 space-x-0 space-y-2"
 	>
-		<Card href="/editor" class="self-stretch">
+		<Card href="{base}/editor" class="self-stretch">
 			<Heading
 				tag="h1"
 				customSize="text-4xl font-bold text-center"
@@ -28,7 +29,7 @@
 			</div>
 		</Card>
 
-		<Card href="/print" class="self-stretch">
+		<Card href="{base}/print" class="self-stretch">
 			<Heading
 				tag="h1"
 				customSize="text-4xl font-bold text-center"

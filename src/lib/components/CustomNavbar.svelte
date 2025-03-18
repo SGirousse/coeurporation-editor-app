@@ -56,7 +56,7 @@
 </script>
 
 <Navbar class="fixed top-0 w-full z-100 h-16" fluid>
-    <NavBrand href="/">
+    <NavBrand href="{base}/">
         <span
             class="flex justify-center items-center self-center text-center text-xl font-semibold whitespace-nowrap space-x-1"
         >

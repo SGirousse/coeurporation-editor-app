@@ -1,9 +1,10 @@
 <script lang="ts">
+    import { base } from "$app/paths";
     import { page } from "$app/state";
     import { Toast, type ColorVariant } from "flowbite-svelte";
     import { ShareNodesOutline } from "flowbite-svelte-icons";
     import { slide } from "svelte/transition";
-    // let { title, grade, effect, lore, bp, cost } = $props();
+
     let { card } = $props();
 
     let toastStatus = $state(false);
@@ -12,7 +13,7 @@
     let shareStatusColor: ColorVariant = $state("dark");
 
     function shareCard() {
-        let shareLink = page.url.origin + "/preview?";
+        let shareLink = page.url.origin + `${base}/preview?`;
         const { illustration: _, ...cardWithoutIllustration } = card;
         shareLink += "card=" + JSON.stringify(cardWithoutIllustration);
         shareLink = encodeURI(shareLink);
