@@ -14,11 +14,17 @@
 </script>
 
 <div
-    class="page2print grid grid-cols-{numberOfCardsPerRow} grid-rows-{numberOfCardsPerCol} h-[297mm] w-[210mm] p-2 bg-white items-center justify-center"
+    class="page2print flex flex-wrap h-[297mm] w-[210mm] p-2 bg-white items-center justify-center"
 >
     {#each { length: numberOfCardsPerPage }, cardNb}
-        {#if cardsToDisplay.length > pageNb + cardNb + pageNb * numberOfCardsPerPage}
-            <div class="flex items-center justify-center h-full w-full">
+        <div
+            class="flex items-center justify-center {numberOfCardsPerCol == 1
+                ? 'h-full'
+                : 'h-1/' + numberOfCardsPerCol} {numberOfCardsPerRow == 1
+                ? 'w-full'
+                : 'w-1/' + numberOfCardsPerRow}"
+        >
+            {#if cardsToDisplay.length > pageNb + cardNb + pageNb * numberOfCardsPerPage}
                 {#if isPortrait}
                     <Card
                         card={cardsToDisplay[
@@ -36,7 +42,7 @@
                         {showBackground}
                     />
                 {/if}
-            </div>
-        {/if}
+            {/if}
+        </div>
     {/each}
 </div>
