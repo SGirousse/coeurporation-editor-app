@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { writable } from "svelte/store";
     import {
         TrashBinOutline,
         BitcoinSolid,
@@ -11,7 +10,14 @@
     import { coeurpormarked } from "$lib/utils/coeurpormarked";
     import type { ClientType } from "$lib";
 
-    let { card = $bindable(), onDeleteAccessor, clients } = $props();
+    import { clients } from "$lib/components/Cards/ResourceCard.svelte";
+    import ShareButton from "../Helper/ShareButton.svelte";
+    let {
+        card = $bindable(),
+        onDeleteAccessor = undefined,
+        isEditable = true,
+        showBackground = false,
+    } = $props();
 
     function deleteCard() {
         onDeleteAccessor.deleteCard(card);
@@ -22,7 +28,7 @@
     }
 
     async function updateClientValue(clientId: string) {
-        const selectedClient = clients.find(
+        const selectedClient = clients.clients.find(
             (client: ClientType) => client.id === clientId,
         );
 
@@ -30,19 +36,21 @@
             card.client = selectedClient.id;
             card.illustration = selectedClient.illustration;
         } else {
-            card.client = clients[0].id;
-            card.illustration = clients[0].illustration;
+            card.client = clients.clients[0].id;
+            card.illustration = clients.clients[0].illustration;
         }
     }
 
-    let editingField = writable<string | null>(null);
+    let editingField = $state<string | undefined>(undefined);
 
     function startEditing(field: string) {
-        editingField.set(field);
+        if (isEditable) {
+            editingField = field;
+        }
     }
 
     function stopEditing() {
-        editingField.set(null);
+        editingField = undefined;
     }
 
     $effect(() => {
@@ -52,250 +60,270 @@
 
 <div
     id={`card-${card.id}`}
-    class="group relative flex h-[70mm] w-[120mm] flex-col rounded-lg border p-1 shadow-lg project-card"
+    class="group relative flex h-[70mm] w-[120mm] flex-col"
 >
-    <div class="absolute top-2 right-2 flex space-x-2 z-10">
-        <button
-            onclick={deleteCard}
-            class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
-        >
-            <TrashBinOutline class="text-red-600" />
-        </button>
-    </div>
-
-    <div class="flex-grow flex cardcontent p-1">
-        <!-- Left part with text data -->
-        <div class="flex flex-col w-[93mm] m-0 mr-2">
-            <div class="relative h-[6mm] w-full">
-                {#if $editingField === "title"}
-                    <input
-                        type="text"
-                        bind:value={card.title}
-                        class="w-full edited border-none p-0 text-lg font-bold focus:outline-none"
-                        onblur={stopEditing}
-                        onkeydown={(e) => e.key === "Enter" && stopEditing()}
-                    />
-                {:else}
+    {#if showBackground}
+        <div class="bg-amber-300 h-full rounded-lg"></div>
+    {:else}
+        <div class="rounded-lg border shadow-lg p-1 project-card">
+            {#if isEditable}
+                <div class="absolute top-2 right-2 flex space-x-2 z-10">
                     <button
-                        class="w-full truncate text-lg font-bold"
-                        onclick={() => startEditing("title")}
+                        onclick={deleteCard}
+                        class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
                     >
-                        {card.title}
+                        <TrashBinOutline class="text-red-600" />
                     </button>
-                {/if}
-            </div>
-
-            <div class="h-[9mm]">
-                {#if $editingField === "lore"}
-                    <textarea
-                        bind:value={card.lore}
-                        class="edited border-none p-0 text-xs leading-tight italic focus:outline-none resize-none w-full h-full"
-                        onblur={stopEditing}
-                    ></textarea>
-                {:else}
-                    <button
-                        class="w-full truncate-2-lines text-xs italic top-0"
-                        onclick={() => startEditing("lore")}
-                    >
-                        {#await coeurpormarked(card.lore, card, clients)}
-                            <p>...parsing card effect</p>
-                        {:then htmlText}
-                            {@html htmlText}
-                        {:catch error}
-                            <p style="color: red">{error.message}</p>
-                        {/await}
-                    </button>
-                {/if}
-            </div>
-
-            <div class="h-[27mm] relative mt-2">
-                <div
-                    class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
-                >
-                    Effet
+                    <ShareButton {card} />
                 </div>
-                {#if $editingField === "effect"}
-                    <textarea
-                        bind:value={card.effect}
-                        class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
-                        onblur={stopEditing}
-                    ></textarea>
-                {:else}
-                    <!-- svelte-ignore a11y_click_events_have_key_events -->
-                    <!-- svelte-ignore a11y_no_static_element_interactions -->
-                    <div
-                        class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
-                        onclick={() => startEditing("effect")}
-                    >
-                        {#await coeurpormarked(card.effect, card, clients)}
-                            <p>...parsing card effect</p>
-                        {:then htmlText}
-                            {@html htmlText}
-                        {:catch error}
-                            <p style="color: red">{error.message}</p>
-                        {/await}
+            {/if}
+
+            <div class="flex-grow flex cardcontent p-1">
+                <!-- Left part with text data -->
+                <div class="flex flex-col w-[93mm] m-0 mr-2">
+                    <div class="relative h-[6mm] w-full">
+                        {#if editingField === "title"}
+                            <input
+                                type="text"
+                                bind:value={card.title}
+                                class="w-full edited border-none p-0 text-lg font-bold focus:outline-none"
+                                onblur={stopEditing}
+                                onkeydown={(e) =>
+                                    e.key === "Enter" && stopEditing()}
+                            />
+                        {:else}
+                            <button
+                                class="w-full truncate text-lg font-bold"
+                                onclick={() => startEditing("title")}
+                            >
+                                {card.title}
+                            </button>
+                        {/if}
                     </div>
-                {/if}
-            </div>
-            <div class="h-[18mm] relative mt-2">
-                <div
-                    class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
-                >
-                    Penalty effect (
-                    {#if $editingField === "penaltyThreshold"}
-                        <input
-                            type="number"
-                            bind:value={card.penaltyThreshold}
-                            class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                            onblur={stopEditing}
-                        />
-                    {:else}
-                        <!-- svelte-ignore a11y_click_events_have_key_events -->
-                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+
+                    <div class="h-[9mm]">
+                        {#if editingField === "lore"}
+                            <textarea
+                                bind:value={card.lore}
+                                class="edited border-none p-0 text-xs leading-tight italic focus:outline-none resize-none w-full h-full"
+                                onblur={stopEditing}
+                            ></textarea>
+                        {:else}
+                            <button
+                                class="w-full truncate-2-lines text-xs italic top-0"
+                                onclick={() => startEditing("lore")}
+                            >
+                                {#await coeurpormarked(card.lore, card, clients.clients)}
+                                    <p>...parsing card effect</p>
+                                {:then htmlText}
+                                    {@html htmlText}
+                                {:catch error}
+                                    <p style="color: red">{error.message}</p>
+                                {/await}
+                            </button>
+                        {/if}
+                    </div>
+
+                    <div class="h-[27mm] relative mt-2">
                         <div
-                            class="text-[12px] leading-tight"
-                            onclick={() => startEditing("penaltyThreshold")}
+                            class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
                         >
-                            {card.penaltyThreshold}
+                            Effet
                         </div>
-                    {/if}
-                    )
+                        {#if editingField === "effect"}
+                            <textarea
+                                bind:value={card.effect}
+                                class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
+                                onblur={stopEditing}
+                            ></textarea>
+                        {:else}
+                            <!-- svelte-ignore a11y_click_events_have_key_events -->
+                            <!-- svelte-ignore a11y_no_static_element_interactions -->
+                            <div
+                                class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
+                                onclick={() => startEditing("effect")}
+                            >
+                                {#await coeurpormarked(card.effect, card, clients.clients)}
+                                    <p>...parsing card effect</p>
+                                {:then htmlText}
+                                    {@html htmlText}
+                                {:catch error}
+                                    <p style="color: red">{error.message}</p>
+                                {/await}
+                            </div>
+                        {/if}
+                    </div>
+                    <div class="h-[18mm] relative mt-2">
+                        <div
+                            class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
+                        >
+                            Penalty effect (
+                            {#if editingField === "penaltyThreshold"}
+                                <input
+                                    type="number"
+                                    bind:value={card.penaltyThreshold}
+                                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
+                                    onblur={stopEditing}
+                                />
+                            {:else}
+                                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                                <div
+                                    class="text-[12px] leading-tight"
+                                    onclick={() =>
+                                        startEditing("penaltyThreshold")}
+                                >
+                                    {card.penaltyThreshold}
+                                </div>
+                            {/if}
+                            )
+                        </div>
+
+                        {#if editingField === "penaltyEffect"}
+                            <textarea
+                                bind:value={card.penaltyEffect}
+                                class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
+                                onblur={stopEditing}
+                            ></textarea>
+                        {:else}
+                            <!-- svelte-ignore a11y_click_events_have_key_events -->
+                            <!-- svelte-ignore a11y_no_static_element_interactions -->
+                            <div
+                                class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
+                                onclick={() => startEditing("penaltyEffect")}
+                            >
+                                {#await coeurpormarked(card.penaltyEffect, card, clients.clients)}
+                                    <p>...parsing card effect</p>
+                                {:then htmlText}
+                                    {@html htmlText}
+                                {:catch error}
+                                    <p style="color: red">{error.message}</p>
+                                {/await}
+                            </div>
+                        {/if}
+                    </div>
                 </div>
 
-                {#if $editingField === "penaltyEffect"}
-                    <textarea
-                        bind:value={card.penaltyEffect}
-                        class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
-                        onblur={stopEditing}
-                    ></textarea>
-                {:else}
-                    <!-- svelte-ignore a11y_click_events_have_key_events -->
-                    <!-- svelte-ignore a11y_no_static_element_interactions -->
-                    <div
-                        class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
-                        onclick={() => startEditing("penaltyEffect")}
-                    >
-                        {#await coeurpormarked(card.penaltyEffect, card, clients)}
-                            <p>...parsing card effect</p>
-                        {:then htmlText}
-                            {@html htmlText}
-                        {:catch error}
-                            <p style="color: red">{error.message}</p>
-                        {/await}
+                <!-- Right part with illustration / number data -->
+                <div class="relative w-[22mm]">
+                    <img
+                        src={card.illustration}
+                        alt="Project Illustration"
+                        class="h-[22mm] rounded-full"
+                    />
+                    <div class="leading-tight text-center">
+                        <select
+                            name="clients.clients"
+                            class="compact-select"
+                            onchange={handleSelectChange}
+                        >
+                            {#each clients.clients as client, _}
+                                <option
+                                    value={client.id}
+                                    selected={card.client === client.id}
+                                    >{client.name}</option
+                                >
+                            {/each}
+                        </select>
                     </div>
-                {/if}
+
+                    <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+
+                    <!-- Values section -->
+                    <div class="grid grid-cols-2 gap-1 mt-2 mb-2">
+                        <div
+                            class="flex items-center justify-start text-[12px] leading-tight"
+                        >
+                            <EuroOutline />
+                            {#if editingField === "baseRevenue"}
+                                <input
+                                    type="number"
+                                    bind:value={card.baseRevenue}
+                                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
+                                    onblur={stopEditing}
+                                />
+                            {:else}
+                                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                                <div
+                                    onclick={() => startEditing("baseRevenue")}
+                                >
+                                    {card.baseRevenue}
+                                </div>
+                            {/if}k
+                        </div>
+                        <div
+                            class="flex items-center justify-start text-[12px] leading-tight"
+                        >
+                            <AwardSolid />
+                            {#if editingField === "reputation"}
+                                <input
+                                    type="number"
+                                    bind:value={card.reputation}
+                                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
+                                    onblur={stopEditing}
+                                />
+                            {:else}
+                                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                                <div onclick={() => startEditing("reputation")}>
+                                    {card.reputation}
+                                </div>
+                            {/if}
+                        </div>
+                        <div
+                            class="flex items-center justify-start text-[12px] leading-tight"
+                        >
+                            <BitcoinSolid />
+                            {#if editingField === "optimalRevenue"}
+                                <input
+                                    type="number"
+                                    bind:value={card.optimalRevenue}
+                                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
+                                    onblur={stopEditing}
+                                />
+                            {:else}
+                                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                                <div
+                                    onclick={() =>
+                                        startEditing("optimalRevenue")}
+                                >
+                                    {card.optimalRevenue}
+                                </div>
+                            {/if}k
+                        </div>
+                        <div
+                            class="flex items-center justify-start text-[12px] leading-tight"
+                        >
+                            <RocketOutline />
+                            <div>
+                                {clients.clients.find(
+                                    (client: ClientType) =>
+                                        client.id === card.client,
+                                )?.comboThreshold}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+
+                    <!-- Staffing section -->
+                    <div class="flex flex-wrap pt-1">
+                        {#each card.optimalStaffing as _, index}
+                            <div class="m-[1px]">
+                                <!-- svelte-ignore binding_property_non_reactive -->
+                                <Grade
+                                    bind:grade={card.optimalStaffing[index]}
+                                    {isEditable}
+                                />
+                            </div>
+                        {/each}
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Right part with illustration / number data -->
-        <div class="relative w-[22mm]">
-            <img
-                src={card.illustration}
-                alt="Project Illustration"
-                class="h-[22mm] rounded-full"
-            />
-            <div class="leading-tight text-center">
-                <select
-                    name="clients"
-                    class="compact-select"
-                    onchange={handleSelectChange}
-                >
-                    {#each clients as client, _}
-                        <option
-                            value={client.id}
-                            selected={card.client === client.id}
-                            >{client.name}</option
-                        >
-                    {/each}
-                </select>
-            </div>
-
-            <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-            <!-- Values section -->
-            <div class="grid grid-cols-2 gap-1 mt-2 mb-2">
-                <div
-                    class="flex items-center justify-start text-[12px] leading-tight"
-                >
-                    <EuroOutline />
-                    {#if $editingField === "baseRevenue"}
-                        <input
-                            type="number"
-                            bind:value={card.baseRevenue}
-                            class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                            onblur={stopEditing}
-                        />
-                    {:else}
-                        <!-- svelte-ignore a11y_click_events_have_key_events -->
-                        <!-- svelte-ignore a11y_no_static_element_interactions -->
-                        <div onclick={() => startEditing("baseRevenue")}>
-                            {card.baseRevenue}
-                        </div>
-                    {/if}k
-                </div>
-                <div
-                    class="flex items-center justify-start text-[12px] leading-tight"
-                >
-                    <AwardSolid />
-                    {#if $editingField === "reputation"}
-                        <input
-                            type="number"
-                            bind:value={card.reputation}
-                            class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                            onblur={stopEditing}
-                        />
-                    {:else}
-                        <!-- svelte-ignore a11y_click_events_have_key_events -->
-                        <!-- svelte-ignore a11y_no_static_element_interactions -->
-                        <div onclick={() => startEditing("reputation")}>
-                            {card.reputation}
-                        </div>
-                    {/if}
-                </div>
-                <div
-                    class="flex items-center justify-start text-[12px] leading-tight"
-                >
-                    <BitcoinSolid />
-                    {#if $editingField === "optimalRevenue"}
-                        <input
-                            type="number"
-                            bind:value={card.optimalRevenue}
-                            class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                            onblur={stopEditing}
-                        />
-                    {:else}
-                        <!-- svelte-ignore a11y_click_events_have_key_events -->
-                        <!-- svelte-ignore a11y_no_static_element_interactions -->
-                        <div onclick={() => startEditing("optimalRevenue")}>
-                            {card.optimalRevenue}
-                        </div>
-                    {/if}k
-                </div>
-                <div
-                    class="flex items-center justify-start text-[12px] leading-tight"
-                >
-                    <RocketOutline />
-                    <div>
-                        {clients.find(
-                            (client: ClientType) => client.id === card.client,
-                        )?.comboThreshold}
-                    </div>
-                </div>
-            </div>
-
-            <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-            <!-- Staffing section -->
-            <div class="flex flex-wrap pt-1">
-                {#each card.optimalStaffing as _, index}
-                    <div class="m-[1px]">
-                        <!-- svelte-ignore binding_property_non_reactive -->
-                        <Grade bind:grade={card.optimalStaffing[index]} />
-                    </div>
-                {/each}
-            </div>
-        </div>
-    </div>
+    {/if}
 </div>
 
 <style>

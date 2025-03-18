@@ -1,7 +1,7 @@
 <script lang="ts">
     import { grades } from "$lib";
 
-    let { grade = $bindable("") } = $props();
+    let { grade = $bindable(""), isEditable = true } = $props();
 
     let gradeColor = $state("");
 
@@ -27,6 +27,7 @@
     class="{gradeColor} compact-select flex h-6 w-6 rounded-full text-white text-center focus:outline-none p-0 m-0"
     onchange={handleSelectGradeChange}
     bind:value={grade}
+    disabled={!isEditable}
 >
     {#each grades as gradeData}
         <option value={gradeData.value} selected={grade === gradeData.value}

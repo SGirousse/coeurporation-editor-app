@@ -3,23 +3,21 @@
     import { UserAddOutline } from "flowbite-svelte-icons";
     import { ClientType } from "$lib";
     import Client from "./Client.svelte";
+    import { clients } from "$lib/components/Cards/ResourceCard.svelte";
+    import { newClient } from "$lib/utils/cardGenerator";
 
-    let { clients = $bindable([]) } = $props();
     let searchQuery: string = $state("");
     let filteredClients: ClientType[] = $state([]);
 
     function addNewClient() {
-        const client = new ClientType({
-            id: `${(clients.length + 1).toString().padStart(3, "0")}`,
-        });
-        clients = [...clients, client];
+        clients.clients.push(newClient());
     }
     function clearSearch() {
         searchQuery = "";
     }
 
     $effect(() => {
-        filteredClients = clients.filter((client) =>
+        filteredClients = clients.clients.filter((client) =>
             client.name.toLowerCase().includes(searchQuery.toLowerCase()),
         );
     });
@@ -30,8 +28,8 @@
         <Heading tag="h1" customSize="text-4xl font-extrabold" class="p-2">
             Infos <Span gradient>Clients</Span>
             <Secondary>
-                ({#if filteredClients.length != clients.length}{filteredClients.length}
-                    sur&nbsp;{/if}{clients.length})
+                ({#if filteredClients.length != clients.clients.length}{filteredClients.length}
+                    sur&nbsp;{/if}{clients.clients.length})
             </Secondary>
         </Heading>
     </div>

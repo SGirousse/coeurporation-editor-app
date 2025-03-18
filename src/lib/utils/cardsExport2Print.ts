@@ -1,75 +1,37 @@
-
-import type { CardType } from "$lib";
 import { toPng } from "html-to-image";
-import JSZip from "jszip";
+import jsPDF from "jspdf";
 
-/**
- * Create a temporary dom element which will contains all a copy of cards.
- * 
- * @param pageNb Used for the div id.
- * @returns A preformatted div representing an A4 file.
- */
-function newPageElement(pageNb: number): HTMLDivElement {
-    const pageElement = document.createElement("div");
-    pageElement.id = `printPage-${pageNb}`;
-    pageElement.className =
-        "flex flex-wrap h-[297mm] w-[210mm] p-2 bg-white items-center justify-center";
-    document.body.appendChild(pageElement);
 
-    return pageElement;
-}
-
-async function appendPageToZip(zip: JSZip, pageElement: HTMLDivElement, pageNb: number) {
+async function appendPage2PDF(pdf: jsPDF, pageElement: HTMLDivElement, pageNb: number) {
+    // Convert HTML to PDF
     const dataUrl = await toPng(pageElement);
-    const base64Data = dataUrl.split(',')[1];
-    zip.file(`page_${pageNb}.png`, base64Data, { base64: true });
-    document.body.removeChild(pageElement);
+
+    // Add the PNG on a PDF page
+    const imgProps = pdf.getImageProperties(dataUrl);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; // Maintain aspect ratio
+
+    pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
 }
 
-/**
- * Add all cards to page (png) and all the pages to a zip file.
- * 
- * @param zip Zip to populate.
- * @param cards List of cards to print and zip.
- * @param cardsPerPage Number of cards to be printed on each page. 6 for classic cards and 9 for landscape tarot cards.
- * @param pageNb Page number. Is by default 0 but to be incremented if the function called several times on the same zip.
- * @returns Incremented value of page number.
- */
-async function appendCardsPagesToZip(zip: JSZip, cards: CardType[], cardsPerPage: number, pageNb: number = 0): Promise<number> {
-    let cardCount = 0
+export async function cards2pdf() {
+    const pdf = new jsPDF();
 
-    let pageElement = newPageElement(pageNb);
-    for (const card of cards) {
-        if (cardCount > 0 && cardCount % cardsPerPage === 0) {
-            await appendPageToZip(zip, pageElement, pageNb);
-            pageNb++;
-            pageElement = newPageElement(pageNb);
+    // Append all pages to the PDF
+    let pageNb = 0;
+    const pages2print = document.getElementsByClassName("page2print");
+    for (const pageElement of pages2print) {
+        if (pageNb > 0) {
+            pdf.addPage();
         }
-
-        const cardElement = document.getElementById(`card-${card.id}`);
-        if (cardElement) {
-            const cardClone = cardElement.cloneNode(true);
-            pageElement.appendChild(cardClone);
-            cardCount++;
-        }
+        await appendPage2PDF(pdf, pageElement as HTMLDivElement, pageNb);
+        pageNb++;
     }
 
-    await appendPageToZip(zip, pageElement, pageNb);
-    pageNb++;
-
-    return pageNb;
-}
-
-export async function cardsToPngsZipped(baseCards: CardType[], projectCards: CardType[]) {
-
-    const zip = new JSZip();
-
-    let pageNb = await appendCardsPagesToZip(zip, baseCards, 9)
-    await appendCardsPagesToZip(zip, projectCards, 4, pageNb)
-
-    const zipBlob = await zip.generateAsync({ type: "blob" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(zipBlob);
-    link.download = "cards.zip";
-    link.click();
+    // Generate and download the PDF file
+    const pdfBlob = pdf.output("blob");
+    const pdfLink = document.createElement("a");
+    pdfLink.href = URL.createObjectURL(pdfBlob);
+    pdfLink.download = "cards.pdf";
+    pdfLink.click();
 }

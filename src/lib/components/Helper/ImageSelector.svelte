@@ -10,6 +10,7 @@
         illustration = $bindable(""),
         uuid = uuidv4(),
         imageShape = "rect",
+        isEditable = true,
     } = $props();
 
     // Boolean for modals activation/deactivation
@@ -118,12 +119,14 @@
                 ? 'rounded-lg'
                 : 'rounded-full'}"
         />
-        <input
-            type="file"
-            accept="image/*"
-            onchange={handleImageChange}
-            class="absolute inset-0 opacity-0 cursor-pointer"
-        />
+        {#if isEditable}
+            <input
+                type="file"
+                accept="image/*"
+                onchange={handleImageChange}
+                class="absolute inset-0 opacity-0 cursor-pointer"
+            />
+        {/if}
     {:else}
         <div class="absolute bottom-2 right-2 flex space-x-2 z-10">
             <button onclick={onCropComplete} class="rounded-full opacity-100"

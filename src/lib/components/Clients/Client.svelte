@@ -13,6 +13,7 @@
             type="text"
             bind:value={client.name}
             class="edited border-none p-0 text-lg font-bold focus:outline-none w-full"
+            placeholder="Nom du client"
         />
         #{client.id}
     </div>

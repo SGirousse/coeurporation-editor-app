@@ -1,99 +1,52 @@
 <script lang="ts">
-	import Game from "$lib/components/Editor/Game.svelte";
-	import type {
-		ResourceCardType,
-		CodirEventCardType,
-		ActionCardType,
-		ProjectCardType,
-		ClientType,
-	} from "$lib/index.ts";
-	import {
-		readFileContent,
-		writeFileContent,
-	} from "$lib/utils/cardsFileHelper";
-	import { cardsToPngsZipped } from "$lib/utils/cardsExport2Print";
-	import {
-		Fileupload,
-		Button,
-		Navbar,
-		NavBrand,
-		DarkMode,
-	} from "flowbite-svelte";
-	import { HeartOutline } from "flowbite-svelte-icons";
-
-	let files: FileList | undefined = $state();
-	let resourceCards: ResourceCardType[] = $state([]);
-	let codirEventCards: CodirEventCardType[] = $state([]);
-	let actionCards: ActionCardType[] = $state([]);
-	let projectCards: ProjectCardType[] = $state([]);
-	let clients: ClientType[] = $state([]);
-
-	async function saveCardsToFile() {
-		writeFileContent(
-			resourceCards,
-			codirEventCards,
-			actionCards,
-			projectCards,
-			clients,
-		);
-	}
-
-	async function exportCardsForPrint() {
-		const allCards = [...resourceCards, ...codirEventCards, ...actionCards];
-		cardsToPngsZipped(allCards, projectCards);
-	}
-
-	$effect(() => {
-		if (files) {
-			readFileContent(files).then(
-				({
-					resourceCards: newResourceCards,
-					codirEventCards: newCodirEventCards,
-					actionCards: newActionCards,
-					projectCards: newProjectCards,
-					clients: newClients,
-				}) => {
-					resourceCards = newResourceCards;
-					codirEventCards = newCodirEventCards;
-					actionCards = newActionCards;
-					projectCards = newProjectCards;
-					clients = newClients;
-				},
-			);
-			files = undefined;
-		}
-	});
+	import { Card, Heading, Hr, Span } from "flowbite-svelte";
+	import { EditOutline, PrinterOutline } from "flowbite-svelte-icons";
 </script>
 
-<Navbar class="fixed top-0 w-full z-100 h-16">
-	<NavBrand href="/">
-		<span
-			class="flex justify-center items-center self-center text-center text-xl font-semibold whitespace-nowrap"
-		>
-			<span class="hidden sm:block"><HeartOutline class="m-0" /></span>
-			<span class="hidden md:block">poration Editor App </span>
-		</span>
-	</NavBrand>
+<div class="flex items-center justify-center h-full w-full">
 	<div
-		class="flex items-center justify-center self-center text-center space-x-2"
+		class="flex flex-wrap justify-center items-center md:space-x-2 space-x-0 space-y-2"
 	>
-		<div>
-			<Fileupload id="with_helper" bind:files />
-		</div>
-		<div class="flex items-center space-x-2">
-			<Button onclick={saveCardsToFile}>Save</Button>
-			<Button onclick={exportCardsForPrint}>Print</Button>
-		</div>
-		<DarkMode />
-	</div>
-</Navbar>
+		<Card href="/editor" class="self-stretch">
+			<Heading
+				tag="h1"
+				customSize="text-4xl font-bold text-center"
+				class="p-2"
+			>
+				<Span gradient>Editeur de jeu</Span>
+			</Heading>
+			<Hr />
+			<div class="flex items-center space-x-2">
+				<EditOutline size="xl" />
+				<p
+					class="font-normal text-gray-700 dark:text-gray-400 leading-tight text-justify"
+				>
+					Accède à l'éditeur de jeu et crée un nouvel ensemble que tu
+					peux ensuite sauvegarder localement. Reviens à tout moment
+					pour le mettre à jour !
+				</p>
+			</div>
+		</Card>
 
-<div class="mt-16 flex items-center justify-center">
-	<Game
-		bind:resourceCards
-		bind:codirEventCards
-		bind:actionCards
-		bind:projectCards
-		bind:clients
-	/>
+		<Card href="/print" class="self-stretch">
+			<Heading
+				tag="h1"
+				customSize="text-4xl font-bold text-center"
+				class="p-2"
+			>
+				<Span gradient>Impression</Span>
+			</Heading>
+			<Hr />
+			<div class="flex items-center space-x-2">
+				<PrinterOutline size="xl" />
+				<p
+					class="font-normal text-gray-700 dark:text-gray-400 leading-tight text-justify"
+				>
+					Affiche une prévisualisation de tes cartes au format A4,
+					avec ou sans le dos, et lance une impression grandeur nature
+					!
+				</p>
+			</div>
+		</Card>
+	</div>
 </div>
