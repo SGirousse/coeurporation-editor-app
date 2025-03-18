@@ -159,77 +159,83 @@
 </script>
 
 <div class="sticky top-16 z-10 bg-auto bg-white dark:bg-gray-800">
-  <div class="flex items-center justify-center w-full p-2">
-    <Heading tag="h1" customSize="text-4xl font-bold" class="p-2">
+  <div class="flex flex-wrap items-center justify-center w-full p-2">
+    <Heading
+      tag="h1"
+      customSize="text-4xl font-bold"
+      class="p-2 w-full md:w-1/3"
+    >
       Cartes <Span gradient>{title}</Span>
       <Secondary>
         ({#if filteredCards.length != cards.length}{filteredCards.length} sur&nbsp;{/if}{cards.length})
       </Secondary>
     </Heading>
-  </div>
 
-  <!-- Filter and sort buttons-->
-  <div class="flex flex-col md:flex-row items-center space-x-2 w-full p-2">
-    <!-- Filter input-->
-    <div class="flex p-2 input-container w-full">
-      <Input
-        bind:value={searchQuery}
-        placeholder="Search cards by title..."
-        class="w-full"
-      />
-      {#if searchQuery}
-        <button class="clear-button" onclick={clearSearch}>&times;</button>
-      {/if}
-    </div>
+    <!-- Filter and sort buttons-->
+    <div
+      class="flex flex-wrap lg:flex-nowrap items-center space-x-2 w-full md:w-2/3 p-2"
+    >
+      <!-- Filter input-->
+      <div class="flex p-2 input-container w-full min-w-1/3">
+        <Input
+          bind:value={searchQuery}
+          placeholder="Search cards by title..."
+          class="w-full"
+        />
+        {#if searchQuery}
+          <button class="clear-button" onclick={clearSearch}>&times;</button>
+        {/if}
+      </div>
 
-    <!-- Sort buttons-->
-    <div class="flex items-center space-x-2">
-      <GradientButton color="greenToBlue" on:click={sortByTitle}
-        ><SortOutline /> Titre</GradientButton
-      >
-      {#if type == ResourceCardType}
-        <GradientButton color="greenToBlue" on:click={sortByGrade}
-          ><SortOutline /> Grade</GradientButton
+      <!-- Sort buttons-->
+      <div class="flex items-center justify-end space-x-2 w-full">
+        <GradientButton color="greenToBlue" on:click={sortByTitle}
+          ><SortOutline /> Titre</GradientButton
         >
-        <GradientButton color="greenToBlue"
-          ><FilterOutline /> Grade</GradientButton
-        >
-        <Dropdown class="w-44 p-3 space-y-3 text-sm">
-          {#each grades.map((grade) => grade.value) as gradeValue}
-            <li>
-              <Checkbox
-                checked={selectedGrades.includes(gradeValue)}
-                on:click={() => toggleGradeSelection(gradeValue)}
-                >{gradeValue}</Checkbox
-              >
-            </li>
-          {/each}
-        </Dropdown>
-      {/if}
-      {#if type == ProjectCardType}
-        <GradientButton color="greenToBlue" on:click={sortByClient}
-          ><SortOutline /> Client</GradientButton
-        >
-        <GradientButton color="greenToBlue"
-          ><FilterOutline /> Client</GradientButton
-        >
-        <Dropdown class="w-44 p-3 space-y-3 text-sm">
-          {#each clients.clients as client}
-            <li>
-              <Checkbox
-                checked={selectedClients.includes(client.id)}
-                on:click={() => toggleClientSelection(client.id)}
-                >{client.name}</Checkbox
-              >
-            </li>
-          {/each}
-        </Dropdown>
-      {/if}
+        {#if type == ResourceCardType}
+          <GradientButton color="greenToBlue" on:click={sortByGrade}
+            ><SortOutline /> Grade</GradientButton
+          >
+          <GradientButton color="greenToBlue"
+            ><FilterOutline /> Grade</GradientButton
+          >
+          <Dropdown class="w-44 p-3 space-y-3 text-sm">
+            {#each grades.map((grade) => grade.value) as gradeValue}
+              <li>
+                <Checkbox
+                  checked={selectedGrades.includes(gradeValue)}
+                  on:click={() => toggleGradeSelection(gradeValue)}
+                  >{gradeValue}</Checkbox
+                >
+              </li>
+            {/each}
+          </Dropdown>
+        {/if}
+        {#if type == ProjectCardType}
+          <GradientButton color="greenToBlue" on:click={sortByClient}
+            ><SortOutline /> Client</GradientButton
+          >
+          <GradientButton color="greenToBlue"
+            ><FilterOutline /> Client</GradientButton
+          >
+          <Dropdown class="w-44 p-3 space-y-3 text-sm">
+            {#each clients.clients as client}
+              <li>
+                <Checkbox
+                  checked={selectedClients.includes(client.id)}
+                  on:click={() => toggleClientSelection(client.id)}
+                  >{client.name}</Checkbox
+                >
+              </li>
+            {/each}
+          </Dropdown>
+        {/if}
 
-      <!-- New card button -->
-      <Button pill={true} class="p-2!" on:click={addNewCard}
-        ><AddColumnAfterOutline class="w-6 h-6" /></Button
-      >
+        <!-- New card button -->
+        <Button pill={true} class="p-2!" on:click={addNewCard}
+          ><AddColumnAfterOutline class="w-6 h-6" /></Button
+        >
+      </div>
     </div>
   </div>
 </div>
