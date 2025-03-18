@@ -5,10 +5,8 @@
 </script>
 
 <div class="flex items-center justify-center h-full w-full">
-	<div
-		class="flex flex-wrap justify-center items-center md:space-x-2 space-x-0 space-y-2"
-	>
-		<Card href="{base}/editor" class="self-stretch">
+	<div class="flex flex-wrap md:space-x-2 space-x-0 space-y-2 md:space-y-0">
+		<Card href="{base}/editor">
 			<Heading
 				tag="h1"
 				customSize="text-4xl font-bold text-center"
@@ -29,7 +27,7 @@
 			</div>
 		</Card>
 
-		<Card href="{base}/print" class="self-stretch">
+		<Card href="{base}/print">
 			<Heading
 				tag="h1"
 				customSize="text-4xl font-bold text-center"
