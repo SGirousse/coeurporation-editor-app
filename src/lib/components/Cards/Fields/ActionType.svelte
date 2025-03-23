@@ -24,13 +24,13 @@
 </script>
 
 <div
-    class="relative rounded-full border min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm]"
+    class="relative rounded-full border min-h-[6mm] max-h-[6mm] min-w-[6mm] max-w-[6mm]"
 >
     <!-- Dropdown toggle -->
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
-        class="{actionTypeColor} flex rounded-full text-center justify-center items-center focus:outline-none min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm]"
+        class="{actionTypeColor} flex rounded-full text-center justify-center items-center focus:outline-none min-h-[6mm] max-h-[6mm] min-w-[6mm] max-w-[6mm]"
         onclick={() => (isDropdownOpen = isEditable ? !isDropdownOpen : false)}
     >
         <Icon

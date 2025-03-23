@@ -14,7 +14,7 @@
 </script>
 
 <div
-    class="page2print flex flex-wrap h-[297mm] w-[210mm] p-2 bg-white items-center justify-center"
+    class="page2print flex flex-wrap h-[297mm] w-[210mm] bg-white items-center justify-center space-x-2"
 >
     {#each { length: numberOfCardsPerPage }, cardNb}
         <div

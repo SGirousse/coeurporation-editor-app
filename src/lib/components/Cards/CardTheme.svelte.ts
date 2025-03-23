@@ -3,6 +3,7 @@ export const CARD_THEMES = [
         name: "default",
         mainColor: "black",
         accentuationColor: "black",
+        outerBorder: "black",
         ligthTextColor: "white",
         darkTextColor: "black"
     },
@@ -10,6 +11,7 @@ export const CARD_THEMES = [
         name: "clear",
         mainColor: "white",
         accentuationColor: "white",
+        outerBorder: "black",
         ligthTextColor: "black",
         darkTextColor: "black"
     },
@@ -17,6 +19,7 @@ export const CARD_THEMES = [
         name: "crapgemigniii",
         mainColor: "#0070AD",
         accentuationColor: "#17ABDA",
+        outerBorder: "#0070AD",
         ligthTextColor: "white",
         darkTextColor: "black"
     },

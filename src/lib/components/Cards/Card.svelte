@@ -23,7 +23,8 @@
 
 <div
     id={`card-${card.id}`}
-    class="group relative flex h-[88.9mm] w-[63.5mm] flex-col"
+    class="group relative flex h-[88.9mm] w-[63.5mm] flex-col rounded-lg"
+    style="border: 0.5px {currentCardTheme.value.outerBorder} solid;"
 >
     {#if showBackground}
         <div
@@ -129,14 +130,14 @@
                 </div>
 
                 <div
-                    class="flex flex-nowrap items-center justify-end h-[9mm] space-x-2 pt-1 pb-1 pr-2 pl-2 rounded-b-lg"
+                    class="flex flex-nowrap items-center justify-end h-[8.5mm] space-x-2 pt-1 pb-1 pr-2 pl-2 rounded-b-lg"
                     style="background: linear-gradient(90deg, {currentCardTheme
                         .value.accentuationColor} 10%, {currentCardTheme.value
                         .mainColor} 100%);"
                 >
                     {#if "burnoutPoints" in card}
                         <div
-                            class="flex justify-center items-center rounded-full border min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm] text-[12px]"
+                            class="flex justify-center items-center rounded-full border min-h-[6mm] max-h-[6mm] min-w-[6mm] max-w-[6mm] text-[12px]"
                             style="background: {currentCardTheme.value
                                 .accentuationColor}; border-color: {currentCardTheme
                                 .value

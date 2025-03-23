@@ -24,7 +24,7 @@
 
 <select
     name="grades"
-    class="{gradeColor} compact-select flex min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm] rounded-full text-white text-center focus:outline-none p-0 m-0"
+    class="{gradeColor} compact-select flex min-h-[6mm] max-h-[6mm] min-w-[6mm] max-w-[6mm] rounded-full text-white text-center focus:outline-none p-0 m-0"
     onchange={handleSelectGradeChange}
     bind:value={grade}
     disabled={!isEditable}
