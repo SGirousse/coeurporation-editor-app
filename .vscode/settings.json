@@ -1,0 +1,8 @@
+{
+    "css.customData": [
+        ".vscode/css_custom_rules.json"
+    ],
+    "files.associations": {
+        "*.css": "tailwindcss"
+    }
+}

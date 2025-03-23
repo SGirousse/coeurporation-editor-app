@@ -1,17 +1,13 @@
 <script lang="ts">
-    import {
-        TrashBinOutline,
-        BatteryOutline,
-        EuroOutline,
-        CartPlusAltSolid,
-        ChartMixedDollarSolid,
-        BugSolid,
-    } from "flowbite-svelte-icons";
+    import { TrashBinOutline, BatteryOutline } from "flowbite-svelte-icons";
     import Grade from "./Fields/Grade.svelte";
     import ImageSelector from "$lib/components/Helper/ImageSelector.svelte";
-
-    import { coeurpormarked } from "$lib/utils/coeurpormarked";
     import ShareButton from "../Helper/ShareButton.svelte";
+    import EditableNumber from "./Fields/EditableNumber.svelte";
+    import EditableMarkdown from "./Fields/EditableMarkdown.svelte";
+    import CardTypeIcon from "./Fields/CardTypeIcon.svelte";
+    import { currentCardTheme } from "./CardTheme.svelte";
+    import ActionType from "./Fields/ActionType.svelte";
 
     let {
         card = $bindable(),
@@ -20,20 +16,8 @@
         showBackground = false,
     } = $props();
 
-    let editingField = $state<string | undefined>(undefined);
-
     function deleteCard() {
         onDeleteAccessor.deleteCard(card);
-    }
-
-    function startEditing(field: string) {
-        if (isEditable) {
-            editingField = field;
-        }
-    }
-
-    function stopEditing() {
-        editingField = undefined;
     }
 </script>
 
@@ -42,11 +26,21 @@
     class="group relative flex h-[88.9mm] w-[63.5mm] flex-col"
 >
     {#if showBackground}
-        <div class="bg-amber-300 h-full rounded-lg"></div>
+        <div
+            class="h-full rounded-lg"
+            style="background: radial-gradient(circle, {currentCardTheme.value
+                .mainColor} 10%, {currentCardTheme.value
+                .accentuationColor} 100%);"
+        ></div>
     {:else}
-        <div class="rounded-lg border shadow-lg p-1 standard-card">
+        <div
+            class="rounded-lg game-card"
+            style="background: linear-gradient(90deg, {currentCardTheme.value
+                .accentuationColor} 10%, {currentCardTheme.value
+                .mainColor} 100%); "
+        >
             {#if isEditable}
-                <div class="absolute top-2 right-2 flex space-x-2 z-10">
+                <div class="absolute bottom-1 left-2 flex space-x-2 z-10">
                     <button
                         onclick={deleteCard}
                         class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
@@ -57,209 +51,116 @@
                 </div>
             {/if}
 
-            <div class="flex-grow cardcontent p-1">
-                <div class="flex flex-col">
-                    {#if editingField === "title"}
-                        <input
-                            type="text"
-                            placeholder="Titre"
-                            bind:value={card.title}
-                            class="edited border-none p-0 text-lg font-bold focus:outline-none"
-                            onblur={stopEditing}
-                            onkeydown={(e) =>
-                                e.key === "Enter" && stopEditing()}
+            <div class="flex flex-col">
+                <!-- Top of the card (cost, title)-->
+                <div
+                    class="flex flex-nowrap h-[9.5mm] items-center space-x-1 pl-1 pr-0.5 rounded-t-lg"
+                    style="background: linear-gradient(90deg, {currentCardTheme
+                        .value.accentuationColor} 10%, {currentCardTheme.value
+                        .mainColor} 100%);"
+                >
+                    <div
+                        class="ml-1 pl-[7mm] items-center w-full h-[6mm] border rounded"
+                        style="background: {currentCardTheme.value
+                            .mainColor}; border-color: {currentCardTheme.value
+                            .mainColor};  color: {currentCardTheme.value
+                            .ligthTextColor};"
+                    >
+                        <EditableMarkdown
+                            {card}
+                            bind:markdownText={card.title}
+                            additionalClass={"font-bold"}
                         />
-                    {:else}
-                        <button
-                            class="h-[8mm] truncate text-lg font-bold"
-                            onclick={() => startEditing("title")}
+                    </div>
+                    <div
+                        class="flex items-center justify-center absolute -translate-x-0.5 min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm] rounded-full bg-white"
+                        style="background: {currentCardTheme.value
+                            .accentuationColor}; border-color: {currentCardTheme
+                            .value.accentuationColor}; color: {currentCardTheme
+                            .value.ligthTextColor};"
+                    >
+                        <CardTypeIcon type={card.cardType} />
+                    </div>
+                    {#if "cost" in card}
+                        <div
+                            class="flex items-center justify-center text-black text-[14px] font-bold min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm] rounded-lg bg-gradient-to-r from-amber-200 to-yellow-500"
                         >
-                            {card.title}
-                        </button>
+                            <!-- <EuroOutline size="xs" /> -->
+                            <EditableNumber
+                                bind:value={card.cost}
+                                {isEditable}
+                            />
+                            <!-- k -->
+                        </div>
                     {/if}
+                </div>
 
-                    <div class="relative h-[34mm] mb-1">
-                        <ImageSelector
-                            bind:illustration={card.illustration}
+                <!-- Illustration and values (burnout, grade, ...)-->
+                <div class="h-[33mm]">
+                    <ImageSelector
+                        bind:illustration={card.illustration}
+                        {isEditable}
+                    />
+                </div>
+
+                <div
+                    class="h-[7mm] pl-1 pr-1"
+                    style="color: {currentCardTheme.value
+                        .darkTextColor}; background-color: white;"
+                >
+                    <EditableMarkdown
+                        {card}
+                        bind:markdownText={card.lore}
+                        additionalClass={"text-[9px] italic"}
+                    />
+                </div>
+
+                <div
+                    class="relative h-[30.3mm] pl-1 pr-1"
+                    style="color: {currentCardTheme.value
+                        .darkTextColor}; background-color: white;"
+                >
+                    <EditableMarkdown
+                        {card}
+                        bind:markdownText={card.effect}
+                        textAeraTitle="Effet"
+                        additionalClass={"text-[12px]"}
+                    />
+                </div>
+
+                <div
+                    class="flex flex-nowrap items-center justify-end h-[9mm] space-x-2 pt-1 pb-1 pr-2 pl-2 rounded-b-lg"
+                    style="background: linear-gradient(90deg, {currentCardTheme
+                        .value.accentuationColor} 10%, {currentCardTheme.value
+                        .mainColor} 100%);"
+                >
+                    {#if "burnoutPoints" in card}
+                        <div
+                            class="flex justify-center items-center rounded-full border min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm] text-[12px]"
+                            style="background: {currentCardTheme.value
+                                .accentuationColor}; border-color: {currentCardTheme
+                                .value
+                                .accentuationColor}; color: {currentCardTheme
+                                .value.ligthTextColor};"
+                        >
+                            <BatteryOutline size="xs" />
+                            <EditableNumber
+                                bind:value={card.burnoutPoints}
+                                {isEditable}
+                            />
+                        </div>
+                    {/if}
+                    {#if "subType" in card}
+                        <ActionType
+                            bind:actionType={card.subType as string}
                             {isEditable}
                         />
-
-                        {#if "grade" in card}
-                            <div class="absolute -top-3 -right-1">
-                                <Grade
-                                    bind:grade={card.grade as string}
-                                    {isEditable}
-                                />
-                            </div>
-                        {/if}
-                    </div>
-
-                    <div class="relative h-[7mm]">
-                        {#if editingField === "lore"}
-                            <textarea
-                                placeholder="Lore de la carte"
-                                rows="2"
-                                bind:value={card.lore}
-                                class="edited border-none p-0 text-[9px] leading-tight italic focus:outline-none text-justify"
-                                onblur={stopEditing}
-                            ></textarea>
-                        {:else}
-                            <!-- svelte-ignore a11y_click_events_have_key_events -->
-                            <!-- svelte-ignore a11y_no_static_element_interactions -->
-                            <div
-                                class="truncate-2-lines text-[9px] italic text-justify"
-                                onclick={() => startEditing("lore")}
-                            >
-                                {#await coeurpormarked(card.lore, card)}
-                                    <p>...parsing card effect</p>
-                                {:then htmlText}
-                                    {@html htmlText}
-                                {:catch error}
-                                    <p style="color: red">{error.message}</p>
-                                {/await}
-                            </div>
-                        {/if}
-                    </div>
-
-                    <div class="relative h-[27mm] mt-2">
-                        <div
-                            class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
-                        >
-                            Effet
-                        </div>
-                        {#if editingField === "effect"}
-                            <textarea
-                                placeholder="Description de l'effet de la carte"
-                                bind:value={card.effect}
-                                class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
-                                onblur={stopEditing}
-                            ></textarea>
-                        {:else}
-                            <!-- svelte-ignore a11y_click_events_have_key_events -->
-                            <!-- svelte-ignore a11y_no_static_element_interactions -->
-                            <div
-                                class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
-                                onclick={() => startEditing("effect")}
-                            >
-                                {#await coeurpormarked(card.effect, card)}
-                                    <p>...parsing card effect</p>
-                                {:then htmlText}
-                                    {@html htmlText}
-                                {:catch error}
-                                    <p style="color: red">{error.message}</p>
-                                {/await}
-                            </div>
-                        {/if}
-                    </div>
-
-                    <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-                    <div class="flex h-[4mm] items-center justify-between pt-1">
-                        <div class="w-full">
-                            {#if card.cardType == "ResourceCardType"}
-                                <CartPlusAltSolid />
-                            {:else if card.cardType == "CodirEventCardType"}
-                                <ChartMixedDollarSolid />
-                            {:else if card.cardType == "ActionCardType"}
-                                <BugSolid />
-                            {/if}
-                        </div>
-                        {#if "burnoutPoints" in card}
-                            <div class="flex items-center justify-end w-1/3">
-                                <BatteryOutline />
-                                {#if editingField === "burnoutPoints"}
-                                    <input
-                                        type="number"
-                                        bind:value={card.burnoutPoints}
-                                        class="text-[12px] edited border-none p-0 leading-tight focus:outline-none footer-element"
-                                        placeholder="e.g. 3"
-                                        onblur={stopEditing}
-                                    />
-                                {:else}
-                                    <button
-                                        class="text-[12px] footer-element"
-                                        onclick={() =>
-                                            startEditing("burnoutPoints")}
-                                        >{#if card.burnoutPoints}{card.burnoutPoints}{:else}0{/if}</button
-                                    >
-                                {/if}
-                            </div>
-                        {/if}
-                        {#if "cost" in card}
-                            <div
-                                class="flex items-center justify-end w-1/3 text-[12px]"
-                            >
-                                <EuroOutline size="sm" />
-                                {#if editingField === "cost"}
-                                    <input
-                                        type="number"
-                                        bind:value={card.cost}
-                                        class="text-[12px] edited border-none p-0 leading-tight focus:outline-none footer-element"
-                                        placeholder="e.g. 20"
-                                        onblur={stopEditing}
-                                    />
-                                {:else}
-                                    <button
-                                        class="footer-element text-[12px]"
-                                        onclick={() => startEditing("cost")}
-                                        >{#if card.cost}{card.cost}{:else}0{/if}</button
-                                    >
-                                {/if}
-                                k
-                            </div>
-                        {/if}
-                    </div>
+                    {/if}
+                    {#if "grade" in card}
+                        <Grade bind:grade={card.grade as string} {isEditable} />
+                    {/if}
                 </div>
             </div>
         </div>
     {/if}
 </div>
-
-<style>
-    .standard-card {
-        background-color: white;
-        color: black;
-    }
-
-    .standard-card button {
-        text-align: left;
-        width: 100%;
-        height: 100%;
-    }
-
-    .standard-card button.footer-element {
-        text-align: end;
-        width: fit-content;
-    }
-
-    .standard-card textarea {
-        width: 100%;
-        height: 100%;
-        resize: none;
-    }
-
-    .cardcontent {
-        border: 1px solid black;
-        border-radius: 5px;
-        color: black;
-    }
-
-    .effect_area {
-        background-color: white;
-        color: black;
-    }
-
-    .truncate {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
-    .truncate-2-lines {
-        display: -webkit-box;
-        -webkit-line-clamp: 2; /* Number of lines to show */
-        line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-</style>

@@ -23,6 +23,7 @@
     import { FloppyDiskAltOutline, UploadOutline } from "flowbite-svelte-icons";
     import { page } from "$app/state";
     import { base } from "$app/paths";
+    import CardThemeButton from "./Cards/CardThemeButton.svelte";
 
     let files: FileList | undefined = $state();
     let uploadSaveModal = $state(false);
@@ -85,6 +86,7 @@
             >
             <Tooltip>Enregistrer</Tooltip>
         </div>
+        <CardThemeButton />
         <DarkMode />
     </div>
 </Navbar>

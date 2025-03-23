@@ -49,6 +49,7 @@ export function newCard(type: any) {
         // no additional property
     } else if (type == ActionCardType) {
         card.cardType = "ActionCardType"
+        card.subType = "ephemeral"
         // no additional property
     } else if (type == ProjectCardType) {
         card.cardType = "ProjectCardType"

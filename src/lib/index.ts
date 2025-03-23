@@ -48,6 +48,7 @@ export class ActionCardType implements CardType {
     public illustration: string = "";
     public lore: string = "Lore";
     public effect: string = "Effet";
+    public subType: string = "ephemeral";
 
     constructor(init?: Partial<ActionCardType>) {
         Object.assign(this, init);
@@ -78,14 +79,20 @@ export class ProjectCardType implements CardType {
 
 export const grades = [
     { value: "", color: "bg-white" },
-    { value: "Stg", color: "bg-teal-500" },
-    { value: "A", color: "bg-green-500" },
-    { value: "B", color: "bg-blue-500" },
-    { value: "C", color: "bg-yellow-500" },
-    { value: "D", color: "bg-orange-500" },
-    { value: "E", color: "bg-purple-500" },
-    { value: "S", color: "bg-amber-500" },
+    { value: "Stg", color: "bg-teal-300" },
+    { value: "A", color: "bg-green-300" },
+    { value: "B", color: "bg-sky-300" },
+    { value: "C", color: "bg-yellow-300" },
+    { value: "D", color: "bg-orange-300" },
+    { value: "E", color: "bg-purple-300" },
+    { value: "S", color: "bg-amber-300" },
 ];
+
+export const actionTypes = [
+    { value: "ephemeral", color: "bg-white", icon: "tabler:link" },
+    { value: "permanent", color: "bg-white", icon: "tabler:brand-linktree" },
+];
+
 
 export class ClientType {
     public uuid: string = uuidv4();

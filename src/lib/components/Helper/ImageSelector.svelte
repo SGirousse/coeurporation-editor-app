@@ -116,7 +116,7 @@
             src={illustration}
             alt="Card Illustration"
             class="h-full w-full object-cover {imageShape == 'rect'
-                ? 'rounded-lg'
+                ? ''
                 : 'rounded-full'}"
         />
         {#if isEditable}

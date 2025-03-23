@@ -59,7 +59,7 @@
 <button
     onclick={shareCard}
     disabled={toastStatus}
-    class="rounded bg-{shareStatusColor}-200 text-{shareStatusColor}-700 p-1 opacity-0 transition-opacity group-hover:opacity-100"
+    class="rounded bg-gray-200 text-{shareStatusColor}-700 p-1 opacity-0 transition-opacity group-hover:opacity-100"
 >
     <ShareNodesOutline />
 </button>
