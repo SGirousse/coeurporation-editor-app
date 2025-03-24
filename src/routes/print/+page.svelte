@@ -4,9 +4,9 @@
         codirEventCards,
         actionCards,
         projectCards,
-    } from "$lib/components/Cards/ResourceCard.svelte";
+    } from "$lib/components/GameManager.svelte";
     import PrintPreview from "$lib/components/Printer/PrintPreview.svelte";
-    import { cards2pdf } from "$lib/utils/cardsExport2Print";
+    import { cards2pdf } from "$lib/components/Printer/CardsPages2PDF.svelte";
     import { Button, Spinner } from "flowbite-svelte";
     import {
         AtomOutline,

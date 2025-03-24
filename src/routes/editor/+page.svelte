@@ -4,7 +4,7 @@
 		CodirEventCardType,
 		ActionCardType,
 		ProjectCardType,
-	} from "$lib/index.js";
+	} from "$lib/components/Cards/CardType.svelte";
 	import CardList from "$lib/components/Cards/CardList.svelte";
 	import ClientList from "$lib/components/Clients/ClientList.svelte";
 </script>

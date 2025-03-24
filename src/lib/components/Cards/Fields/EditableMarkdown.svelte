@@ -1,11 +1,13 @@
 <script lang="ts">
-    import { coeurpormarked } from "$lib/utils/coeurpormarked";
+    import { coeurpormarked } from "$lib/components/Helper/Coeurpormarked.svelte";
     import { Spinner } from "flowbite-svelte";
+    import EditableNumber from "./EditableNumber.svelte";
 
     let {
         card,
         markdownText = $bindable(),
         textAeraTitle = "",
+        threshold = $bindable(),
         additionalClass = "",
         isEditable = true,
     } = $props();
@@ -18,6 +20,9 @@
         class="absolute left top-0 transform text-xs flex items-center font-bold"
     >
         {textAeraTitle}
+        {#if threshold}
+            (<EditableNumber bind:value={threshold} />)
+        {/if}
     </div>
 {/if}
 {#if isEditionActive}

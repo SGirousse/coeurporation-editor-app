@@ -1,12 +1,15 @@
 <script lang="ts">
   import Card from "./Card.svelte";
-  import { ActionCardType, CodirEventCardType, grades } from "$lib";
   import ProjectCard from "./ProjectCard.svelte";
   import {
     ProjectCardType,
     ResourceCardType,
     type CardType,
-  } from "$lib/index.js";
+    ActionCardType,
+    CodirEventCardType,
+    grades,
+    newCard,
+  } from "$lib/components/Cards/CardType.svelte";
   import {
     Heading,
     Span,
@@ -28,8 +31,7 @@
     actionCards,
     projectCards,
     clients,
-    newCard,
-  } from "$lib/components/Cards/ResourceCard.svelte";
+  } from "$lib/components/GameManager.svelte";
 
   let { type } = $props();
 

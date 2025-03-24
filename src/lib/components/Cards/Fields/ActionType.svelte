@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
-    import { actionTypes } from "$lib";
+    import { actionTypes } from "$lib/components/Cards/CardType.svelte";
 
     let { actionType = $bindable(), isEditable = true } = $props();
 

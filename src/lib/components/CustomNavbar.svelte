@@ -1,13 +1,4 @@
 <script lang="ts">
-    import { writeFileContent } from "$lib/utils/cardsFileHelper";
-    import {
-        resourceCards,
-        codirEventCards,
-        actionCards,
-        projectCards,
-        clients,
-        loadFromFile,
-    } from "$lib/components/Cards/ResourceCard.svelte";
     import {
         Fileupload,
         Button,
@@ -24,6 +15,15 @@
     import { page } from "$app/state";
     import { base } from "$app/paths";
     import CardThemeButton from "./Cards/CardThemeButton.svelte";
+    import {
+        resourceCards,
+        codirEventCards,
+        actionCards,
+        projectCards,
+        clients,
+        loadFromFile,
+        writeFileContent,
+    } from "./GameManager.svelte";
 
     let files: FileList | undefined = $state();
     let uploadSaveModal = $state(false);

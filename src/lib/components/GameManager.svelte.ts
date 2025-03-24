@@ -1,4 +1,33 @@
-import { type CardType, ResourceCardType, CodirEventCardType, ActionCardType, ProjectCardType, ClientType } from "$lib/index.js";
+import type { ProjectCardType, ActionCardType, CodirEventCardType, ResourceCardType, CardType } from "./Cards/CardType.svelte";
+import type { ClientType } from "./Clients/ClientType.svelte";
+
+
+// STATE VALUES
+export let resourceCards = $state<{ cards: ResourceCardType[] }>({ cards: [] });
+export let codirEventCards = $state<{ cards: CodirEventCardType[] }>({ cards: [] });
+export let actionCards = $state<{ cards: ActionCardType[] }>({ cards: [] });
+export let projectCards = $state<{ cards: ProjectCardType[] }>({ cards: [] });
+export let clients = $state<{ clients: ClientType[] }>({ clients: [] });
+
+export async function loadFromFile(files: any) {
+    await readFileContent(files).then(
+        ({
+            resourceCards: newResourceCards,
+            codirEventCards: newCodirEventCards,
+            actionCards: newActionCards,
+            projectCards: newProjectCards,
+            clients: newClients,
+        }) => {
+            resourceCards.cards = newResourceCards;
+            codirEventCards.cards = newCodirEventCards;
+            actionCards.cards = newActionCards;
+            projectCards.cards = newProjectCards;
+            clients.clients = newClients;
+        },
+    );
+    files = undefined;
+}
+
 
 const GAME_JSON_DATA = "data";
 const GAME_JSON_DATA_CARD_RESOURCES = "resources";

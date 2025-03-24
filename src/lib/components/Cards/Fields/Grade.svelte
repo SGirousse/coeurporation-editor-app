@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { grades } from "$lib";
+    import { grades } from "$lib/components/Cards/CardType.svelte";
 
     let { grade = $bindable(""), isEditable = true } = $props();
 

@@ -1,13 +1,14 @@
 <script lang="ts">
-    import { TrashBinOutline, BatteryOutline } from "flowbite-svelte-icons";
+    import { TrashBinOutline } from "flowbite-svelte-icons";
     import Grade from "./Fields/Grade.svelte";
     import ImageSelector from "$lib/components/Helper/ImageSelector.svelte";
     import ShareButton from "../Helper/ShareButton.svelte";
     import EditableNumber from "./Fields/EditableNumber.svelte";
     import EditableMarkdown from "./Fields/EditableMarkdown.svelte";
-    import CardTypeIcon from "./Fields/CardTypeIcon.svelte";
     import { currentCardTheme } from "./CardTheme.svelte";
     import ActionType from "./Fields/ActionType.svelte";
+    import Icon from "@iconify/svelte";
+    import { cardTypeIcons } from "./CardType.svelte";
 
     let {
         card = $bindable(),
@@ -80,7 +81,7 @@
                             .value.accentuationColor}; color: {currentCardTheme
                             .value.ligthTextColor};"
                     >
-                        <CardTypeIcon type={card.cardType} />
+                        <Icon icon={cardTypeIcons[card.cardType]} />
                     </div>
                     {#if "cost" in card}
                         <div
@@ -144,7 +145,7 @@
                                 .accentuationColor}; color: {currentCardTheme
                                 .value.ligthTextColor};"
                         >
-                            <BatteryOutline size="xs" />
+                            <Icon icon="material-symbols:battery-0-bar" />
                             <EditableNumber
                                 bind:value={card.burnoutPoints}
                                 {isEditable}

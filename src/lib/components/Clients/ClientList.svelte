@@ -1,17 +1,20 @@
 <script lang="ts">
     import { Button, Heading, Input, Secondary, Span } from "flowbite-svelte";
     import { UserAddOutline } from "flowbite-svelte-icons";
-    import { ClientType } from "$lib";
+    import {
+        ClientType,
+        newClient,
+    } from "$lib/components/Clients/ClientType.svelte";
     import Client from "./Client.svelte";
-    import { clients } from "$lib/components/Cards/ResourceCard.svelte";
-    import { newClient } from "$lib/utils/cardGenerator";
+    import { clients } from "$lib/components/GameManager.svelte";
 
     let searchQuery: string = $state("");
     let filteredClients: ClientType[] = $state([]);
 
     function addNewClient() {
-        clients.clients.push(newClient());
+        clients.clients.push(newClient(clients.clients.length));
     }
+
     function clearSearch() {
         searchQuery = "";
     }

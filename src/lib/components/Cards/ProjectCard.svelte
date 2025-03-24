@@ -1,17 +1,15 @@
 <script lang="ts">
-    import {
-        TrashBinOutline,
-        BitcoinSolid,
-        AwardSolid,
-        RocketOutline,
-        EuroOutline,
-    } from "flowbite-svelte-icons";
+    import { TrashBinOutline } from "flowbite-svelte-icons";
     import Grade from "./Fields/Grade.svelte";
-    import { coeurpormarked } from "$lib/utils/coeurpormarked";
-    import type { ClientType } from "$lib";
-
-    import { clients } from "$lib/components/Cards/ResourceCard.svelte";
+    import type { ClientType } from "$lib/components/Clients/ClientType.svelte";
+    import { clients } from "$lib/components/GameManager.svelte";
     import ShareButton from "../Helper/ShareButton.svelte";
+    import EditableMarkdown from "./Fields/EditableMarkdown.svelte";
+    import { currentCardTheme } from "./CardTheme.svelte";
+    import EditableNumber from "./Fields/EditableNumber.svelte";
+    import Icon from "@iconify/svelte";
+    import { cardTypeIcons } from "./CardType.svelte";
+
     let {
         card = $bindable(),
         onDeleteAccessor = undefined,
@@ -41,18 +39,6 @@
         }
     }
 
-    let editingField = $state<string | undefined>(undefined);
-
-    function startEditing(field: string) {
-        if (isEditable) {
-            editingField = field;
-        }
-    }
-
-    function stopEditing() {
-        editingField = undefined;
-    }
-
     $effect(() => {
         updateClientValue(card.client);
     });
@@ -60,14 +46,25 @@
 
 <div
     id={`card-${card.id}`}
-    class="group relative flex h-[70mm] w-[120mm] flex-col"
+    class="group relative flex h-[70mm] w-[120mm] flex-col rounded-lg"
+    style="border: 0.5px {currentCardTheme.value.outerBorder} solid;"
 >
     {#if showBackground}
-        <div class="bg-amber-300 h-full rounded-lg"></div>
+        <div
+            class="h-full rounded-lg"
+            style="background: radial-gradient(circle, {currentCardTheme.value
+                .mainColor} 10%, {currentCardTheme.value
+                .accentuationColor} 100%);"
+        ></div>
     {:else}
-        <div class="rounded-lg border shadow-lg p-1 project-card">
+        <div
+            class="rounded-lg game-card"
+            style="background: linear-gradient(90deg, {currentCardTheme.value
+                .accentuationColor} 10%, {currentCardTheme.value
+                .mainColor} 100%); "
+        >
             {#if isEditable}
-                <div class="absolute top-2 right-2 flex space-x-2 z-10">
+                <div class="absolute bottom-1 left-2 flex space-x-2 z-10">
                     <button
                         onclick={deleteCard}
                         class="rounded bg-gray-200 p-1 text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
@@ -78,225 +75,146 @@
                 </div>
             {/if}
 
-            <div class="flex-grow flex cardcontent p-1">
+            <div class="flex-grow flex">
                 <!-- Left part with text data -->
-                <div class="flex flex-col w-[93mm] m-0 mr-2">
-                    <div class="relative h-[6mm] w-full">
-                        {#if editingField === "title"}
-                            <input
-                                type="text"
-                                bind:value={card.title}
-                                class="w-full edited border-none p-0 text-lg font-bold focus:outline-none"
-                                onblur={stopEditing}
-                                onkeydown={(e) =>
-                                    e.key === "Enter" && stopEditing()}
+                <div class="flex flex-col w-[93mm] m-0">
+                    <div
+                        class="flex flex-nowrap h-[9.5mm] items-center space-x-1 pl-1 rounded-t-lg"
+                    >
+                        <div
+                            class="ml-1 pl-[7mm] relative h-[6mm] w-full"
+                            style="background: {currentCardTheme.value
+                                .mainColor}; border-color: {currentCardTheme
+                                .value.mainColor};  color: {currentCardTheme
+                                .value.ligthTextColor};"
+                        >
+                            <EditableMarkdown
+                                {card}
+                                bind:markdownText={card.title}
+                                additionalClass={"font-bold"}
                             />
-                        {:else}
-                            <button
-                                class="w-full truncate text-lg font-bold"
-                                onclick={() => startEditing("title")}
-                            >
-                                {card.title}
-                            </button>
-                        {/if}
-                    </div>
-
-                    <div class="h-[9mm]">
-                        {#if editingField === "lore"}
-                            <textarea
-                                bind:value={card.lore}
-                                class="edited border-none p-0 text-xs leading-tight italic focus:outline-none resize-none w-full h-full"
-                                onblur={stopEditing}
-                            ></textarea>
-                        {:else}
-                            <button
-                                class="w-full truncate-2-lines text-xs italic top-0"
-                                onclick={() => startEditing("lore")}
-                            >
-                                {#await coeurpormarked(card.lore, card, clients.clients)}
-                                    <p>...parsing card effect</p>
-                                {:then htmlText}
-                                    {@html htmlText}
-                                {:catch error}
-                                    <p style="color: red">{error.message}</p>
-                                {/await}
-                            </button>
-                        {/if}
-                    </div>
-
-                    <div class="h-[27mm] relative mt-2">
-                        <div
-                            class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
-                        >
-                            Effet
                         </div>
-                        {#if editingField === "effect"}
-                            <textarea
-                                bind:value={card.effect}
-                                class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
-                                onblur={stopEditing}
-                            ></textarea>
-                        {:else}
-                            <!-- svelte-ignore a11y_click_events_have_key_events -->
-                            <!-- svelte-ignore a11y_no_static_element_interactions -->
-                            <div
-                                class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
-                                onclick={() => startEditing("effect")}
-                            >
-                                {#await coeurpormarked(card.effect, card, clients.clients)}
-                                    <p>...parsing card effect</p>
-                                {:then htmlText}
-                                    {@html htmlText}
-                                {:catch error}
-                                    <p style="color: red">{error.message}</p>
-                                {/await}
-                            </div>
-                        {/if}
-                    </div>
-                    <div class="h-[18mm] relative mt-2">
                         <div
-                            class="absolute left top-0 transform -translate-y-2 text-xs flex items-center font-bold"
+                            class="flex items-center justify-center absolute -translate-x-0.5 min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm] rounded-full bg-white"
+                            style="background: {currentCardTheme.value
+                                .accentuationColor}; border-color: {currentCardTheme
+                                .value
+                                .accentuationColor}; color: {currentCardTheme
+                                .value.ligthTextColor};"
                         >
-                            Penalty effect (
-                            {#if editingField === "penaltyThreshold"}
-                                <input
-                                    type="number"
-                                    bind:value={card.penaltyThreshold}
-                                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                                    onblur={stopEditing}
-                                />
-                            {:else}
-                                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                                <div
-                                    class="text-[12px] leading-tight"
-                                    onclick={() =>
-                                        startEditing("penaltyThreshold")}
-                                >
-                                    {card.penaltyThreshold}
-                                </div>
-                            {/if}
-                            )
+                            <Icon icon={cardTypeIcons[card.cardType]} />
                         </div>
+                    </div>
 
-                        {#if editingField === "penaltyEffect"}
-                            <textarea
-                                bind:value={card.penaltyEffect}
-                                class="p-0 pt-2 edited border-none text-[12px] leading-tight focus:outline-none text-justify"
-                                onblur={stopEditing}
-                            ></textarea>
-                        {:else}
-                            <!-- svelte-ignore a11y_click_events_have_key_events -->
-                            <!-- svelte-ignore a11y_no_static_element_interactions -->
-                            <div
-                                class="p-0 pt-2 h-full overflow-hidden text-[12px] leading-tight effect_area align-text-top text-justify preview"
-                                onclick={() => startEditing("penaltyEffect")}
-                            >
-                                {#await coeurpormarked(card.penaltyEffect, card, clients.clients)}
-                                    <p>...parsing card effect</p>
-                                {:then htmlText}
-                                    {@html htmlText}
-                                {:catch error}
-                                    <p style="color: red">{error.message}</p>
-                                {/await}
-                            </div>
-                        {/if}
+                    <div
+                        class="h-[8mm] pl-1 pr-1 pt-1"
+                        style="color: {currentCardTheme.value
+                            .darkTextColor}; background-color: white;"
+                    >
+                        <EditableMarkdown
+                            {card}
+                            bind:markdownText={card.lore}
+                            additionalClass={"text-[9px] italic"}
+                        />
+                    </div>
+
+                    <div
+                        class="relative h-[30.3mm] pl-1 pr-1"
+                        style="color: {currentCardTheme.value
+                            .darkTextColor}; background-color: white;"
+                    >
+                        <EditableMarkdown
+                            {card}
+                            bind:markdownText={card.effect}
+                            textAeraTitle="Effet"
+                            additionalClass={"text-[12px]"}
+                        />
+                    </div>
+                    <div
+                        class="relative h-[21.7mm] pl-1 pr-1 rounded-bl"
+                        style="color: {currentCardTheme.value
+                            .darkTextColor}; background-color: white;"
+                    >
+                        <EditableMarkdown
+                            {card}
+                            bind:markdownText={card.effect}
+                            textAeraTitle="Effet de pénalité"
+                            bind:threshold={card.penaltyThreshold}
+                            additionalClass={"text-[12px]"}
+                        />
                     </div>
                 </div>
 
                 <!-- Right part with illustration / number data -->
-                <div class="relative w-[22mm]">
-                    <img
-                        src={card.illustration}
-                        alt="Project Illustration"
-                        class="h-[22mm] rounded-full"
-                    />
-                    <div class="leading-tight text-center">
-                        <select
-                            name="clients.clients"
-                            class="compact-select"
-                            onchange={handleSelectChange}
+                <div class="relative w-[27mm]">
+                    <div class="items-center justify-center">
+                        <div class="h-[27mm] p-1">
+                            <img
+                                src={card.illustration}
+                                alt="Project Illustration"
+                                class=" rounded-full border"
+                                style="border-color: {currentCardTheme.value
+                                    .mainColor};"
+                            />
+                        </div>
+                        <div
+                            class="leading-tight text-center pb-1"
+                            style="color: {currentCardTheme.value
+                                .ligthTextColor};"
                         >
-                            {#each clients.clients as client, _}
-                                <option
-                                    value={client.id}
-                                    selected={card.client === client.id}
-                                    >{client.name}</option
-                                >
-                            {/each}
-                        </select>
+                            <select
+                                name="clients"
+                                class="compact-select bg-transparent font-bold"
+                                onchange={handleSelectChange}
+                            >
+                                {#each clients.clients as client, _}
+                                    <option
+                                        value={client.id}
+                                        selected={card.client === client.id}
+                                        >{client.name}</option
+                                    >
+                                {/each}
+                            </select>
+                        </div>
                     </div>
 
-                    <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+                    <hr
+                        style="color: {currentCardTheme.value.ligthTextColor};"
+                    />
 
                     <!-- Values section -->
-                    <div class="grid grid-cols-2 gap-1 mt-2 mb-2">
-                        <div
-                            class="flex items-center justify-start text-[12px] leading-tight"
-                        >
-                            <EuroOutline />
-                            {#if editingField === "baseRevenue"}
-                                <input
-                                    type="number"
-                                    bind:value={card.baseRevenue}
-                                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                                    onblur={stopEditing}
-                                />
-                            {:else}
-                                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                                <div
-                                    onclick={() => startEditing("baseRevenue")}
-                                >
-                                    {card.baseRevenue}
-                                </div>
-                            {/if}k
+                    <div
+                        class="grid grid-cols-2 gap-1 mt-2 mb-2 text-[14px] leading-tight"
+                        style="color: {currentCardTheme.value.ligthTextColor};"
+                    >
+                        <div class="flex items-center justify-center">
+                            <Icon icon="material-symbols:euro-symbol-rounded" />
+                            <EditableNumber
+                                bind:value={card.baseRevenue}
+                                {isEditable}
+                            />k
                         </div>
-                        <div
-                            class="flex items-center justify-start text-[12px] leading-tight"
-                        >
-                            <AwardSolid />
-                            {#if editingField === "reputation"}
-                                <input
-                                    type="number"
-                                    bind:value={card.reputation}
-                                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                                    onblur={stopEditing}
-                                />
-                            {:else}
-                                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                                <div onclick={() => startEditing("reputation")}>
-                                    {card.reputation}
-                                </div>
-                            {/if}
+                        <div class="flex items-center justify-center">
+                            <Icon icon="tabler:award" />
+                            <EditableNumber
+                                bind:value={card.reputation}
+                                {isEditable}
+                            />
                         </div>
-                        <div
-                            class="flex items-center justify-start text-[12px] leading-tight"
-                        >
-                            <BitcoinSolid />
-                            {#if editingField === "optimalRevenue"}
-                                <input
-                                    type="number"
-                                    bind:value={card.optimalRevenue}
-                                    class="edited border-none p-0 text-[12px] leading-tight focus:outline-none"
-                                    onblur={stopEditing}
-                                />
-                            {:else}
-                                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                                <div
-                                    onclick={() =>
-                                        startEditing("optimalRevenue")}
-                                >
-                                    {card.optimalRevenue}
-                                </div>
-                            {/if}k
+                        <div class="flex items-center justify-center">
+                            <Icon
+                                icon="material-symbols:currency-bitcoin-rounded"
+                            />
+                            <EditableNumber
+                                bind:value={card.optimalRevenue}
+                                {isEditable}
+                            />
+                            k
                         </div>
-                        <div
-                            class="flex items-center justify-start text-[12px] leading-tight"
-                        >
-                            <RocketOutline />
+                        <div class="flex items-center justify-center">
+                            <Icon
+                                icon="material-symbols:rocket-launch-outline-rounded"
+                            />
                             <div>
                                 {clients.clients.find(
                                     (client: ClientType) =>
@@ -306,10 +224,14 @@
                         </div>
                     </div>
 
-                    <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+                    <hr
+                        style="color: {currentCardTheme.value.ligthTextColor};"
+                    />
 
                     <!-- Staffing section -->
-                    <div class="flex flex-wrap pt-1">
+                    <div
+                        class="flex flex-wrap p-2 pt-3 items-center justify-center"
+                    >
                         {#each card.optimalStaffing as _, index}
                             <div class="m-[1px]">
                                 <!-- svelte-ignore binding_property_non_reactive -->
@@ -325,44 +247,3 @@
         </div>
     {/if}
 </div>
-
-<style>
-    .project-card {
-        background-color: white;
-        color: black;
-    }
-
-    .project-card .edited {
-        background-color: rgb(197, 197, 197);
-    }
-
-    .project-card button {
-        text-align: left;
-    }
-
-    .project-card textarea {
-        width: 100%;
-        height: 100%;
-        resize: none;
-    }
-
-    .cardcontent {
-        border: 1px solid black;
-        border-radius: 5px;
-        color: black;
-    }
-
-    .truncate {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-    .truncate-2-lines {
-        display: -webkit-box;
-        -webkit-line-clamp: 2; /* Number of lines to show */
-        line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-</style>
