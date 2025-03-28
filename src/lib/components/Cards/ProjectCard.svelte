@@ -54,8 +54,11 @@
             class="h-full rounded-lg"
             style="background: radial-gradient(circle, {currentCardTheme.value
                 .mainColor} 10%, {currentCardTheme.value
-                .accentuationColor} 100%);"
-        ></div>
+                .accentuationColor} 100%); color: {currentCardTheme.value
+                .ligthTextColor};"
+        >
+            <Icon icon={cardTypeIcons[card.cardType]} class="h-full w-full" />
+        </div>
     {:else}
         <div
             class="rounded-lg game-card"
@@ -230,10 +233,10 @@
 
                     <!-- Staffing section -->
                     <div
-                        class="flex flex-wrap p-2 pt-3 items-center justify-center"
+                        class="flex flex-wrap p-0 pt-2 items-center justify-center"
                     >
                         {#each card.optimalStaffing as _, index}
-                            <div class="m-[1px]">
+                            <div class="p-0.5">
                                 <!-- svelte-ignore binding_property_non_reactive -->
                                 <Grade
                                     bind:grade={card.optimalStaffing[index]}

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 // UTILITY CONSTANTS
 // - GLOBAL
 export const CARD_TYPE_NAME_RESOURCE: string = "ResourceCardType";
-export const CARD_TYPE_NAME_CODIREVENT: string = "CodirEventCardType";
+export const CARD_TYPE_NAME_EVENT: string = "CodirEventCardType";
 export const CARD_TYPE_NAME_ACTION: string = "ActionCardType";
 export const CARD_TYPE_NAME_PROJECT: string = "ProjectCardType";
 // - ACTION
@@ -22,7 +22,7 @@ export function newCard(type: any) {
         card.burnoutPoints = 3;
         card.cost = 25;
     } else if (type == CodirEventCardType) {
-        card.cardType = CARD_TYPE_NAME_CODIREVENT;
+        card.cardType = CARD_TYPE_NAME_EVENT;
         // no additional property
     } else if (type == ActionCardType) {
         card.cardType = CARD_TYPE_NAME_ACTION;
@@ -81,7 +81,7 @@ export class CodirEventCardType implements CardType {
 
     constructor(init?: Partial<CodirEventCardType>) {
         Object.assign(this, init);
-        this.cardType = CARD_TYPE_NAME_CODIREVENT;
+        this.cardType = CARD_TYPE_NAME_EVENT;
     }
 }
 
@@ -140,7 +140,7 @@ export const actionTypes = [
 type CardTypeIcons = Record<string, string>;
 export const cardTypeIcons: CardTypeIcons = {
     [CARD_TYPE_NAME_RESOURCE]: "material-symbols:shopping-cart-outline-sharp",
-    [CARD_TYPE_NAME_CODIREVENT]: "material-symbols:mode-fan",
-    [CARD_TYPE_NAME_ACTION]: "material-symbols:local-activity-outline-sharp",
+    [CARD_TYPE_NAME_EVENT]: "material-symbols:local-activity-outline-sharp",
+    [CARD_TYPE_NAME_ACTION]: "material-symbols:mode-fan",
     [CARD_TYPE_NAME_PROJECT]: "material-symbols:factory-outline",
 }
