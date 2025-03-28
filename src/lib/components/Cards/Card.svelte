@@ -32,8 +32,11 @@
             class="h-full rounded-lg"
             style="background: radial-gradient(circle, {currentCardTheme.value
                 .mainColor} 10%, {currentCardTheme.value
-                .accentuationColor} 100%);"
-        ></div>
+                .accentuationColor} 100%); color: {currentCardTheme.value
+                .ligthTextColor};"
+        >
+            <Icon icon={cardTypeIcons[card.cardType]} class="h-full w-full" />
+        </div>
     {:else}
         <div
             class="rounded-lg game-card"
@@ -87,12 +90,10 @@
                         <div
                             class="flex items-center justify-center text-black text-[14px] font-bold min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm] rounded-lg bg-gradient-to-r from-amber-200 to-yellow-500"
                         >
-                            <!-- <EuroOutline size="xs" /> -->
                             <EditableNumber
                                 bind:value={card.cost}
                                 {isEditable}
                             />
-                            <!-- k -->
                         </div>
                     {/if}
                 </div>
@@ -138,14 +139,14 @@
                 >
                     {#if "burnoutPoints" in card}
                         <div
-                            class="flex justify-center items-center rounded-full border min-h-[6mm] max-h-[6mm] min-w-[6mm] max-w-[6mm] text-[12px]"
+                            class="flex justify-center items-center rounded-full border min-h-[7mm] max-h-[7mm] min-w-[7mm] max-w-[7mm] text-[12px] font-bold"
                             style="background: {currentCardTheme.value
                                 .accentuationColor}; border-color: {currentCardTheme
                                 .value
                                 .accentuationColor}; color: {currentCardTheme
                                 .value.ligthTextColor};"
                         >
-                            <Icon icon="material-symbols:battery-0-bar" />
+                            <Icon icon="material-symbols:battery-full" />
                             <EditableNumber
                                 bind:value={card.burnoutPoints}
                                 {isEditable}

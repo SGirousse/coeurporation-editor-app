@@ -122,7 +122,7 @@ export class ProjectCardType implements CardType {
 }
 
 export const grades = [
-    { value: "", color: "bg-white" },
+    { value: "", color: "bg-transparent" },
     { value: "Stg", color: "bg-teal-300" },
     { value: "A", color: "bg-green-300" },
     { value: "B", color: "bg-sky-300" },
