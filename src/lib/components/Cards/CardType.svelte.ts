@@ -122,14 +122,14 @@ export class ProjectCardType implements CardType {
 }
 
 export const grades = [
-    { value: "", color: "bg-transparent" },
-    { value: "Stg", color: "bg-teal-300" },
-    { value: "A", color: "bg-green-300" },
-    { value: "B", color: "bg-sky-300" },
-    { value: "C", color: "bg-yellow-300" },
-    { value: "D", color: "bg-orange-300" },
-    { value: "E", color: "bg-purple-300" },
-    { value: "S", color: "bg-amber-300" },
+    { value: "", color: "bg-transparent", baseCost: 0 },
+    { value: "Stg", color: "bg-teal-300", baseCost: 10 },
+    { value: "A", color: "bg-green-300", baseCost: 20 },
+    { value: "B", color: "bg-sky-300", baseCost: 30 },
+    { value: "C", color: "bg-amber-300", baseCost: 50 },
+    { value: "D", color: "bg-orange-300", baseCost: 80 },
+    { value: "E", color: "bg-purple-300", baseCost: 100 },
+    { value: "S", color: "bg-red-300", baseCost: 120 },
 ];
 
 export const actionTypes = [

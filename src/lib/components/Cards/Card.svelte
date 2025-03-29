@@ -160,7 +160,11 @@
                         />
                     {/if}
                     {#if "grade" in card}
-                        <Grade bind:grade={card.grade as string} {isEditable} />
+                        <Grade
+                            bind:grade={card.grade as string}
+                            bind:cost={card.cost}
+                            {isEditable}
+                        />
                     {/if}
                 </div>
             </div>

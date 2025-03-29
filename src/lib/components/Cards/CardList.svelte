@@ -39,7 +39,7 @@
     if (type == ResourceCardType) {
       return "Ressources";
     } else if (type == CodirEventCardType) {
-      return "Evénements";
+      return "Événements";
     } else if (type == ActionCardType) {
       return "Actions";
     } else if (type == ProjectCardType) {

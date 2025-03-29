@@ -1,9 +1,14 @@
 <script lang="ts">
     import { grades } from "$lib/components/Cards/CardType.svelte";
 
-    let { grade = $bindable(""), isEditable = true } = $props();
+    let {
+        grade = $bindable(""),
+        cost = $bindable(),
+        isEditable = true,
+    } = $props();
 
     let gradeColor = $state("");
+    updateGradeValue(grade);
 
     async function handleSelectGradeChange(event: any) {
         updateGradeValue(event.target.value);
@@ -14,12 +19,9 @@
         if (gradeItem) {
             grade = gradeItem.value;
             gradeColor = gradeItem.color;
+            cost = gradeItem.baseCost;
         }
     }
-
-    $effect(() => {
-        updateGradeValue(grade);
-    });
 </script>
 
 <select
