@@ -10,6 +10,7 @@
         NavUl,
         NavLi,
         Modal,
+        Spinner,
     } from "flowbite-svelte";
     import { FloppyDiskAltOutline, UploadOutline } from "flowbite-svelte-icons";
     import { page } from "$app/state";
@@ -27,6 +28,7 @@
 
     let files: FileList | undefined = $state();
     let uploadSaveModal = $state(false);
+    let isLoadInProgress = $state(false);
 
     let gameElementsNumber = $derived(
         [
@@ -47,11 +49,18 @@
         );
     }
 
+    // create a dedicated function to manage async action (unsupported in $effect)
+    async function uploadFromFile(files: any) {
+        isLoadInProgress = true;
+        uploadSaveModal = false;
+        await loadFromFile(files);
+        files = undefined;
+        isLoadInProgress = false;
+    }
+
     $effect(() => {
         if (files) {
-            loadFromFile(files);
-            files = undefined;
-            uploadSaveModal = false;
+            uploadFromFile(files);
         }
     });
 </script>
@@ -77,9 +86,16 @@
         class="flex items-center justify-center self-center text-center space-x-2"
     >
         <div class="flex items-center space-x-2">
-            <Button onclick={() => (uploadSaveModal = true)}
-                ><UploadOutline /></Button
+            <Button
+                onclick={() => (uploadSaveModal = true)}
+                disabled={isLoadInProgress}
             >
+                {#if isLoadInProgress}
+                    <Spinner size="4" color="white" />
+                {:else}
+                    <UploadOutline />
+                {/if}
+            </Button>
             <Tooltip>Charger une sauvegarde</Tooltip>
             <Button onclick={saveCardsToFile} disabled={gameElementsNumber < 1}
                 ><FloppyDiskAltOutline /></Button
