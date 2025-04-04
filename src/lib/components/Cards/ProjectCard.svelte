@@ -140,7 +140,7 @@
                     >
                         <EditableMarkdown
                             {card}
-                            bind:markdownText={card.effect}
+                            bind:markdownText={card.penaltyEffect}
                             textAeraTitle="Effet de pénalité"
                             bind:threshold={card.penaltyThreshold}
                             additionalClass={"text-[12px]"}
