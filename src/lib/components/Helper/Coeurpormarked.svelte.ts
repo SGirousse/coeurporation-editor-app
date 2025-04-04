@@ -1,6 +1,6 @@
 import { marked } from "marked";
 import { grades, type CardType } from "$lib/components/Cards/CardType.svelte";
-import { type ClientType } from "$lib/components/Clients/ClientType.svelte";
+import { clients } from "$lib/components/GameManager.svelte";
 
 const ICON_BASE = "base";
 const ICON_PLUS = "plus";
@@ -50,16 +50,20 @@ const MSG_WRONG_ATTRIBUTE = "<div class='bg-red-500'>Cette variable n'est pas su
      * - `%cardClient%` : `card.client` (only Project Cards)
      * 
      * Supported calculated variables :
-     * - `%bp<sign>x%`       : write <sign>x<batteryIcon>
-     * - `%k<sign>x%`        : write <sign>xk€
-     * - `%happy<sign>x%`    : write <sign>x<happynessIcon>
-     * - `%rep<sign>x%`      : write <sign>x<reputationIcon>
-     * - `%grade<value>%`    : write <value> in the grade formatting
+     * - `%bp<sign>x%`          : write <sign>x<batteryIcon>
+     * - `%k<sign>x%`           : write <sign>xk€
+     * - `%happy<sign>x%`       : write <sign>x<happynessIcon>
+     * - `%rep<sign>x%`         : write <sign>x<reputationIcon>
+     * - `%grade<value>%`       : write <value> in the grade formatting
+     * - `%cardResource<sign>x%`
+     * - `%cardAction<sign>x%`
+     * - `%cardEvent<sign>x%`
+     * - `%cardProject<sign>x%`
      *
      * @param rawText html text to be transformed.
      * @param card card data to be used for data extraction.
      */
-export async function coeurpormarked(rawText: string = "", card: CardType, clients: ClientType[] = []): Promise<string> {
+export async function coeurpormarked(rawText: string = "", card: CardType): Promise<string> {
     const markedText = await marked(rawText);
 
     let coeurpormarkedText = markedText
@@ -74,7 +78,7 @@ export async function coeurpormarked(rawText: string = "", card: CardType, clien
         .replaceAll("%cardOR%", "optimalRevenue" in card ? `${card.optimalRevenue}${ICON_KEURO[ICON_BASE]}` : MSG_WRONG_ATTRIBUTE)
         .replaceAll("%cardRep%", "reputation" in card ? `${card.reputation}${ICON_AWARD[ICON_BASE]}` : MSG_WRONG_ATTRIBUTE)
         .replaceAll("%cardPenT%", "penaltyThreshold" in card ? `${card.penaltyThreshold}` : MSG_WRONG_ATTRIBUTE)
-        .replaceAll("%cardClient%", "client" in card ? `${clients.find((client) => client.id === card.client)?.name || ""}` : MSG_WRONG_ATTRIBUTE)
+        .replaceAll("%cardClient%", "client" in card ? `${clients.clients.find((client) => client.id === card.client)?.name || ""}` : MSG_WRONG_ATTRIBUTE)
 
     coeurpormarkedText = coeurpormarkedText.replace(new RegExp(`%grade([A-Z]+)%`, "gi"), (match, p1) => {
         return replaceGrade(p1)
