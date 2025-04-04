@@ -1849,6 +1849,11 @@ svelte-check@^4.0.0:
     picocolors "^1.0.0"
     sade "^1.7.4"
 
+svelte-dnd-action@^0.9.60:
+  version "0.9.60"
+  resolved "https://registry.yarnpkg.com/svelte-dnd-action/-/svelte-dnd-action-0.9.60.tgz#d2f5b01b99649360067c79aea9bcd50731a4fc33"
+  integrity sha512-PTz9RlJiSTNXo0mIUGPmYXRMcqzLG/ghr79YqLrsOrq0dM4gQhXn97AkuImTalNuIxl/tohFK3uQPsEML+ZKeQ==
+
 svelte-easy-crop@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/svelte-easy-crop/-/svelte-easy-crop-4.0.0.tgz#399d0c4c330f6f0f3f85c025d3a87725cf2e002f"
