@@ -6,9 +6,9 @@
     import EditableNumber from "./Fields/EditableNumber.svelte";
     import EditableMarkdown from "./Fields/EditableMarkdown.svelte";
     import { currentCardTheme } from "./CardTheme.svelte";
-    import ActionType from "./Fields/ActionType.svelte";
-    import Icon from "@iconify/svelte";
     import { cardTypeIcons } from "./CardType.svelte";
+    import GameIcon from "../Helper/GameIcon.svelte";
+    import { ICON_BATTERY } from "../Helper/IconManager.svelte";
 
     let {
         card = $bindable(),
@@ -29,13 +29,17 @@
 >
     {#if showBackground}
         <div
-            class="h-full rounded-lg"
+            class="h-full rounded-lg flex items-center justify-center"
             style="background: radial-gradient(circle, {currentCardTheme.value
                 .mainColor} 10%, {currentCardTheme.value
                 .accentuationColor} 100%); color: {currentCardTheme.value
                 .ligthTextColor};"
         >
-            <Icon icon={cardTypeIcons[card.cardType]} class="h-full w-full" />
+            <GameIcon
+                name={cardTypeIcons[card.cardType]}
+                width="w-full"
+                height="h-full"
+            />
         </div>
     {:else}
         <div
@@ -59,13 +63,21 @@
             <div class="flex flex-col">
                 <!-- Top of the card (cost, title)-->
                 <div
-                    class="flex flex-nowrap h-[9.5mm] items-center space-x-1 pl-1 pr-0.5 rounded-t-lg"
+                    class="flex flex-nowrap h-[9.5mm] items-center space-x-1 rounded-t-lg w-full"
                     style="background: linear-gradient(90deg, {currentCardTheme
                         .value.accentuationColor} 10%, {currentCardTheme.value
                         .mainColor} 100%);"
                 >
                     <div
-                        class="ml-1 pl-[7mm] items-center w-full h-[6mm] border rounded"
+                        class="flex items-center justify-center w-1/10 h-full bg-white truncate p-0 m-0 rounded-tl-lg"
+                        style="background: {currentCardTheme.value
+                            .accentuationColor}; color: {currentCardTheme.value
+                            .ligthTextColor};"
+                    >
+                        <GameIcon name={cardTypeIcons[card.cardType]} />
+                    </div>
+                    <div
+                        class="items-center w-8/10 h-full pl-1 pr-1"
                         style="background: {currentCardTheme.value
                             .mainColor}; border-color: {currentCardTheme.value
                             .mainColor};  color: {currentCardTheme.value
@@ -74,21 +86,12 @@
                         <EditableMarkdown
                             {card}
                             bind:markdownText={card.title}
-                            additionalClass={"font-bold"}
+                            additionalClass={"font-bold text-left truncate text-[14px] flex items-center"}
                         />
-                    </div>
-                    <div
-                        class="flex items-center justify-center absolute -translate-x-0.5 min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm] rounded-full bg-white"
-                        style="background: {currentCardTheme.value
-                            .accentuationColor}; border-color: {currentCardTheme
-                            .value.accentuationColor}; color: {currentCardTheme
-                            .value.ligthTextColor};"
-                    >
-                        <Icon icon={cardTypeIcons[card.cardType]} />
                     </div>
                     {#if "cost" in card}
                         <div
-                            class="flex items-center justify-center text-black text-[14px] font-bold min-h-[8mm] max-h-[8mm] min-w-[8mm] max-w-[8mm] rounded-lg bg-gradient-to-r from-amber-200 to-yellow-500"
+                            class="flex items-center justify-center w-1/10 h-full text-black font-bold text-[14px] bg-gradient-to-r from-amber-200 to-yellow-500 truncate p-0 m-0 rounded-tr-lg"
                         >
                             <EditableNumber
                                 bind:value={card.cost}
@@ -146,18 +149,12 @@
                                 .accentuationColor}; color: {currentCardTheme
                                 .value.ligthTextColor};"
                         >
-                            <Icon icon="material-symbols:battery-full" />
+                            <GameIcon name={ICON_BATTERY} />
                             <EditableNumber
                                 bind:value={card.burnoutPoints}
                                 {isEditable}
                             />
                         </div>
-                    {/if}
-                    {#if "subType" in card}
-                        <ActionType
-                            bind:actionType={card.subType as string}
-                            {isEditable}
-                        />
                     {/if}
                     {#if "grade" in card}
                         <Grade

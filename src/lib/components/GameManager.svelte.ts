@@ -172,7 +172,6 @@ export async function readFileContent(files: FileList): Promise<{ resourceCards:
                     illustration: card.illustration,
                     lore: card.lore,
                     effect: card.effect,
-                    subType: card.subType || "ephemeral",
                 });
             }
         }

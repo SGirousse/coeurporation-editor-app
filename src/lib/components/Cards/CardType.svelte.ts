@@ -1,5 +1,6 @@
 import defaultIllustration from "$lib/assets/illustration/default.jpg";
 import { v4 as uuidv4 } from 'uuid';
+import { ICON_CARD_RSC, ICON_CARD_ACTION, ICON_CARD_EVENT, ICON_CARD_PROJECT, ICON_EFFECT_PERMANENT, ICON_EFFECT_ONSTAFFING } from "../Helper/IconManager.svelte";
 
 // UTILITY CONSTANTS
 // - GLOBAL
@@ -26,7 +27,6 @@ export function newCard(type: any) {
         // no additional property
     } else if (type == ActionCardType) {
         card.cardType = CARD_TYPE_NAME_ACTION;
-        card.subType = CARD_ACTION_SUBTYPE_EPHEMERAL;
         // no additional property
     } else if (type == ProjectCardType) {
         card.cardType = CARD_TYPE_NAME_PROJECT;
@@ -92,7 +92,6 @@ export class ActionCardType implements CardType {
     public illustration: string = "";
     public lore: string = "Lore";
     public effect: string = "Effet";
-    public subType: string = CARD_ACTION_SUBTYPE_EPHEMERAL;
 
     constructor(init?: Partial<ActionCardType>) {
         Object.assign(this, init);
@@ -133,14 +132,14 @@ export const grades = [
 ];
 
 export const actionTypes = [
-    { value: CARD_ACTION_SUBTYPE_EPHEMERAL, color: "bg-white", icon: "material-symbols:link-rounded" },
-    { value: CARD_ACTION_SUBTYPE_PERMANENT, color: "bg-white", icon: "material-symbols:link-off-rounded" },
+    { value: CARD_ACTION_SUBTYPE_EPHEMERAL, color: "bg-white", icon: ICON_EFFECT_PERMANENT },
+    { value: CARD_ACTION_SUBTYPE_PERMANENT, color: "bg-white", icon: ICON_EFFECT_ONSTAFFING },
 ];
 
 type CardTypeIcons = Record<string, string>;
 export const cardTypeIcons: CardTypeIcons = {
-    [CARD_TYPE_NAME_RESOURCE]: "material-symbols:shopping-cart-outline-sharp",
-    [CARD_TYPE_NAME_EVENT]: "material-symbols:local-activity-outline-sharp",
-    [CARD_TYPE_NAME_ACTION]: "material-symbols:mode-fan",
-    [CARD_TYPE_NAME_PROJECT]: "material-symbols:factory-outline",
+    [CARD_TYPE_NAME_RESOURCE]: ICON_CARD_RSC,
+    [CARD_TYPE_NAME_EVENT]: ICON_CARD_EVENT,
+    [CARD_TYPE_NAME_ACTION]: ICON_CARD_ACTION,
+    [CARD_TYPE_NAME_PROJECT]: ICON_CARD_PROJECT,
 }

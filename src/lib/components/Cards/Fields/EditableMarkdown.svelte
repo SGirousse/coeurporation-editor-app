@@ -16,9 +16,7 @@
 </script>
 
 {#if textAeraTitle}
-    <div
-        class="absolute left top-0 transform text-xs flex items-center font-bold"
-    >
+    <div class="absolute left transform text-xs flex items-center font-bold">
         {textAeraTitle}
         {#if threshold}
             (<EditableNumber bind:value={threshold} />)

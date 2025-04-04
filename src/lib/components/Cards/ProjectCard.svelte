@@ -7,8 +7,14 @@
     import EditableMarkdown from "./Fields/EditableMarkdown.svelte";
     import { currentCardTheme } from "./CardTheme.svelte";
     import EditableNumber from "./Fields/EditableNumber.svelte";
-    import Icon from "@iconify/svelte";
     import { cardTypeIcons } from "./CardType.svelte";
+    import GameIcon from "../Helper/GameIcon.svelte";
+    import {
+        ICON_BASE_REVENUE,
+        ICON_AWARD,
+        ICON_OPTIMAL_REVENUE,
+        ICON_REPUTATION,
+    } from "../Helper/IconManager.svelte";
 
     let {
         card = $bindable(),
@@ -51,13 +57,17 @@
 >
     {#if showBackground}
         <div
-            class="h-full rounded-lg"
+            class="h-full rounded-lg flex items-center justify-center"
             style="background: radial-gradient(circle, {currentCardTheme.value
                 .mainColor} 10%, {currentCardTheme.value
                 .accentuationColor} 100%); color: {currentCardTheme.value
                 .ligthTextColor};"
         >
-            <Icon icon={cardTypeIcons[card.cardType]} class="h-full w-full" />
+            <GameIcon
+                name={cardTypeIcons[card.cardType]}
+                width="w-full"
+                height="h-full"
+            />
         </div>
     {:else}
         <div
@@ -105,7 +115,7 @@
                                 .accentuationColor}; color: {currentCardTheme
                                 .value.ligthTextColor};"
                         >
-                            <Icon icon={cardTypeIcons[card.cardType]} />
+                            <GameIcon name={cardTypeIcons[card.cardType]} />
                         </div>
                     </div>
 
@@ -191,23 +201,21 @@
                         style="color: {currentCardTheme.value.ligthTextColor};"
                     >
                         <div class="flex items-center justify-center">
-                            <Icon icon="material-symbols:euro-symbol-rounded" />
+                            <GameIcon name={ICON_BASE_REVENUE} />
                             <EditableNumber
                                 bind:value={card.baseRevenue}
                                 {isEditable}
                             />k
                         </div>
                         <div class="flex items-center justify-center">
-                            <Icon icon="tabler:award" />
+                            <GameIcon name={ICON_AWARD} />
                             <EditableNumber
                                 bind:value={card.reputation}
                                 {isEditable}
                             />
                         </div>
                         <div class="flex items-center justify-center">
-                            <Icon
-                                icon="material-symbols:currency-bitcoin-rounded"
-                            />
+                            <GameIcon name={ICON_OPTIMAL_REVENUE} />
                             <EditableNumber
                                 bind:value={card.optimalRevenue}
                                 {isEditable}
@@ -215,9 +223,7 @@
                             k
                         </div>
                         <div class="flex items-center justify-center">
-                            <Icon
-                                icon="material-symbols:rocket-launch-outline-rounded"
-                            />
+                            <GameIcon name={ICON_REPUTATION} />
                             <div>
                                 {clients.clients.find(
                                     (client: ClientType) =>
